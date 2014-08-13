@@ -260,7 +260,10 @@ var userObj = {};
           if(!opportunities[match.opportunity].interest) {
             opportunities[match.opportunity].interest = {};
           }
-          opportunities[match.opportunity].interest[match.user] = match.userInterest;
+          if(!opportunities[match.opportunity].interest[match.userInterest]){
+            opportunities[match.opportunity].interest[match.userInterest] = {};
+          }
+          opportunities[match.opportunity].interest[match.userInterest][match.user] = match.userInterest;
           if(!userObj[match.user][match.userInterest]) {
             userObj[match.user][match.userInterest] = [1, 0];
           } else {
