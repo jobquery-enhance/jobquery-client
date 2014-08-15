@@ -53,7 +53,7 @@ app.factory('FilterService', ['$state', 'Match', 'Opportunity', 'User', 'Dialogu
             //make one
             opp.interest = {};
           }
-          make a tuple with the [user Requested, user Scheduled]
+          // make a tuple with the [user Requested, user Scheduled]
           if(!userObj[match.user][match.userInterest]) {
             userObj[match.user][match.userInterest] = [1, 0];
           } else {
