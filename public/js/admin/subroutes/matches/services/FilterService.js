@@ -73,9 +73,8 @@ app.factory('FilterService', ['$state', 'Match', 'Opportunity', 'User', 'Dialogu
           //NEW WAY TO CALCULATE MATCH.USERINTEREST THAT TAKES INTO ACCOUNT ADMIN OVERRIDE, 
           //UPVOTE, DOWNVOTE, STAR AND NOGO
 
-          //if admin has set this match to 'noGo', set value to 0
+          //if admin has set this match to 'noGo', set value to 1
           //if admin has hardcoded this match, set to highest value
-            //if admin has overridden user interest, use that value
           //else
             //calculateNonHardCodedBaseLevel()
 
