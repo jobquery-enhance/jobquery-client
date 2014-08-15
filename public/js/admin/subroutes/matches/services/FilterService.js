@@ -44,15 +44,16 @@ app.factory('FilterService', ['$state', 'Match', 'Opportunity', 'User', 'Dialogu
           }
         });
         //for each match in matchesArray
-        _.forEach(matchesArray, function(match) {
-          var userRequestedNum;
+        for(var i = 0; i < matchesArray.length; i++){
+          var match = matchesArray[i];
+          var userRequestedNum, baseValue;
           //if there is no interest property on opportunity object
           var opp = opportunities[match.opportunity];
           if(!opp.interest) {
             //make one
             opp.interest = {};
           }
-          //make a tuple with the [user Requested, user Scheduled]
+          make a tuple with the [user Requested, user Scheduled]
           if(!userObj[match.user][match.userInterest]) {
             userObj[match.user][match.userInterest] = [1, 0];
           } else {
@@ -68,7 +69,26 @@ app.factory('FilterService', ['$state', 'Match', 'Opportunity', 'User', 'Dialogu
             opp.interest[match.userInterest][userRequestedNum] = [];
           }
           opp.interest[match.userInterest][userRequestedNum].push(match.user);
-        });
+
+          //NEW WAY TO CALCULATE MATCH.USERINTEREST THAT TAKES INTO ACCOUNT ADMIN OVERRIDE, 
+          //UPVOTE, DOWNVOTE, STAR AND NOGO
+
+          //if admin has set this match to 'noGo', set value to 0
+          //if admin has hardcoded this match, set to highest value
+            //if admin has overridden user interest, use that value
+          //else
+            //calculateNonHardCodedBaseLevel()
+
+          //calculateNonHardCodedBaseLevel = function()
+            //if adminOverrride !== 0
+              //baseValue = adminOverride * 3
+            //else
+              //baseValue = userInterest * 3
+            //if upvote
+              //baseValue += 1
+            //if downVote
+              //baseValue -= 1
+        }
       });
     });
 
