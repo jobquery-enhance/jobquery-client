@@ -5,6 +5,7 @@ app.controller('AdminSidebarCtrl', ['$scope', '$rootScope', '$state', function (
 
     var sidebarIds = {
         'dashboard': 'sidebar-dashboard',
+        'feed': 'sidebar-feed',
         'opportunities': 'sidebar-opportunities',
         'companies': 'sidebar-companies',
         'account': 'sidebar-account',
