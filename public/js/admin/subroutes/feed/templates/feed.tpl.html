@@ -17,12 +17,13 @@
         <div class="dashbox-title">{{dategroup.date}}</div>
         <div class="dashbox dashbox-content" collapse="dategroup.isCollapsed">
         <!-- <div class="content-section container-fluid" id={{datagroup.dateid}}"> -->
-            {{dategroup}}
+            <div ng-repeat="feeditem in dategroup.items">
+              <a href="/admin/candidates/{{feeditem.userid}}">{{feeditem.name}}</a> {{feeditem.action}} {{feeditem.target}}<br />
+          </div>
         </div>
     </div>
             <!-- <div class="dashbox-title">{{dategroup.date}}</div>
             <div class="dashbox dashbox-content" ng-click="toggleShow({{rollupId}})">
-                <a href="/admin/candidates/53b4c6e12595bcdc07a854dc">Chris Oliver</a> declared interest for 20 new opportunities
                 <div id="{{rollupId}}">
                     <div ng-repeat="feeditemdetail in feeditemdetails" ng-show="feeditemdetail.showThis">
                         <a href="/admin/candidates/{{feeditemdetail.userid}}">{{feeditemdetail.name}}</a> {{feeditemdetail.action}} {{feeditemdetail.target}}

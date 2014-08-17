@@ -14,7 +14,8 @@ app.controller('AdminFeedCtrl', ['$scope', '$controller', '$timeout', function (
       dateid: "20140814-date",
       isCollapsed: false,
       items: [
-        {userid: "53b4c6e12595bcdc07a854dc", name: "Chris Oliver", action: "did something", target: "to this object", isCollapsed: false},
+        // TODO: Group these by action/object
+        {userid: "53b4c6e12595bcdc07a854dc", name: "Chris Oliver", action: "added a new opportunity", model: "opportunity", target: "Awesome Job", isCollapsed: false},
         {userid: "53b4c6e12595bcdc07a854dc", name: "Chris Oliver", action: "did something else", target: "to this object", isCollapsed: false},
         {userid: "53b4c6e12595bcdc07a854dc", name: "Chris Oliver", action: "did a third thing", target: "to another object", isCollapsed: false},
       ]
