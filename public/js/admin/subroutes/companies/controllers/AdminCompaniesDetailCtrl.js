@@ -1,4 +1,4 @@
- app.controller('AdminCompaniesDetailCtrl', ['$scope', 'Company', '$stateParams', function ($scope, Company, $stateParams) {
+ app.controller('AdminCompaniesDetailCtrl', ['$scope', '$rootScope', 'Company', '$stateParams', function ($scope, $rootScope, Company, $stateParams) {
 
   $scope.readOnly = true;
 
