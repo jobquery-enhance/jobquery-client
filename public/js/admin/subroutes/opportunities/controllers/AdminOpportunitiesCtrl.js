@@ -1,5 +1,5 @@
-app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'DialogueService',
-  function ($scope, Opportunity, Match, DialogueService) {
+app.controller('AdminOpportunitiesCtrl', ['$scope', '$rootScope', 'Opportunity', 'Match', 'DialogueService',
+  function ($scope, $rootScope, Opportunity, Match, DialogueService) {
 
   Match.getAll().then(function (data) {
     $scope.mapToView(data.matches, data.opportunities);
@@ -67,6 +67,7 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'Dia
     var opportunityToUpdate = {};
     opportunityToUpdate._id = opp._id;
     opportunityToUpdate[property] = !opp[property];
+    opportunityToUpdate.uid = $rootScope.uid;
     Opportunity.update(opportunityToUpdate);
   };
 
@@ -75,8 +76,8 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'Dia
     var toggleOppCategory = function(opp){
 
       //these are the unique _id in mongodb for the 'Attending Hiring Day', and
-      //'Not Attending Hiring Day' respectively. These two categories should probably 
-      //be refactored at some point in time to be boolean values on each opportunity 
+      //'Not Attending Hiring Day' respectively. These two categories should probably
+      //be refactored at some point in time to be boolean values on each opportunity
       //rather than part of the original 'category' implementation
 
       if(opp.category.name === 'Attending Hiring Day'){
@@ -109,7 +110,7 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'Dia
         }
       }
       $scope.groups[newCategory].push(opp);
-      
+
     };
 
     var toggleOppCategoryInDatabase = function(opp){
@@ -117,6 +118,7 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'Dia
           _id: opp._id,
           category: opp.category
         };
+        opportunityToUpdate.uid = $rootScope.uid;
         Opportunity.update(opportunityToUpdate);
     };
 

@@ -1,10 +1,13 @@
 app
-  .factory('authHttpInterceptor', ['localStorageService', '$location', function (localStorageService, $location) {
+  .factory('authHttpInterceptor', ['$rootScope', 'localStorageService', '$location', function ($rootScope, localStorageService, $location) {
    return {
      'request': function(config) {
        config.headers = config.headers || {};
        if (localStorageService.get('token')) {
          config.headers.Authorization = 'Bearer ' + localStorageService.get('token');
+       }
+       if (localStorageService.get('_id') && !$rootScope.uid) {
+         $rootScope.uid = localStorageService.get('_id');
        }
        if (!isTokenInDate(localStorageService) && checkAuthorizedRoutes(config.url)) {
          $location.path('/login');

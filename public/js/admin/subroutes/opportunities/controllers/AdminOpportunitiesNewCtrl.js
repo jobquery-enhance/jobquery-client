@@ -1,6 +1,6 @@
 app.controller('AdminOpportunitiesNewCtrl',
-  ['$scope', '$stateParams', '$state', 'Opportunity', 'User', 'Tag', 'Category', 'Company', '$q', 'generateGlyphs',
-  function ($scope, $stateParams, $state, Opportunity, User, Tag, Category, Company, $q, generateGlyphs) {
+  ['$scope', '$rootScope', '$stateParams', '$state', 'Opportunity', 'User', 'Tag', 'Category', 'Company', '$q', 'generateGlyphs',
+  function ($scope, $rootScope, $stateParams, $state, Opportunity, User, Tag, Category, Company, $q, generateGlyphs) {
 
   $scope.sorter = 'name';
   $scope.reverse = false;
@@ -177,6 +177,7 @@ app.controller('AdminOpportunitiesNewCtrl',
         };
       });
 
+      oppData.uid = $rootScope.uid;
       Opportunity.create(oppData).then(function(data){
         $state.go('admin.opportunities.detail', { _id : data._id});
       });

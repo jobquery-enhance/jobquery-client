@@ -1,6 +1,6 @@
 app.controller('AdminOpportunitiesDetailCtrl',
-  ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User',
-  function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User) {
+  ['$scope', '$rootScope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User',
+  function ($scope, $rootScope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User) {
   $scope.sorter = 'score';
   $scope.reverse = true;
   var originalCompanyId;
@@ -170,6 +170,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     });
 
     // update opportunity
+    oppData.uid = $rootScope.uid;
     Opportunity.update(oppData).then(function(data){
     });
 
@@ -180,12 +181,21 @@ app.controller('AdminOpportunitiesDetailCtrl',
         if (company._id === originalCompanyId) {
           var indexToRemove = company.opportunities.indexOf(oppData._id);
           company.opportunities.splice(indexToRemove, 1);
+          company.uid = $rootScope.uid;
+          company.feedAction = "removed";
+          company.feedActionObject = oppData._id;
+          company.feedActionType = "Opportunity";
           Company.update(company);
         }
 
         // add opportunity._id to new company
         if (company._id === oppData.company) {
           company.opportunities.push(oppData._id);
+          // Figure out how not to duplicate this when updating the opportunity
+          company.uid = $rootScope.uid;
+          company.feedAction = "added";
+          company.feedActionObject = oppData._id;
+          company.feedActionType = "Opportunity";
           Company.update(company);
         }
       });
@@ -365,7 +375,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     for(var glyphName in glyphs){
       user[glyphName] = false;
     }
-    console.dir(user);
+    // console.dir(user);
     $scope.edit(user);
   };
 
