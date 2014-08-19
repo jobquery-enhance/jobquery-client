@@ -14,6 +14,8 @@ app.factory('Company', ['CompanyResource', function (CompanyResource) {
   };
 
   companyMethods.create = function (company) {
+    console.log("GETTING UID FROM COMPANY OBJ");
+    console.log(company.uid);
     var company = new CompanyResource(company);
     return company.$save();
   };

@@ -1,5 +1,5 @@
-app.controller('LoginCtrl', ['User', '$state', '$scope', 'localStorageService',
-  function( User, $state, $scope, localStorageService) {
+app.controller('LoginCtrl', ['User', '$state', '$scope', '$rootScope', 'localStorageService',
+  function( User, $state, $scope, $rootScope, localStorageService) {
 
   localStorageService.clearAll();
   $scope.submit =  function (email, password) {
@@ -10,6 +10,8 @@ app.controller('LoginCtrl', ['User', '$state', '$scope', 'localStorageService',
         localStorageService.set('token-date', JSON.stringify(new Date()));
         localStorageService.set('_id', response.data._id);
         localStorageService.set('isAdmin', response.data.isAdmin);
+
+        $rootScope.uid = response.data._id;
 
         // got to appropiate part of the app
         if(response.data.isAdmin){

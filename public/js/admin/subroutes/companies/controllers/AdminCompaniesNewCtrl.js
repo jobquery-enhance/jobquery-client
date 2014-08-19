@@ -1,4 +1,4 @@
-app.controller('AdminCompaniesNewCtrl', ['$scope', 'Company', '$state', function ($scope, Company, $state) {
+app.controller('AdminCompaniesNewCtrl', ['$scope', '$rootScope', 'Company', '$state', function ($scope, $rootScope, Company, $state) {
 
   var newCompany = {};
   newCompany.name = '';
@@ -24,6 +24,10 @@ app.controller('AdminCompaniesNewCtrl', ['$scope', 'Company', '$state', function
 
   $scope.create = function () {
     removeEmptyFields();
+    newCompany.uid = $rootScope.uid;
+    console.log("CREATING NEW COMP");
+    console.log(newCompany);
+    console.log(newCompany.uid);
     Company.create(newCompany).then(function (company) {
       $state.go('admin.companies.detail', {_id: company._id});
     });
