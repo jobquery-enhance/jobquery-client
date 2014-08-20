@@ -1,6 +1,6 @@
 app.controller('AdminCandidatesCtrl',
-  ['$http', '$scope', 'User', 'Match', 'SERVER_URL',
-   function ($http, $scope, User, Match, SERVER_URL) {
+  ['$http', '$scope', '$rootScope', 'User', 'Match', 'SERVER_URL',
+   function ($http, $scope, $rootScope, User, Match, SERVER_URL) {
 
   $scope.query = '';
   $scope.config = {};
@@ -31,6 +31,7 @@ app.controller('AdminCandidatesCtrl',
     var userToUpdate = {};
     userToUpdate._id = user._id;
     userToUpdate[property] = !user[property];
+    userToUpdate.uid = $rootScope.uid;
     User.update(userToUpdate);
   };
 

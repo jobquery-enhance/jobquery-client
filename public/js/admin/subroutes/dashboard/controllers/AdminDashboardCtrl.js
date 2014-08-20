@@ -1,4 +1,4 @@
-app.controller('AdminDashboardCtrl', ['$scope', 'Match', 'User', function ($scope, Match, User) {
+app.controller('AdminDashboardCtrl', ['$scope', '$rootScope', 'Match', 'User', function ($scope, $rootScope, Match, User) {
 
   var matches, users, opportunities, candidateCategories, opportunityCategories, sorter, reverse;
   reverse = false;
@@ -81,13 +81,14 @@ app.controller('AdminDashboardCtrl', ['$scope', 'Match', 'User', function ($scop
       updatedMatch._id = entry._id;
       if(entry.internalNotes) updatedMatch.internalNotes = entry.internalNotes;
       if(entry.override) updatedMatch.adminOverride = entry.override;
-
+      updatedMatch.uid = $rootScope.uid;
       Match.update(updatedMatch).then(function(data){
         entry.editingInternalNotes = false;
         entry.editingOverride = false;
       });
     } else if (!event) {
       entry.isProcessed = entry.processed;
+      entry.uid = $rootScope.uid;
       Match.update(entry).then(function(data){
         console.log('Match Updated');
       });

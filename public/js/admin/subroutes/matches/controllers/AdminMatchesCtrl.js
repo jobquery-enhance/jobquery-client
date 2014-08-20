@@ -1,6 +1,6 @@
 app.controller('AdminMatchesCtrl',
-  ['$scope', '$state', '$http', 'Match', 'Opportunity', 'User', 'Scheduler', 'SERVER_URL', 'DialogueService',
-  function ($scope, $state, $http, Match, Opportunity, User, Scheduler, SERVER_URL, DialogueService) {
+  ['$scope', '$rootScope', '$state', '$http', 'Match', 'Opportunity', 'User', 'Scheduler', 'SERVER_URL', 'DialogueService',
+  function ($scope, $rootScope, $state, $http, Match, Opportunity, User, Scheduler, SERVER_URL, DialogueService) {
 
   Match.getAll().then(function (matchData) {
     User.getAll().then(function (users) {
@@ -78,6 +78,7 @@ app.controller('AdminMatchesCtrl',
       match.adminOverride = match.value;
     }
     // save update to server
+    match.uid = $rootScope.uid;
     Match.update(match);
   };
 

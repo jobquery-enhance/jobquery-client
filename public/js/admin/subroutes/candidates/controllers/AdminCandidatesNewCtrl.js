@@ -1,4 +1,4 @@
-app.controller('AdminCandidatesNewCtrl', ['User', '$scope', 'Category', function (User, $scope, Category) {
+app.controller('AdminCandidatesNewCtrl', ['User', '$scope', '$rootScope', 'Category', function (User, $scope, $rootScope, Category) {
 
   Category.getAll('User').then(function(categories){
     $scope.categories = categories;
@@ -8,8 +8,8 @@ app.controller('AdminCandidatesNewCtrl', ['User', '$scope', 'Category', function
     return emailStrings
       .replace(/\n|\s/g, ',')
       .split(',')
-      .filter(function(email){ 
-        if(email.match(/@/g)) return email; 
+      .filter(function(email){
+        if(email.match(/@/g)) return email;
       });
   };
 
@@ -67,7 +67,8 @@ app.controller('AdminCandidatesNewCtrl', ['User', '$scope', 'Category', function
   $scope.addNewCategory = function(newCategoryName){
     var newCategory = {
       name: newCategoryName,
-      type: 'User'
+      type: 'User',
+      uid: $rootScope.uid
     };
     Category.create(newCategory).then(function(response){
       newCategory._id = response._id;

@@ -1,5 +1,5 @@
-app.controller('AdminCandidatesDetailCtrl', ['User', '$scope', '$stateParams', 'Match', 'Company', 'Tag', 'Category', '$q',
-function (User, $scope, $stateParams, Match, Company, Tag, Category, $q) {
+app.controller('AdminCandidatesDetailCtrl', ['User', '$scope', '$rootScope', '$stateParams', 'Match', 'Company', 'Tag', 'Category', '$q',
+function (User, $scope, $rootScope, $stateParams, Match, Company, Tag, Category, $q) {
 
   var user, companies, matches, categories, opportunityCategories;
   $scope.submitText = 'Update Candidate Info';
@@ -92,6 +92,7 @@ function (User, $scope, $stateParams, Match, Company, Tag, Category, $q) {
     var handleCategory = function(){
       var deferred = $q.defer();
       if(user.category && !user.category._id){
+        user.category.uid = $rootScope.uid;
         Category.create(user.category).then(function(data){
           user.category._id = data._id;
           deferred.resolve();
@@ -104,6 +105,7 @@ function (User, $scope, $stateParams, Match, Company, Tag, Category, $q) {
 
     $scope.submitText = 'Submitting...';
     handleCategory().then(function(){
+      user.uid = $rootScope.uid;
       return User.update(user);
     }).then(function (updated) {
       $scope.updated = true;
