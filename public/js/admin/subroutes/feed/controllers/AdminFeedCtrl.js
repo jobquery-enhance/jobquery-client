@@ -1,12 +1,12 @@
-app.controller('AdminFeedCtrl', ['$scope', '$controller', '$timeout', function ($scope, $controller, $timeout) {
-  // We need to pull all feed rows from database
-  // Actually, when doing the query, group by, date, then user, then target/action type?
-  // foreach row:
-  //   get actor object
-  //   display action
-  //   display target object (category, profile, etc)
-  //   figure out how to consolidate these (if multiple objects)
-
+app.controller('AdminFeedCtrl', ['$scope', '$controller', 'Feed',  function ($scope, $controller, Feed) {
+  // console.log("Attempting to invoke Feed.getAll()");
+  // Feed.getAll().then(function(feedItems) {
+  //   // if (err) {
+  //   //   console.log(err);
+  //   // }
+  //   console.log(feedItems);
+  //   $scope.feeditemdetails = feedItems;
+  // });
 
   $scope.feeditemdetails = [
     {
@@ -50,6 +50,6 @@ app.controller('AdminFeedCtrl', ['$scope', '$controller', '$timeout', function (
         {userid: "53b4c6e12595bcdc07a854dc", name: "Admin", action: "did something else?", target: "to another object", isCollapsed: false}
         ]
     }
-  ]
+  ];
 
 }]);

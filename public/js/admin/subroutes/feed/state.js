@@ -10,5 +10,5 @@ app.config(['$stateProvider', function($stateProvider){
       url: '',
       templateUrl: '/js/admin/subroutes/feed/templates/feed.tpl.html',
       controller: 'AdminFeedCtrl'
-    })
+    });
 }]);
