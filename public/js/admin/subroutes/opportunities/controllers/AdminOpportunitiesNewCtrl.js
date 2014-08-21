@@ -130,6 +130,7 @@ app.controller('AdminOpportunitiesNewCtrl',
     var handleCompany = function(){
       var deferred = $q.defer();
       if(!$scope.basic.company._id){
+        $scope.basic.company.uid = $rootScope.uid;
         Company.create($scope.basic.company).then(function(data){
           $scope.basic.company._id = data._id;
           deferred.resolve();
@@ -143,6 +144,7 @@ app.controller('AdminOpportunitiesNewCtrl',
     var handleCategory = function(){
       var deferred = $q.defer();
       if(!$scope.basic.category._id){
+        $scope.basic.category.uid = $rootScope.uid;
         Category.create($scope.basic.category).then(function(data){
           $scope.basic.category._id = data._id;
           deferred.resolve();

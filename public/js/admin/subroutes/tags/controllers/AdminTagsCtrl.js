@@ -1,5 +1,5 @@
-app.controller('AdminTagsCtrl', ['$scope', 'Tag', 'Category', '$q',
-  function ($scope, Tag, Category, $q) {
+app.controller('AdminTagsCtrl', ['$scope', '$rootScope', 'Tag', 'Category', '$q',
+  function ($scope, $rootScope, Tag, Category, $q) {
 
   $scope.pendingRequests = 0;
 
@@ -135,10 +135,12 @@ app.controller('AdminTagsCtrl', ['$scope', 'Tag', 'Category', '$q',
     } else if (tag.name && tag.label) {
       $scope.pendingRequests++;
       if (tag._id) {
+        tag.uid = $rootScope.uid;
         Tag.update(tag).then( function (data) {
           $scope.pendingRequests--;
         });
       } else {
+        tag.uid = $rootScope.uid;
         Tag.create(tag).then( function (data) {
           $scope.pendingRequests--;
           tag._id = data._id;
@@ -171,6 +173,9 @@ app.controller('AdminTagsCtrl', ['$scope', 'Tag', 'Category', '$q',
       if (tag._id) {
         tag.active = false;
         tag.category = tag.category._id;
+        tag.uid = $rootScope.uid;
+        tag.feedAction = "removed";
+        tag.feedSummary = "removed a tag";
         return Tag.update(tag);
       } else {
         var deferred = $q.defer();
@@ -210,6 +215,7 @@ app.controller('AdminTagsCtrl', ['$scope', 'Tag', 'Category', '$q',
       type: 'Tag'
     };
     $scope.pendingRequests++;
+    newCategory.uid = $rootScope.uid;
     Category.create(newCategory).then(function (category) {
       $scope.pendingRequests--;
       newCategory._id = category._id;
@@ -224,6 +230,7 @@ app.controller('AdminTagsCtrl', ['$scope', 'Tag', 'Category', '$q',
 
   $scope.saveCategory = function (category) {
     $scope.pendingRequests++;
+    category.uid = $rootScope.uid;
     Category.update(category).then(function (category) {
       $scope.pendingRequests--;
       console.log('category updated');
@@ -235,6 +242,7 @@ app.controller('AdminTagsCtrl', ['$scope', 'Tag', 'Category', '$q',
     category.active = false;
     category.name = category.name + ' ' + date;
     $scope.pendingRequests++;
+    category.uid = $rootScope.uid;
     Category.update(category).then(function(category){
       $scope.pendingRequests--;
       delete $scope.categories[category._id];

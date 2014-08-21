@@ -183,6 +183,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
           company.opportunities.splice(indexToRemove, 1);
           company.uid = $rootScope.uid;
           company.feedAction = "removed";
+          company.feedSummary = "removed an opportunity";
           company.feedActionObject = oppData._id;
           company.feedActionType = "Opportunity";
           Company.update(company);
@@ -196,6 +197,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
           company.feedAction = "added";
           company.feedActionObject = oppData._id;
           company.feedActionType = "Opportunity";
+          company.feedSummary = "added an opportunity";
           Company.update(company);
         }
       });
@@ -206,6 +208,11 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
   $scope.edit = function (user) {
     //user.adminOverride = user.value;
+    user.uid = $rootScope.uid;
+    user.feedSummary = "match updated for user";
+    user.feedActionObject = user._id;
+    user.feedActionObjectType = "User";
+    user.feedActionObjectDisplayName = user.name;
     Match.update(user);
   };
 

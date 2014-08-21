@@ -1,6 +1,6 @@
 app.controller('UsersDashboardCtrl',
-  ['$scope', 'UsersOpportunity', 'GuidanceService', 'generateGlyphs', '$sce',
-  function ($scope, UsersOpportunity, GuidanceService, generateGlyphs, $sce) {
+  ['$scope', '$rootScope', 'UsersOpportunity', 'GuidanceService', 'generateGlyphs', '$sce',
+  function ($scope, $rootScope, UsersOpportunity, GuidanceService, generateGlyphs, $sce) {
 
   var matches, matchesWithInterest;
   $scope.submitText = '✔ Submit Preferences';
@@ -144,6 +144,7 @@ app.controller('UsersDashboardCtrl',
     });
 
     $scope.match.userInterest = value;
+    $scope.match.uid = $rootScope.uid;
     UsersOpportunity.update($scope.match).then(function () { });
 
   };
@@ -158,7 +159,7 @@ app.controller('UsersDashboardCtrl',
     $scope.pendingRequests++;
     $scope.default = true;
     $scope.isVideo = false;
-
+    $scope.match.uid = $rootScope.uid;
     UsersOpportunity.update($scope.match).then(function(){
       $scope.submitText = 'Fetching Next';
       $scope.matches.splice(0, 1);

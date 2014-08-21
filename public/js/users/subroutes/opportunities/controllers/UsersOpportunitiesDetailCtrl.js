@@ -1,6 +1,6 @@
 app.controller('UsersOpportunitiesDetailCtrl',
-  ['$scope', '$timeout', '$sce', 'UsersOpportunity', '$stateParams', 'GuidanceService', 'generateGlyphs',
-  function($scope, $timeout, $sce, UsersOpportunity, $stateParams, GuidanceService, generateGlyphs) {
+  ['$scope', '$rootScope', '$timeout', '$sce', 'UsersOpportunity', '$stateParams', 'GuidanceService', 'generateGlyphs',
+  function($scope, $rootScope, $timeout, $sce, UsersOpportunity, $stateParams, GuidanceService, generateGlyphs) {
 
   $scope.submitText = '✔  Submit Preferences';
   $scope.pendingRequests = 0;
@@ -29,6 +29,7 @@ app.controller('UsersOpportunitiesDetailCtrl',
     });
 
     $scope.match.userInterest = value;
+    $scope.match.uid = $rootScope.uid;
     UsersOpportunity.update($scope.match).then(function () { });
   };
 
@@ -109,6 +110,7 @@ app.controller('UsersOpportunitiesDetailCtrl',
       return object;
     });
 
+    $scope.match.uid = $rootScope.uid;
     UsersOpportunity.update($scope.match).then(function(){
       $scope.submitText = '✔  Save Successful';
       $scope.pendingRequests--;
