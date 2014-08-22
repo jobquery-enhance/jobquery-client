@@ -79,6 +79,7 @@ app.controller('AdminMatchesCtrl',
     }
     // save update to server
     match.uid = $rootScope.uid;
+    match.targetDisplayName = match.opportunity.company.name + " - " + match.opportunity.jobTitle;
     Match.update(match);
   };
 

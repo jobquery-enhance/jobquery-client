@@ -171,6 +171,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
     // update opportunity
     oppData.uid = $rootScope.uid;
+    oppData.targetDisplayName = oppData.company.name + ' - ' + oppData.jobTitle;
     Opportunity.update(oppData).then(function(data){
     });
 
@@ -186,6 +187,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
           company.feedSummary = "removed an opportunity";
           company.feedActionObject = oppData._id;
           company.feedActionType = "Opportunity";
+          company.targetDisplayName = oppData.company.name + ' - ' + oppData.jobTitle;
           Company.update(company);
         }
 
@@ -196,8 +198,10 @@ app.controller('AdminOpportunitiesDetailCtrl',
           company.uid = $rootScope.uid;
           company.feedAction = "added";
           company.feedActionObject = oppData._id;
+          company.feedTargetDisplayName = "company.name";
           company.feedActionType = "Opportunity";
           company.feedSummary = "added an opportunity";
+          company.targetDisplayName = oppData.company.name + ' - ' + oppData.jobTitle;
           Company.update(company);
         }
       });
@@ -213,6 +217,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     user.feedActionObject = user._id;
     user.feedActionObjectType = "User";
     user.feedActionObjectDisplayName = user.name;
+    user.targetDisplayName = oppData.company.name + ' - ' + oppData.jobTitle;
     Match.update(user);
   };
 

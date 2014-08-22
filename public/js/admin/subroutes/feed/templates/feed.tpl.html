@@ -17,8 +17,12 @@
         <div class="dashbox-title">{{dategroup.date}}</div>
         <div class="dashbox dashbox-content" collapse="dategroup.isCollapsed">
         <!-- <div class="content-section container-fluid" id={{datagroup.dateid}}"> -->
-            <div ng-repeat="feeditem in dategroup.items">
-              <a href="/admin/candidates/{{feeditem.userid}}">{{feeditem.name}}</a> {{feeditem.action}} {{feeditem.target}}<br />
+            <div ng-repeat="users in dategroup.items">
+                <div ng-repeat="(action,useractions) in users">
+                    <div ng-repeat="useraction in useractions">
+                        <a href="/admin/candidates/{{useraction.userid}}">{{useraction.userDisplayName}}</a> {{action}}: <a href="somemapping">{{useraction.targetDisplayName}}</a> <br />
+                    </div>
+                </div>
           </div>
         </div>
     </div>

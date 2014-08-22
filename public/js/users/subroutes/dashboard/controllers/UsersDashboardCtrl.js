@@ -145,6 +145,7 @@ app.controller('UsersDashboardCtrl',
 
     $scope.match.userInterest = value;
     $scope.match.uid = $rootScope.uid;
+    $scope.match.targetDisplayName = $scope.match.opportunity.company.name + ' - ' + $scope.match.opportunity.jobTitle;
     UsersOpportunity.update($scope.match).then(function () { });
 
   };
@@ -160,6 +161,7 @@ app.controller('UsersDashboardCtrl',
     $scope.default = true;
     $scope.isVideo = false;
     $scope.match.uid = $rootScope.uid;
+    $scope.match.targetDisplayName = $scope.match.opportunity.company.name + ' - ' + $scope.match.opportunity.jobTitle;
     UsersOpportunity.update($scope.match).then(function(){
       $scope.submitText = 'Fetching Next';
       $scope.matches.splice(0, 1);

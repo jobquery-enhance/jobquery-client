@@ -27,6 +27,7 @@
   $scope.update = function () {
     removeEmptyFields();
     $scope.company.uid = $rootScope.uid;
+    $scope.company.targetDisplayName = $scope.company.name;
     Company.update($scope.company).then(function (data) {
       console.log('Update successful');
     });

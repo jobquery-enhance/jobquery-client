@@ -93,6 +93,7 @@ function (User, $scope, $rootScope, $stateParams, Match, Company, Tag, Category,
       var deferred = $q.defer();
       if(user.category && !user.category._id){
         user.category.uid = $rootScope.uid;
+        user.category.targetDisplayName = user.category.name;
         Category.create(user.category).then(function(data){
           user.category._id = data._id;
           deferred.resolve();
@@ -106,6 +107,7 @@ function (User, $scope, $rootScope, $stateParams, Match, Company, Tag, Category,
     $scope.submitText = 'Submitting...';
     handleCategory().then(function(){
       user.uid = $rootScope.uid;
+      user.targetDisplayName = user.name;
       return User.update(user);
     }).then(function (updated) {
       $scope.updated = true;

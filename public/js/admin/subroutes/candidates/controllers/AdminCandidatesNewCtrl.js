@@ -68,7 +68,8 @@ app.controller('AdminCandidatesNewCtrl', ['User', '$scope', '$rootScope', 'Categ
     var newCategory = {
       name: newCategoryName,
       type: 'User',
-      uid: $rootScope.uid
+      uid: $rootScope.uid,
+      targetDisplayName: newCategoryName
     };
     Category.create(newCategory).then(function(response){
       newCategory._id = response._id;

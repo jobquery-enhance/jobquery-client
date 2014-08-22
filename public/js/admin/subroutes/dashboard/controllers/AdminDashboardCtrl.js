@@ -82,6 +82,7 @@ app.controller('AdminDashboardCtrl', ['$scope', '$rootScope', 'Match', 'User', f
       if(entry.internalNotes) updatedMatch.internalNotes = entry.internalNotes;
       if(entry.override) updatedMatch.adminOverride = entry.override;
       updatedMatch.uid = $rootScope.uid;
+      updatedMatch.targetDisplayName = updatedMatch.opportunity.company.name + ' - ' + updatedMatch.opportunity.jobTitle;
       Match.update(updatedMatch).then(function(data){
         entry.editingInternalNotes = false;
         entry.editingOverride = false;
@@ -89,6 +90,7 @@ app.controller('AdminDashboardCtrl', ['$scope', '$rootScope', 'Match', 'User', f
     } else if (!event) {
       entry.isProcessed = entry.processed;
       entry.uid = $rootScope.uid;
+      entry.targetDisplayName = entry.opportunity.company.name + ' - ' + entry.opportunity.jobTitle;
       Match.update(entry).then(function(data){
         console.log('Match Updated');
       });

@@ -1,6 +1,6 @@
 app.controller('UsersAccountCtrl',
-  ['$scope', '$timeout', 'UsersAccount', 'UserTag', 'DialogueService',
-  function ($scope, $timeout, UsersAccount, UserTag, DialogueService) {
+  ['$scope', '$rootScope', '$timeout', 'UsersAccount', 'UserTag', 'DialogueService',
+  function ($scope, $rootScope, $timeout, UsersAccount, UserTag, DialogueService) {
 
   var SURVEY_LINK = 'https://docs.google.com/forms/d/1TgmSj5Wnu9Cbwi4xl42Gp3bEWxCFw4lD-pdNiaYTKOI/viewform';
 
@@ -72,10 +72,12 @@ app.controller('UsersAccountCtrl',
       }
     }
     $scope.user.tags = compiledTags;
-    
+
     // send for update
     $scope.pendingRequests++;
     $scope.submitText = 'Saving...';
+    $scope.user.uid = $rootScope.uid;
+    $scope.user.targetDisplayName = $scope.user.name || $scope.user.email;
     UsersAccount.update($scope.user).then(function (response) {
       $scope.submitText = '✔ Save Successful';
       $scope.pendingRequests--;

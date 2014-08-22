@@ -32,6 +32,7 @@ app.controller('AdminCandidatesCtrl',
     userToUpdate._id = user._id;
     userToUpdate[property] = !user[property];
     userToUpdate.uid = $rootScope.uid;
+    userToUpdate.targetDisplayName = userToUpdate.name;
     User.update(userToUpdate);
   };
 

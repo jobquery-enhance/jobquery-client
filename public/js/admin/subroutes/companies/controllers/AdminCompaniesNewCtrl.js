@@ -25,6 +25,7 @@ app.controller('AdminCompaniesNewCtrl', ['$scope', '$rootScope', 'Company', '$st
   $scope.create = function () {
     removeEmptyFields();
     newCompany.uid = $rootScope.uid;
+    newCompany.targetDisplayName = newCompany.name;
     Company.create(newCompany).then(function (company) {
       $state.go('admin.companies.detail', {_id: company._id});
     });

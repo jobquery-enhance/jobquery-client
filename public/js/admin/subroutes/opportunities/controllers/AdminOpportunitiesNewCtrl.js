@@ -131,6 +131,7 @@ app.controller('AdminOpportunitiesNewCtrl',
       var deferred = $q.defer();
       if(!$scope.basic.company._id){
         $scope.basic.company.uid = $rootScope.uid;
+        $scope.basic.company.targetDisplayName = $scope.basic.company.name;
         Company.create($scope.basic.company).then(function(data){
           $scope.basic.company._id = data._id;
           deferred.resolve();
@@ -145,6 +146,7 @@ app.controller('AdminOpportunitiesNewCtrl',
       var deferred = $q.defer();
       if(!$scope.basic.category._id){
         $scope.basic.category.uid = $rootScope.uid;
+        $scope.basic.category.targetDisplayName = $scope.basic.category.name;
         Category.create($scope.basic.category).then(function(data){
           $scope.basic.category._id = data._id;
           deferred.resolve();
@@ -180,6 +182,7 @@ app.controller('AdminOpportunitiesNewCtrl',
       });
 
       oppData.uid = $rootScope.uid;
+      oppData.targetDisplayName = oppData.company.name + ' - ' + oppData.jobTitle;
       Opportunity.create(oppData).then(function(data){
         $state.go('admin.opportunities.detail', { _id : data._id});
       });

@@ -136,11 +136,13 @@ app.controller('AdminTagsCtrl', ['$scope', '$rootScope', 'Tag', 'Category', '$q'
       $scope.pendingRequests++;
       if (tag._id) {
         tag.uid = $rootScope.uid;
+        tag.targetDisplayName = tag.name;
         Tag.update(tag).then( function (data) {
           $scope.pendingRequests--;
         });
       } else {
         tag.uid = $rootScope.uid;
+        tag.targetDisplayName = tag.name;
         Tag.create(tag).then( function (data) {
           $scope.pendingRequests--;
           tag._id = data._id;
@@ -176,6 +178,7 @@ app.controller('AdminTagsCtrl', ['$scope', '$rootScope', 'Tag', 'Category', '$q'
         tag.uid = $rootScope.uid;
         tag.feedAction = "removed";
         tag.feedSummary = "removed a tag";
+        tag.targetDisplayName = tag.name;
         return Tag.update(tag);
       } else {
         var deferred = $q.defer();
@@ -216,6 +219,7 @@ app.controller('AdminTagsCtrl', ['$scope', '$rootScope', 'Tag', 'Category', '$q'
     };
     $scope.pendingRequests++;
     newCategory.uid = $rootScope.uid;
+    newCategory.targetDisplayName = newCategory.name;
     Category.create(newCategory).then(function (category) {
       $scope.pendingRequests--;
       newCategory._id = category._id;
@@ -231,6 +235,7 @@ app.controller('AdminTagsCtrl', ['$scope', '$rootScope', 'Tag', 'Category', '$q'
   $scope.saveCategory = function (category) {
     $scope.pendingRequests++;
     category.uid = $rootScope.uid;
+    category.targetDisplayName = category.name;
     Category.update(category).then(function (category) {
       $scope.pendingRequests--;
       console.log('category updated');
@@ -243,6 +248,7 @@ app.controller('AdminTagsCtrl', ['$scope', '$rootScope', 'Tag', 'Category', '$q'
     category.name = category.name + ' ' + date;
     $scope.pendingRequests++;
     category.uid = $rootScope.uid;
+    category.targetDisplayName = category.name;
     Category.update(category).then(function(category){
       $scope.pendingRequests--;
       delete $scope.categories[category._id];

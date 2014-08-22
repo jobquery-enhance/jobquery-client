@@ -68,6 +68,7 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', '$rootScope', 'Opportunity',
     opportunityToUpdate._id = opp._id;
     opportunityToUpdate[property] = !opp[property];
     opportunityToUpdate.uid = $rootScope.uid;
+    opportunityToUpdate.targetDisplayName = opportunity.company ? opportunityToUpdate.company.name + ' - ' + opportunityToUpdate.jobTitle : opportunityToUpdate.jobTitle;
     Opportunity.update(opportunityToUpdate);
   };
 
@@ -119,6 +120,7 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', '$rootScope', 'Opportunity',
           category: opp.category
         };
         opportunityToUpdate.uid = $rootScope.uid;
+        opportunityToUpdate.targetDisplayName = opportunityToUpdate.company.name + ' - ' + opportunityToUpdate.jobTitle;
         Opportunity.update(opportunityToUpdate);
     };
 
