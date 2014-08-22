@@ -13,14 +13,14 @@
             </div>
         </div>
     </div>
-    <div class="row" id="{{dategroup.dateid}}" ng-repeat="dategroup in feeditemdetails" ng-click="dategroup.isCollapsed = !dategroup.isCollapsed">
-        <div class="dashbox-title">{{dategroup.date}}</div>
+    <div class="row" id="{{dategroup.dateid}}" ng-repeat="dategroup in feeditemdetails" >
+        <div class="dashbox-title" ng-click="dategroup.isCollapsed = !dategroup.isCollapsed">{{dategroup.date}}</div>
         <div class="dashbox dashbox-content" collapse="dategroup.isCollapsed">
         <!-- <div class="content-section container-fluid" id={{datagroup.dateid}}"> -->
-            <div ng-repeat="users in dategroup.items">
-                <div ng-repeat="(action,useractions) in users">
-                    <div ng-repeat="useraction in useractions">
-                        <a href="/admin/candidates/{{useraction.userid}}">{{useraction.userDisplayName}}</a> {{action}}: <a href="somemapping">{{useraction.targetDisplayName}}</a> <br />
+            <div ng-repeat="user in dategroup.items">
+                <div ng-repeat="(action,targets) in user">
+                    <div ng-repeat="(target,targetdetail) in targets">
+                        <a href="/admin/candidates/{{targetdetail.userid}}">{{targetdetail.userDisplayName}}</a> {{action}}: <a href="somemapping">{{targetdetail.targetDisplayName}}</a> <br />
                     </div>
                 </div>
           </div>
