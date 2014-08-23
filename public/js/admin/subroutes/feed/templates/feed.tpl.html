@@ -19,12 +19,26 @@
         <!-- <div class="content-section container-fluid" id={{datagroup.dateid}}"> -->
             <div ng-repeat="user in dategroup.items">
                 <div ng-repeat="(action,targets) in user">
-                    <div ng-repeat="(target,targetdetail) in targets">
-                        <!-- TODO: only show targetLink if we have direct link -->
-                        <div ng-switch on="targetdetail.targetType">
-                            <div ng-switch-when="Category"><a href="{{targetdetail.userLink}}">{{targetdetail.userDisplayName}}</a> {{action}}: {{targetdetail.targetDisplayName}}<br /></div>
-                            <div ng-switch-default><a href="{{targetdetail.userLink}}">{{targetdetail.userDisplayName}}</a> {{action}}: <a href="{{targetdetail.targetLink}}">{{targetdetail.targetDisplayName}}</a> <br /></div>
+                    <!--
+                    <div ng-if="Object.keys(targets).length > 4" ng-model="open">
+                        {{pluralMap.target.before}} {{targets.length}} {{pluralMap.target.after}}
+                        <details id="details" ng-open="open" ng-click="open = !open">
+                        <div ng-repeat="(target,targetdetail) in targets">
+                            <div ng-switch on="targetdetail.targetType">
+                                <div ng-switch-when="Category"><a href="{{targetdetail.userLink}}">{{targetdetail.userDisplayName}}</a> {{action}}: {{targetdetail.targetDisplayName}}<br /></div>
+                                <div ng-switch-default><a href="{{targetdetail.userLink}}">{{targetdetail.userDisplayName}}</a> {{action}}: <a href="{{targetdetail.targetLink}}">{{targetdetail.targetDisplayName}}</a> <br />
+                            </div>
+                        </div>
+                        </details>
                     </div>
+                    <div ng-if="Object.keys(targets).length <= 4">
+                        -->
+                        <div ng-repeat="(target,targetdetail) in targets">
+                            <div ng-switch on="targetdetail.targetType">
+                                <div ng-switch-when="Category"><a href="{{targetdetail.userLink}}">{{targetdetail.userDisplayName}}</a> {{action}}: {{targetdetail.targetDisplayName}}<br /></div>
+                                <div ng-switch-default><a href="{{targetdetail.userLink}}">{{targetdetail.userDisplayName}}</a> {{action}}: <a href="{{targetdetail.targetLink}}">{{targetdetail.targetDisplayName}}</a> <br />
+                        </div>
+                    <!-- </div> -->
                 </div>
           </div>
         </div>

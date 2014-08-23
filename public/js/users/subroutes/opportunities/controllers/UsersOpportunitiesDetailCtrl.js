@@ -30,6 +30,8 @@ app.controller('UsersOpportunitiesDetailCtrl',
 
     $scope.match.userInterest = value;
     $scope.match.uid = $rootScope.uid;
+    $scope.match.actionObject = $scope.match.opportunity._id;
+    $scope.match.actionObjectType = 'Opportunity';
     $scope.match.targetDisplayName = $scope.match.opportunity.company.name + ' - ' + $scope.match.opportunity.jobTitle;
     UsersOpportunity.update($scope.match).then(function () { });
   };
@@ -112,6 +114,8 @@ app.controller('UsersOpportunitiesDetailCtrl',
     });
 
     $scope.match.uid = $rootScope.uid;
+    $scope.match.actionObject = $scope.match.opportunity._id;
+    $scope.match.actionObjectType = 'Opportunity';
     $scope.match.targetDisplayName = $scope.match.opportunity.company.name + ' - ' + $scope.match.opportunity.jobTitle;
     UsersOpportunity.update($scope.match).then(function(){
       $scope.submitText = '✔  Save Successful';
