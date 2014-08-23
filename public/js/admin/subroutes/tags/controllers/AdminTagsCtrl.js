@@ -60,7 +60,6 @@ app.controller('AdminTagsCtrl', ['$scope', '$rootScope', 'Tag', 'Category', '$q'
             }
             if (tag && (tag.position !== i)) {
               tag.position = i;
-              console.log('error found, correcting');
               promises.push(Tag.update(tag));
             }
           }
@@ -238,7 +237,6 @@ app.controller('AdminTagsCtrl', ['$scope', '$rootScope', 'Tag', 'Category', '$q'
     category.targetDisplayName = category.name;
     Category.update(category).then(function (category) {
       $scope.pendingRequests--;
-      console.log('category updated');
     });
   };
 
