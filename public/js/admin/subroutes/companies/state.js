@@ -21,6 +21,10 @@ app.config(['$stateProvider', function($stateProvider){
         url: '/:_id',
         templateUrl: '/js/admin/subroutes/companies/templates/detail.tpl.html',
         controller: 'AdminCompaniesDetailCtrl'
+      })
+      .state('admin.monitor', {
+        url: '/monitor',
+        templateUrl: '/js/admin/subroutes/companies/templates/monitor.tpl.html',
+        controller: 'AdminCompaniesMonitorCtrl'
       });
-
 }]);
