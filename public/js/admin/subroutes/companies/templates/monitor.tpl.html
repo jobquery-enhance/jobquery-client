@@ -1,1 +1,7 @@
-<div>{{ test }}</div>
+<div class="container">
+  <tabset  vertical="true" type="pills">
+    <tab ng-repeat="company in company" heading="{{ company }}">{{ company }}</tab>
+  </tabset>
+
+
+</div>

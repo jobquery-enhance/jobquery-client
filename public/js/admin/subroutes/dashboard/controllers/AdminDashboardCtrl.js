@@ -1,13 +1,12 @@
 app.controller('AdminDashboardCtrl', ['$scope', 'Match', 'User', '$http', 'SERVER_URL', function ($scope, Match, User, $http, SERVER_URL) {
-  console.log(SERVER_URL, ' serverurl');
-  $http({
-    method: 'POST',
-    url: SERVER_URL + '/api/companies/indeed',
-    data: {keyword: 'Google'},
-    cache: true
-  }).then(function(res) {
-    console.log(res.data);
-  });
+  // $http({
+  //   method: 'POST',
+  //   url: SERVER_URL + '/api/companies/indeed',
+  //   data: {keyword: 'Google'},
+  //   cache: true
+  // }).then(function(res) {
+  //   console.log(res.data);
+  // });
 
 
   var matches, users, opportunities, candidateCategories, opportunityCategories, sorter, reverse;
