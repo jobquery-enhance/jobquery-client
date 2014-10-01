@@ -1,7 +1,20 @@
-<div class="container">
-  <tabset  vertical="true" type="pills">
-    <tab ng-repeat="company in company" heading="{{ company }}">{{ company }}</tab>
-  </tabset>
+<!-- <tabset  vertical="true" type="pills">
+  <tab ng-repeat="(company, opps) in companies" heading="{{ company }}">
+    <ul>
+      <li ng-repeat="opportunity in company.results">
+        {{ opportunity.company }}
+      </li>
+    </ul>
+  </tab>
+</tabset> -->
 
-
-</div>
+<span class="dropdown" on-toggle="toggled(open)">
+  <a class="dropdown-toggle">
+    Click me to select a company, yo!
+  </a>
+  <ul class="dropdown-menu">
+    <li ng-repeat="(company, opps) in companies">
+      <a>{{ company }}</a>
+    </li>
+  </ul>
+</span>

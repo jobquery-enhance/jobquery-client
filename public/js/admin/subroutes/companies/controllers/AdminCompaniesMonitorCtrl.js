@@ -7,10 +7,8 @@ app.controller('AdminCompaniesMonitorCtrl', ['$scope', '$http', 'SERVER_URL', fu
     cache: true
   }).then(function(res) {
     console.log(res.data, '  data');
-    $scope.test = res.data;
+    $scope.companies = res.data;
     // $scope.test = res.data;
   });
-
-  $scope.company = ['google', 'asdf', 'someothercompany', 'yep another one'];
 
 }]);
