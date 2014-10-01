@@ -3,7 +3,8 @@ app.controller('AdminDashboardCtrl', ['$scope', 'Match', 'User', '$http', 'SERVE
   $http({
     method: 'POST',
     url: SERVER_URL + '/api/companies/indeed',
-    data: {keyword: 'Google'}
+    data: {keyword: 'Google'},
+    cache: true
   }).then(function(res) {
     console.log(res.data);
   });
