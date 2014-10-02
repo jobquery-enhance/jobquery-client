@@ -7,7 +7,7 @@
       <h4>{{ job.jobtitle }}</h4>
       <h6>Location: {{ job.formattedLocationFull }}</h6>
       <h6>Posted {{ job.formattedRelativeTime }}</h6>
-      <h6><a ng-href="{{ job.url }}">CLick Here to See Post on Indeed.com</a></h6>
+      <h6><a ng-href="{{ job.url }}" target="_blank">CLick Here to See Post on Indeed.com</a></h6>
     </li>
   </ul>
   <h1 ng-if="!jobResults" style="margin-left: 20%;">There are no results to display</h1>
