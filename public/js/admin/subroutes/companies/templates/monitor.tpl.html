@@ -1,16 +1,13 @@
 <span class="dropdown" is-open="status.isopen">
-  <a class="dropdown-toggle">
-    Click me to select a company, yo!
+  <!-- <a class="dropdown-toggle"> -->
+  <!--   Click me to select a company, yo!
   </a>
   <ul class="dropdown-menu">
     <li ng-repeat="(company, opps) in companies">
       <a ng-click="companyInfo(company)">{{ company }}</a>
     </li>
+  </ul> -->
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="(company, opps) in companies">{{ company }}</li>
   </ul>
 </span>
-
-<!-- <div class="container">
-  <ul>
-    <li ng-repeat="job in jobs.results">{{ job.jobtitle }}</li>
-  </ul>
-</div> -->

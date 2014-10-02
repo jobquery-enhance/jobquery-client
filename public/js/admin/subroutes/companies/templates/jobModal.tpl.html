@@ -2,9 +2,14 @@
   <h3 class="modal-title">{{ items.query }}</h3>
 </div>
 <div class="modal-body">
-  <ul>
-    <li ng-repeat="job in items.results"> {{ job.jobtitle}} {{ job.formattedRelativeTime }}</li>
+  <ul ng-if="jobResults" class="list-group" style="list-style: none;">
+    <li class="list-group-item" ng-repeat="job in items.results">
+      <h5>{{ job.jobtitle }}</h5>
+      <h6>Location: {{ job.formattedLocationFull }}</h6>
+      <h6>Posted {{ job.formattedRelativeTime }}</h6>
+    </li>
   </ul>
+  <h1 ng-if="!jobResults" style="margin-left: 20%;">There are no results to display</h1>
 </div>
 <div class="modal-footer">
   <button class="btn btn-primary" ng-click="ok()">OK</button>
