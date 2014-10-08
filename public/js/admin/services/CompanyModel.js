@@ -33,5 +33,9 @@ app.factory('Company', ['CompanyResource', 'SERVER_URL', '$http', function (Comp
     return CompanyResource.update({_id: company._id}, company).$promise;
   };
 
+  // companyMethods.getIndeed = function(keyword) {
+
+  // }
+
   return companyMethods;
 }]);

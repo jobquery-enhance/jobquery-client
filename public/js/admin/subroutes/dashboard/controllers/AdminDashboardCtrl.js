@@ -1,7 +1,18 @@
-app.controller('AdminDashboardCtrl', ['$scope', 'Match', 'User', function ($scope, Match, User) {
+app.controller('AdminDashboardCtrl', ['$scope', 'Match', 'User', '$http', 'SERVER_URL', function ($scope, Match, User, $http, SERVER_URL) {
+  // $http({
+  //   method: 'POST',
+  //   url: SERVER_URL + '/api/companies/indeed',
+  //   data: {keyword: 'Google'},
+  //   cache: true
+  // }).then(function(res) {
+  //   console.log(res.data);
+  // });
+
+
   var matches, users, opportunities, candidateCategories, opportunityCategories, sorter, reverse;
   reverse = false;
   $scope.candidateCategoryQuery = {};
+
 
   $scope.humanifyDate = function(date){
     var newDate = new Date(date);
