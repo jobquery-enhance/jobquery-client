@@ -129,6 +129,7 @@
             <thead>
                 <th></th><!-- Empty table header-->
                 <th><div class="text-left pointer" ng-click="sorter = 'name'; reverse = !reverse">Name <span class="glyphicon glyphicon-sort"></span></div></th>
+                <th><div class="text-left pointer" ng-click="sorter = 'attending'; reverse = !reverse">Attending?</div></th>
                 <th><div class="text-left  pointer" ng-click="sorter = 'category'; reverse = !reverse">Group <span class="glyphicon glyphicon-sort"></span></div></th>
                 <th><div class="text-left  pointer" ng-click="sorter = 'searchStage'; reverse = !reverse">Stage <span class="glyphicon glyphicon-sort"></span></div></th>
                 <th><div class="text-center pointer" ng-click="sorter = 'score'; reverse = !reverse">Match <span class="glyphicon glyphicon-sort"></span></div></th>
@@ -155,6 +156,7 @@
                 <tr ng-repeat-start="user in declared | filter:ExcludeAccepted() | orderBy:sorter:reverse">
                     <td><a ui-sref="admin.candidates.detail({_id: user._id})">Detail</a></td>
                     <td>{{ user.name }}</td>
+                    <td>{{ user.attending }}</td>
                     <td>{{ user.category }}</td>
                     <td>{{ user.searchStage }}</td>
                     <td><div class="text-center">{{ user.points[1] === 0 ? '-' : user.score + '%' }}</div></td>
@@ -181,6 +183,7 @@
                 <tr ng-repeat-end ng-if="$index > 0 && $index % 10 === 0 && !$last">
                     <th></th><!-- Empty table header-->
                     <th><div class="text-left">Name</div></th>
+                    <th><div class="text-left pointer" ng-click="sorter = 'name'; reverse = !reverse">Attending?</div></th>
                     <th><div class="text-left">Group</div></th>
                     <th><div class="text-left">Stage</div></th>
                     <th><div class="text-center">Match</div></th>

@@ -16,7 +16,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.companies = companies;
 
     Match.getUsers($stateParams._id).then(function (data) {
-
+      console.log(data);
       $scope.mapToView(data.opportunity, data.matches);
       $scope.oppData = data.opportunity;
       $scope.matchData = data.matches;
@@ -91,9 +91,15 @@ app.controller('AdminOpportunitiesDetailCtrl',
         if(!matchModel || !matchModel.user) {
           return;
         }
+        if(matchModel.user.attending) {
+          matchModel.user.attending = 'Yes';
+        } else {
+          matchModel.user.attending = 'No';
+        }
         return {
           _id: matchModel.user._id,
           name: matchModel.user.name,
+          attending: matchModel.user.attending,
           email: matchModel.user.email,
           star: matchModel.star,
           upVote: matchModel.upVote,
