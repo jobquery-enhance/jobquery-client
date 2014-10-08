@@ -13,6 +13,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $state.go("admin.opportunities.preview", {_id: $scope.oppData._id});
   };
   Company.getAll().then(function (companies) {
+    console.log(companies, ' companies');
     $scope.companies = companies;
 
     Match.getUsers($stateParams._id).then(function (data) {
