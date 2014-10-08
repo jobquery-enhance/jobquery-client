@@ -160,8 +160,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
       return result;
     };
     $scope.declared = declared();
-    console.log($scope.attending, ' attending');
-    console.log($scope.notAttending, ' notAttending');
     $scope.updateGuidance();
   };
 
