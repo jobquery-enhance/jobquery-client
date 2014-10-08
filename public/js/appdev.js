@@ -17,8 +17,8 @@ app.run(['$rootScope', function($rootScope) {
  };
   //check the states when transitioning
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-    console.log('toState ', toState);
-    console.log('fromState ', fromState);
+    // console.log('toState ', toState);
+    // console.log('fromState ', fromState);
   });
 }]);
 
