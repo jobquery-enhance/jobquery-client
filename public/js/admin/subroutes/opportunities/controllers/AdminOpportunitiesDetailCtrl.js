@@ -1,10 +1,11 @@
 app.controller('AdminOpportunitiesDetailCtrl',
   ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User',
   function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User) {
+  var originalCompanyId;
   $scope.sorter = 'score';
   $scope.reverse = true;
-  var originalCompanyId;
   $scope.oppData = {};
+  $scope.showAttending = false;
 
   //array to create the downloadable grid
   var interestGrid = ['Name', 'Group', 'Stage', 'Interest', 'Admin Override', 'Attending'];

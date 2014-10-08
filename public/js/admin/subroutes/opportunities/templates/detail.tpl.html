@@ -124,6 +124,7 @@
 
             <button ng-click="matchGrid()">Download Match Grid</button>
             <button type="button" ng-init="hideQuestions = true; hideTags = false" ng-click="hideQuestions = !hideQuestions; hideTags = !hideTags">Toggle Questions and Tags</button>
+            <button ng-click="showAttending = !showAttending">Toggle Non-Attending Candidates</button>
 <!-- Match Grid -->
             <table class="table table-striped table-condensed">
 <!-- 1st Row Header -->
@@ -196,6 +197,32 @@
                     <th ng-repeat="tag in filteredTags" ng-show="!hideTags"><div class="text-center">{{ tag.data.name }}</div></th>
                     <th ng-repeat="question in guidance.questions" ng-show="!hideQuestions"><div class="text-center">{{question.question}}</div></th>
                 </tr> -->
+                <tr ng-if="showAttending" ng-repeat="user in notAttending | filter:ExcludeAccepted() | orderBy:sorter:reverse">
+                    <td><a ui-sref="admin.candidates.detail({_id: user._id})">Detail</a></td>
+                    <td class="text-center">{{ user.name }}</td>
+                    <td class="text-center">{{ user.attending }}</td>
+                    <td>{{ user.category }}</td>
+                    <td>{{ user.searchStage }}</td>
+                    <td><div class="text-center">{{ user.points[1] === 0 ? '-' : user.score + '%' }}</div></td>
+                    <td><div class="text-center">{{ user.interest === 0 ? 'N/A' : user.interest }}</div></td>
+                    <td class="text-center" style="min-width: 100px; max-width: 100px; font-weight: 600">
+                        <input class="text-center"  placeholder="{{ user.adminOverride}} " ng-model="user.adminOverride" ng-click="edit(user)" ng-class="isOverridden(user)" type="number" min="1" max="4"></input>
+                    </td>
+
+                    <td class="text-center" style="min-width: 100px; max-width: 100px; font-weight: 600">
+                      <p class="text-center"  >
+                        <span ng-class="{'starStyle' : user.star === true} " class="glyphicon glyphicon-star" ng-click="adjustGlyphHighlighting('star', $index, user)"></span>
+                        <span ng-class="{'upVoteStyle' : user.upVote === true} "class="glyphicon glyphicon-thumbs-up" ng-click=" adjustGlyphHighlighting('upVote', $index, user)"></span>
+                        <span ng-class="{'downVoteStyle' : user.downVote === true} "class="glyphicon glyphicon-thumbs-down" ng-click=" adjustGlyphHighlighting('downVote', $index, user)"></span>
+                        <span ng-class="{'noGoStyle' : user.noGo === true} " class="glyphicon glyphicon-remove" ng-click=" adjustGlyphHighlighting('noGo', $index, user)"></span>
+                      </p>
+                    </td>
+
+                    <td ng-repeat="tag in filteredTags" ng-show="!hideTags">
+                        <p class="text-center"><span class="glyphicon" ng-class="calculateFit(tag.importance, filteredStats[tag.data._id].type, tag.value, user.tags[tag.data._id])[0]" ng-style="{color: calculateFit(tag.importance, filteredStats[tag.data._id].type, tag.value, user.tags[tag.data._id])[1]}"></span></p>
+                    </td>
+                    <td ng-repeat="answerObject in user.answers" ng-show="!hideQuestions"><p class="text-center">{{answerObject.answer || 'N/A'}}</p></td>
+                </tr>
             </tbody>
         </div>
     </div>
