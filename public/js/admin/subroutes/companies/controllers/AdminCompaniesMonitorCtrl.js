@@ -13,9 +13,6 @@ app.controller('AdminCompaniesMonitorCtrl', ['$scope', '$http', 'SERVER_URL', '$
     url: SERVER_URL + '/api/companies/indeed',
     cache: true
   }).then(function(res) {
-    // _.filter(res.data, function() {
-
-    // });
     $scope.companies = res.data;
   });
 
