@@ -68,6 +68,12 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.guidance = guidance;
 
     // declared = user tags
+
+    //going to hold the users who aren't attending hiring day
+    $scope.notAttending = [];
+    //going to hold the users who are attending hiring day
+    $scope.attending = [];
+
     $scope.interestThreeOrAbove = 0;
     $scope.interestResponses = 0;
     var declared = function() {
@@ -92,6 +98,30 @@ app.controller('AdminOpportunitiesDetailCtrl',
         }
         if(matchModel.user.attending) {
           matchModel.user.attending = 'Yes';
+          $scope.attending.push({
+            _id: matchModel.user._id,
+            name: matchModel.user.name,
+            attending: matchModel.user.attending,
+            email: matchModel.user.email,
+            star: matchModel.star,
+            upVote: matchModel.upVote,
+            downVote: matchModel.downVote,
+            noGo: matchModel.noGo,
+            interest: matchModel.userInterest,
+            answers: matchModel.answers,
+            category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
+            searchStage: matchModel.user.searchStage,
+            adminOverride: matchModel.adminOverride,
+            points: [0, 0], // default: [points, possible points]
+            score: 0, // points[0] / points[1]
+            tags: (function () {
+              var tagsByKeys = {};
+              matchModel.user.tags.forEach(function (tag) {
+                tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
+              });
+              return tagsByKeys;
+            })()
+          });
         } else {
           matchModel.user.attending = 'No';
         }
@@ -128,6 +158,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
       return result;
     };
     $scope.declared = declared();
+    console.log($scope.declared);
     $scope.updateGuidance();
   };
 
