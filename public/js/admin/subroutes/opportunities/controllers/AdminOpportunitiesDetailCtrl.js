@@ -158,7 +158,8 @@ app.controller('AdminOpportunitiesDetailCtrl',
       return result;
     };
     $scope.declared = declared();
-    console.log($scope.declared);
+    console.log($scope.attending, ' attending');
+    console.log($scope.declared, ' declared');
     $scope.updateGuidance();
   };
 
@@ -329,7 +330,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     }
 
     // reset scores to recalculate
-    $scope.declared.forEach(function (user) {
+    $scope.attending.forEach(function (user) {
       user.points[0] = 0;
       user.points[1] = 0;
     });
@@ -337,13 +338,13 @@ app.controller('AdminOpportunitiesDetailCtrl',
     // count # of people meeting thresholds
     Object.keys($scope.filteredStats).forEach(function (tagId) {
       if ($scope.filteredStats[tagId].type === 'scale') {
-        $scope.declared.forEach(function (user) {
+        $scope.attending.forEach(function (user) {
           if (user.tags[tagId] >= $scope.filteredStats[tagId].threshold) {
             $scope.filteredStats[tagId].count += 1;
           }
         });
       } else if ($scope.filteredStats[tagId].type === 'binary') {
-        $scope.declared.forEach(function (user) {
+        $scope.attending.forEach(function (user) {
           if (user.tags[tagId] === $scope.filteredStats[tagId].threshold) {
             $scope.filteredStats[tagId].count += 1;
           }
@@ -352,7 +353,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     });
 
     // calculate match results per user
-    $scope.declared.forEach(function (user) {
+    $scope.attending.forEach(function (user) {
       // loop over all tags to compare & calculate match score
       Object.keys($scope.filteredStats).forEach(function (tagId) {
         // must have
@@ -425,7 +426,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
   //fill up the interest grid array
   $scope.matchGrid = function() {
     var csvString = '';
-    _.each($scope.declared, function(user) {
+    _.each($scope.attending, function(user) {
       var result = [];
       if(user.name) {
         result.push(user.name, user.category || '', user.searchStage || '', user.interest || '', user.adminOverride || '');
