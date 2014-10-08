@@ -16,7 +16,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.companies = companies;
 
     Match.getUsers($stateParams._id).then(function (data) {
-      console.log(data);
       $scope.mapToView(data.opportunity, data.matches);
       $scope.oppData = data.opportunity;
       $scope.matchData = data.matches;
