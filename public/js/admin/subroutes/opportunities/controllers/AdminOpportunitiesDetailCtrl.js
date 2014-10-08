@@ -1,10 +1,11 @@
 app.controller('AdminOpportunitiesDetailCtrl',
   ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User',
   function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User) {
+  var originalCompanyId;
   $scope.sorter = 'score';
   $scope.reverse = true;
-  var originalCompanyId;
   $scope.oppData = {};
+  $scope.showAttending = false;
 
   //array to create the downloadable grid
   var interestGrid = ['Name', 'Group', 'Stage', 'Interest', 'Admin Override', 'Attending'];
@@ -68,6 +69,12 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.guidance = guidance;
 
     // declared = user tags
+
+    //going to hold the users who aren't attending hiring day
+    $scope.notAttending = [];
+    //going to hold the users who are attending hiring day
+    $scope.attending = [];
+
     $scope.interestThreeOrAbove = 0;
     $scope.interestResponses = 0;
     var declared = function() {
@@ -90,35 +97,60 @@ app.controller('AdminOpportunitiesDetailCtrl',
         if(!matchModel || !matchModel.user) {
           return;
         }
+        //if user is attending push user obj into attending array if not push into notAttending array
         if(matchModel.user.attending) {
           matchModel.user.attending = 'Yes';
+          $scope.attending.push({
+            _id: matchModel.user._id,
+            name: matchModel.user.name,
+            attending: matchModel.user.attending,
+            email: matchModel.user.email,
+            star: matchModel.star,
+            upVote: matchModel.upVote,
+            downVote: matchModel.downVote,
+            noGo: matchModel.noGo,
+            interest: matchModel.userInterest,
+            answers: matchModel.answers,
+            category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
+            searchStage: matchModel.user.searchStage,
+            adminOverride: matchModel.adminOverride,
+            points: [0, 0], // default: [points, possible points]
+            score: 0, // points[0] / points[1]
+            tags: (function () {
+              var tagsByKeys = {};
+              matchModel.user.tags.forEach(function (tag) {
+                tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
+              });
+              return tagsByKeys;
+            })()
+          });
         } else {
           matchModel.user.attending = 'No';
+          $scope.notAttending.push({
+            _id: matchModel.user._id,
+            name: matchModel.user.name,
+            attending: matchModel.user.attending,
+            email: matchModel.user.email,
+            star: matchModel.star,
+            upVote: matchModel.upVote,
+            downVote: matchModel.downVote,
+            noGo: matchModel.noGo,
+            interest: matchModel.userInterest,
+            answers: matchModel.answers,
+            category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
+            searchStage: matchModel.user.searchStage,
+            adminOverride: matchModel.adminOverride,
+            points: [0, 0], // default: [points, possible points]
+            score: 0, // points[0] / points[1]
+            tags: (function () {
+              var tagsByKeys = {};
+              matchModel.user.tags.forEach(function (tag) {
+                tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
+              });
+              return tagsByKeys;
+            })()
+          });
         }
-        return {
-          _id: matchModel.user._id,
-          name: matchModel.user.name,
-          attending: matchModel.user.attending,
-          email: matchModel.user.email,
-          star: matchModel.star,
-          upVote: matchModel.upVote,
-          downVote: matchModel.downVote,
-          noGo: matchModel.noGo,
-          interest: matchModel.userInterest,
-          answers: matchModel.answers,
-          category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
-          searchStage: matchModel.user.searchStage,
-          adminOverride: matchModel.adminOverride,
-          points: [0, 0], // default: [points, possible points]
-          score: 0, // points[0] / points[1]
-          tags: (function () {
-            var tagsByKeys = {};
-            matchModel.user.tags.forEach(function (tag) {
-              tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
-            });
-            return tagsByKeys;
-          })()
-        };
       });
       result = result.filter(function(match) {
         if(match) {
@@ -298,7 +330,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     }
 
     // reset scores to recalculate
-    $scope.declared.forEach(function (user) {
+    $scope.attending.forEach(function (user) {
       user.points[0] = 0;
       user.points[1] = 0;
     });
@@ -306,13 +338,13 @@ app.controller('AdminOpportunitiesDetailCtrl',
     // count # of people meeting thresholds
     Object.keys($scope.filteredStats).forEach(function (tagId) {
       if ($scope.filteredStats[tagId].type === 'scale') {
-        $scope.declared.forEach(function (user) {
+        $scope.attending.forEach(function (user) {
           if (user.tags[tagId] >= $scope.filteredStats[tagId].threshold) {
             $scope.filteredStats[tagId].count += 1;
           }
         });
       } else if ($scope.filteredStats[tagId].type === 'binary') {
-        $scope.declared.forEach(function (user) {
+        $scope.attending.forEach(function (user) {
           if (user.tags[tagId] === $scope.filteredStats[tagId].threshold) {
             $scope.filteredStats[tagId].count += 1;
           }
@@ -321,7 +353,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     });
 
     // calculate match results per user
-    $scope.declared.forEach(function (user) {
+    $scope.attending.forEach(function (user) {
       // loop over all tags to compare & calculate match score
       Object.keys($scope.filteredStats).forEach(function (tagId) {
         // must have
@@ -394,7 +426,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
   //fill up the interest grid array
   $scope.matchGrid = function() {
     var csvString = '';
-    _.each($scope.declared, function(user) {
+    _.each($scope.attending, function(user) {
       var result = [];
       if(user.name) {
         result.push(user.name, user.category || '', user.searchStage || '', user.interest || '', user.adminOverride || '');
