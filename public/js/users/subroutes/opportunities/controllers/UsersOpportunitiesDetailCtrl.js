@@ -42,7 +42,6 @@ app.controller('UsersOpportunitiesDetailCtrl',
     var opportunity = match.opportunity;
     var questions = opportunity.questions;
     var user = data.user;
-
     var numQuestions = questions.length;
     var numAnswers = match.answers.length;
     var difference = numQuestions - numAnswers;

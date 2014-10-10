@@ -7,6 +7,7 @@ app.controller('AdminSidebarCtrl', ['$scope', '$rootScope', '$state', function (
         'dashboard': 'sidebar-dashboard',
         'opportunities': 'sidebar-opportunities',
         'companies': 'sidebar-companies',
+        'monitor': 'sidebar-monitor',
         'account': 'sidebar-account',
         'profile': 'sidebar-profile',
         'candidates': 'sidebar-candidates',
@@ -14,26 +15,27 @@ app.controller('AdminSidebarCtrl', ['$scope', '$rootScope', '$state', function (
         'tags': 'sidebar-tags',
     };
 
-    $scope.currentStateHeading = $state.current.name.split('.')[1];
-    document.getElementById(sidebarIds[$scope.currentStateHeading]).classList.add('sidebar-active');
+    // $scope.currentStateHeading = $state.current.name.split('.')[1];
+    // document.getElementById(sidebarIds[$scope.currentStateHeading]).classList.add('sidebar-active');
 
-    var getNewState = function (toState) {
-        var defaultState = "dashboard";
-        for (var state in sidebarIds) {
-            if (toState.hasOwnProperty("name") && toState.name.indexOf(state) > -1) { return state; }
-        }
-        return defaultState;
-    };
+    // var getNewState = function (toState) {
+    //     console.log(toState, '   to state shit');
+    //     var defaultState = "dashboard";
+    //     for (var state in sidebarIds) {
+    //         if (toState.hasOwnProperty("name") && toState.name.indexOf(state) > -1) { return state; }
+    //     }
+    //     return defaultState;
+    // };
 
-    $rootScope.$on('$stateChangeSuccess', function(event, toState) {
-        var fromState = $scope.currentStateHeading;
-        $scope.currentStateHeading = getNewState(toState);
+    // $rootScope.$on('$stateChangeSuccess', function(event, toState) {
+    //     var fromState = $scope.currentStateHeading;
+    //     $scope.currentStateHeading = getNewState(toState);
 
-        var $fromState = document.getElementById(sidebarIds[fromState]);
-        var $toState = document.getElementById(sidebarIds[$scope.currentStateHeading]);
+    //     var $fromState = document.getElementById(sidebarIds[fromState]);
+    //     var $toState = document.getElementById(sidebarIds[$scope.currentStateHeading]);
 
-        if ($fromState) { $fromState.classList.remove('sidebar-active'); }
-        if ($toState) { $toState.classList.add('sidebar-active'); }
-    });
+    //     if ($fromState) { $fromState.classList.remove('sidebar-active'); }
+    //     if ($toState) { $toState.classList.add('sidebar-active'); }
+    // });
 
 }]);

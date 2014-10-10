@@ -27,7 +27,6 @@ app.controller('UsersOpportunitiesCtrl',
 
   UsersOpportunity.getAll().then(function (data) {
     $scope.user = data.user;
-
     var opportunities = data.opportunities;
     var matches = data.matches;
     var interest = formatMatches(matches);
