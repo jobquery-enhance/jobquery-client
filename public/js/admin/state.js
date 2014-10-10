@@ -11,7 +11,7 @@ app.config(['$stateProvider', function ($stateProvider) {
             $location.path('/login');
           } else {
             if($location.path() === '/admin') {
-              $location.path('/admin/dashboard');
+              $location.path('/admin/opportunities');
             }
           }
         }]
