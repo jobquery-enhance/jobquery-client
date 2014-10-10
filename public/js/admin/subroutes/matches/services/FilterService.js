@@ -354,7 +354,7 @@ app.factory('FilterService', ['Match', 'User',
                     var possibleSwitchIndex = k;
 
                     //wasScheduled = switch(emptySpaceIndex, possibleSwitchIndex, oppSchedule, userForSchedule)
-                    wasScheduled = switchSchedulingSlots(emptySpaceIndex, possibleSwitchIndex, oppSchedule, userForSchedule, oppId, userId);
+                    wasScheduled = switchSchedulingSlots(emptySpaceIndex, possibleSwitchIndex, oppSchedule, userForSchedule);
                     //if wasScheduled
                     if(wasScheduled) {
                       //break
@@ -644,9 +644,9 @@ app.factory('FilterService', ['Match', 'User',
         };
 
         var downloadSpreadsheet = function(csvString){
-          var f = document.createElement("iframe");
-          document.body.appendChild(f);
-          f.src = "data:" +  'text/csv'   + "," + encodeURIComponent(csvString);
+         var f = document.createElement("iframe");
+         document.body.appendChild(f);
+         f.src = "data:" +  'text/csv'   + "," + encodeURIComponent(csvString);
         };
 
 
