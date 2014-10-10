@@ -354,7 +354,7 @@ app.factory('FilterService', ['Match', 'User',
                     var possibleSwitchIndex = k;
 
                     //wasScheduled = switch(emptySpaceIndex, possibleSwitchIndex, oppSchedule, userForSchedule)
-                    wasScheduled = switchSchedulingSlots(emptySpaceIndex, possibleSwitchIndex, oppSchedule, userForSchedule);
+                    wasScheduled = switchSchedulingSlots(emptySpaceIndex, possibleSwitchIndex, oppSchedule, userForSchedule, oppId, userId);
                     //if wasScheduled
                     if(wasScheduled) {
                       //break
