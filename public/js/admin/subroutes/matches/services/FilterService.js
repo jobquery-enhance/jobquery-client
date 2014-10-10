@@ -655,6 +655,10 @@ app.factory('FilterService', ['Match', 'User',
           var f = document.createElement('iframe');
           document.body.appendChild(f);
           f.src = 'data:' + 'text/csv' + ',' + encodeURIComponent(csvString);
+          //remove Iframes
+          setTimeout(function() {
+            document.body.removeChild(f);
+          }, 333);
         };
 
         var matches = {};
