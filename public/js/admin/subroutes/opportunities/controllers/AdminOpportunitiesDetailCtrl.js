@@ -6,6 +6,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
   $scope.reverse = true;
   $scope.oppData = {};
   $scope.showAttending = false;
+  $scope.tooltip = '<button>Yo</button>';
 
   //array to create the downloadable grid
   var interestGrid = ['Name', 'Group', 'Stage', 'Interest', 'Admin Override', 'Attending'];
@@ -246,8 +247,10 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.updateGuidance();
   };
 
-  $scope.edit = function (user) {
-    //user.adminOverride = user.value;
+  $scope.edit = function (user, override) {
+    console.log(user);
+    console.log(override);
+    // user.adminOverride = user;
     Match.update(user);
   };
 
