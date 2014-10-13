@@ -426,6 +426,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
   var toggleOffDbGlyph = function(user, glyph){
     user[glyph] = false;
   };
+
   //fill up the interest grid array
   $scope.matchGrid = function() {
     var csvString = '';
