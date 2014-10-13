@@ -432,7 +432,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     var csvString = '';
     _.each($scope.attending, function(user) {
       var result = [];
-      result.push(user.name || user.email, user.category || '', user.searchStage || '', user.interest || '', user.adminOverride || '', user.attending || '', '\n');
+      result.push(user.name || user.email, user.category || '', user.searchStage || '', user.interest || 'Not Declared', user.adminOverride || '', user.attending || '', '\n');
       csvString += result.join(',');
       console.log(csvString);
 
