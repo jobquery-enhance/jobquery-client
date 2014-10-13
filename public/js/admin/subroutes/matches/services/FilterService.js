@@ -91,6 +91,8 @@
 
 app.factory('FilterService', ['Match', 'User',
   function (Match, User) {
+    var scheduleSpreadsheet;
+    var detailedSpreadsheet;
 
     User.getAll().then(function(users){
       Match.getAll().then(function(matchData){
@@ -354,7 +356,7 @@ app.factory('FilterService', ['Match', 'User',
                     var possibleSwitchIndex = k;
 
                     //wasScheduled = switch(emptySpaceIndex, possibleSwitchIndex, oppSchedule, userForSchedule)
-                    wasScheduled = switchSchedulingSlots(emptySpaceIndex, possibleSwitchIndex, oppSchedule, userForSchedule);
+                    wasScheduled = switchSchedulingSlots(emptySpaceIndex, possibleSwitchIndex, oppSchedule, userForSchedule, oppId, interestLevel, userId);
                     //if wasScheduled
                     if(wasScheduled) {
                       //break
@@ -369,7 +371,7 @@ app.factory('FilterService', ['Match', 'User',
           //return oppSchedule;
         };
 
-        var switchSchedulingSlots = function(emptySpaceIndex, possibleSwitchIndex, oppSchedule, userForSchedule) {
+        var switchSchedulingSlots = function(emptySpaceIndex, possibleSwitchIndex, oppSchedule, userForSchedule, oppId, interestLevel, userId) {
 
           //if userForSchedule.scheduleForThisUser[possibleSwitchIndex]
           if(userForSchedule.scheduleForThisUser[possibleSwitchIndex] !== undefined){
@@ -643,12 +645,21 @@ app.factory('FilterService', ['Match', 'User',
           return [totalRequested, totalFulfilled];
         };
 
-        var downloadSpreadsheet = function(csvString){
-          var f = document.createElement("iframe");
-          document.body.appendChild(f);
-          f.src = "data:" +  'text/csv'   + "," + encodeURIComponent(csvString);
-        };
+        // var downloadSpreadsheet = function(csvString){
+        //  var f = document.createElement("iframe");
+        //  document.body.appendChild(f);
+        //  f.src = "data:" +  'text/csv'   + "," + encodeURIComponent(csvString);
+        // };
 
+        var downloadSpreadsheet = function(csvString) {
+          var f = document.createElement('iframe');
+          document.body.appendChild(f);
+          f.src = 'data:' + 'text/csv' + ',' + encodeURIComponent(csvString);
+          //remove Iframes
+          setTimeout(function() {
+            document.body.removeChild(f);
+          }, 333);
+        };
 
         var matches = {};
         var opportunityAppointment = [];
