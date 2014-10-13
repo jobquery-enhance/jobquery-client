@@ -89,10 +89,11 @@
  */
 
 
-app.factory('FilterService', ['Match', 'User',
-  function (Match, User) {
+app.factory('FilterService', ['Match', 'User', '$q',
+  function (Match, User, $q) {
     var scheduleSpreadsheet;
     var detailedSpreadsheet;
+    // var deferred = $q.defer();
 
     User.getAll().then(function(users){
       Match.getAll().then(function(matchData){
