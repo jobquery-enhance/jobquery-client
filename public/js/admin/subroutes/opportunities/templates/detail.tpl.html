@@ -159,7 +159,7 @@
 <!-- Row 3 -->
                 <tr ng-repeat="user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse">
                     <td><a ui-sref="admin.candidates.detail({_id: user._id})">Detail</a></td>
-                    <td class="text-center">{{ user.name }}</td>
+                    <td class="text-center">{{ user.name || user.email }}</td>
                     <td class="text-center">{{ user.attending }}</td>
                     <td>{{ user.category }}</td>
                     <td>{{ user.searchStage }}</td>
