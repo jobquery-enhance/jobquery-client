@@ -9,7 +9,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
   $scope.tooltip = '<button>Yo</button>';
 
   //array to create the downloadable grid
-  var interestGrid = ['Name', 'Group', 'Stage', 'Interest', 'Admin Override', 'Attending'];
+  var interestGrid = ['Name', 'Group', 'Stage', 'Interest', 'Admin Override', 'Attending', '\n'];
 
   $scope.seePreview = function() {
     $state.go("admin.opportunities.preview", {_id: $scope.oppData._id});
@@ -426,28 +426,23 @@ app.controller('AdminOpportunitiesDetailCtrl',
   var toggleOffDbGlyph = function(user, glyph){
     user[glyph] = false;
   };
+
   //fill up the interest grid array
   $scope.matchGrid = function() {
     var csvString = '';
     _.each($scope.attending, function(user) {
       var result = [];
-      if(user.name) {
-        result.push(user.name, user.category || '', user.searchStage || '', user.interest || '', user.adminOverride || '');
-      }
-      if(user.category === "HR14/15" && user.searchStage !== 'Out') {
-        result.push('Yes', '\n');
-      } else {
-        result.push('\n');
-      }
+      result.push(user.name || user.email, user.category || '', user.searchStage || '', user.interest || '', user.adminOverride || '', user.attending || '', '\n');
       csvString += result.join(',');
+      console.log(csvString);
+
     });
 
-    interestGrid.push('\n');
     var str = interestGrid.join(',');
     str += csvString;
     var f = document.createElement("iframe");
     document.body.appendChild(f);
-    f.src = "data:" +  'text/csv'   + "," + encodeURIComponent(str);
+    f.src = 'data:' +  'text/csv'   + ',' + encodeURIComponent(str);
     setTimeout(function() {
       document.body.removeChild(f);
     }, 333);

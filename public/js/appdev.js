@@ -39,7 +39,7 @@ app.animation('.overlay', function() {
   return {
     enter: function(elem, callback) {
       $(elem).animate({
-        opacity: '0.4'
+        opacity: '0.3'
       }, 500, callback);
     },
     leave: function(elem, callback) {
