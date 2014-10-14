@@ -1,33 +1,44 @@
 app.controller('AdminOpportunitiesDetailCtrl',
-  ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User',
-  function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User) {
+  ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User', 'OppFactory',
+  function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User, OppFactory) {
   var originalCompanyId;
   $scope.sorter = 'score';
   $scope.reverse = true;
   $scope.oppData = {};
   $scope.showAttending = false;
-  $scope.tooltip = '<button>Yo</button>';
+
+  OppFactory.tags.then(function(tags) {
+    $scope.tags = tags;
+  });
+
+  OppFactory.categories.then(function(categories) {
+    $scope.categories = categories;
+  });
+
+  OppFactory.users($stateParams._id).then(function(users) {
+    console.log(users);
+  });
 
   //array to create the downloadable grid
-  var interestGrid = ['Name', 'Group', 'Stage', 'Interest', 'Admin Override', 'Attending', '\n'];
+  var interestGrid = ['Name', 'Group', 'Stage', 'Interest', 'Admin Override', 'Attending'];
 
   $scope.seePreview = function() {
     $state.go("admin.opportunities.preview", {_id: $scope.oppData._id});
   };
+
   Company.getAll().then(function (companies) {
     $scope.companies = companies;
-
+  });
     Match.getUsers($stateParams._id).then(function (data) {
       $scope.mapToView(data.opportunity, data.matches);
       $scope.oppData = data.opportunity;
       $scope.matchData = data.matches;
     });
-  });
 
-  Tag.getAll().then(function (tags) { $scope.tags = tags; });
+  // Tag.getAll().then(function (tags) { $scope.tags = tags; });
 
-  Category.getAll('Opportunity')
-  .then(function (categories) { $scope.categories = categories; });
+  // Category.getAll('Opportunity')
+  // .then(function (categories) { $scope.categories = categories; });
 
   $scope.readOnly = true;
   $scope.editButtonText = "✎  Edit Opportunity";
@@ -248,8 +259,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
   };
 
   $scope.edit = function (user, override) {
-    console.log(user);
-    console.log(override);
     // user.adminOverride = user;
     Match.update(user);
   };
@@ -314,9 +323,11 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
   $scope.updateGuidance = function () {
   // filtered guidance = no text type
-  $scope.filteredTags = $scope.guidance.tags.filter(function (tag) {
-    return (tag.value !== 'text');
-  });
+    $scope.filteredTags = $scope.guidance.tags.filter(function (tag) {
+      interestGrid.push(tag.data.name);
+      return (tag.value !== 'text');
+    });
+    interestGrid.push('\n');
   // $scope.filteredTags = $scope.guidance.tags;
 
     // calculate summary stats
@@ -434,7 +445,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
       var result = [];
       result.push(user.name || user.email, user.category || '', user.searchStage || '', user.interest || 'Not Declared', user.adminOverride || '', user.attending || '', '\n');
       csvString += result.join(',');
-      console.log(csvString);
 
     });
 
@@ -448,6 +458,63 @@ app.controller('AdminOpportunitiesDetailCtrl',
     }, 333);
   };
 
-
-
 }]);
+
+//factory to remove logic from controller
+app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Category, Tag, Match, Company) {
+  var categories;
+  var tags;
+  var basic;
+  var guidance;
+  var declared;
+
+  // var match = function(stateParamId) {
+  //   Match.getUsers(stateParamId)
+  //     .then(function(data) {
+
+  //     });
+  // };
+
+  // Company.getAll().then(function (companies) {
+  //   //be sure to pass in $stateParams._id to match.getUsers()
+  //   Match.getUsers().then(function (data) {
+  //     var mapToView(data.opportunity, data.matches);
+  //     var oppData = data.opportunity;
+  //     var matchData = data.matches;
+  //   });
+  // });
+
+
+  return {
+    categories: Category.getAll('Opportunity')
+      .then(function(categories) {
+      return categories;
+    }),
+    tags: Tag.getAll()
+      .then(function(tags) {
+        return tags;
+    }),
+    companies: Company.getAll()
+      .then(function (companies) {
+        return companies;
+    }),
+    users: function(stateParamId) {
+      return Match.getUsers(stateParamId).then(function(data) {
+        return data;
+      });
+    }
+
+  };
+}]);
+
+
+
+
+
+
+
+
+
+
+
+

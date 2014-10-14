@@ -183,20 +183,7 @@
                     </td>
                     <td ng-repeat="answerObject in user.answers" ng-show="!hideQuestions"><p class="text-center">{{answerObject.answer || 'N/A'}}</p></td>
                 </tr>
-<!-- repeat everything 10th row -->
-                <!-- <tr ng-repeat-end ng-if="$index > 0 && $index % 10 === 0 && !$last">
-                    <th></th>
-                    <th><div class="text-left">Name</div></th>
-                    <th><div class="text-left pointer" ng-click="sorter = 'name'; reverse = !reverse">Attending?</div></th>
-                    <th><div class="text-left">Group</div></th>
-                    <th><div class="text-left">Stage</div></th>
-                    <th><div class="text-center">Match</div></th>
-                    <th><div class="text-center">Interest</div></th>
-                    <th><div class="text-center">Admin Override</div></th>
-                    <th><div class="text-center pointer"> Scheduling Preference <span></span></div></th>
-                    <th ng-repeat="tag in filteredTags" ng-show="!hideTags"><div class="text-center">{{ tag.data.name }}</div></th>
-                    <th ng-repeat="question in guidance.questions" ng-show="!hideQuestions"><div class="text-center">{{question.question}}</div></th>
-                </tr> -->
+                <!-- Table to show those who aren't attending hiring day -->
                 <tr ng-if="showAttending" ng-repeat="user in notAttending | filter:ExcludeAccepted() | orderBy:sorter:reverse">
                     <td><a ui-sref="admin.candidates.detail({_id: user._id})">Detail</a></td>
                     <td class="text-center">{{ user.name }}</td>
