@@ -20,14 +20,13 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
   //get user data
   OppFactory.users($stateParams._id).then(function(data) {
-    console.log(data, ' oppInfo');
     $scope.basic = data.basic;
     $scope.guidance = data.guidance;
     opportunityId = data.basic._id;
     originalCompanyId = data.basic.company._id;
     $scope.attending = OppFactory.attending;
     $scope.notAttending = OppFactory.notAttending;
-    console.log(OppFactory.attending, ' factory attending');
+    $scope.updateGuidance();
   });
 
   //get all companies
@@ -341,7 +340,6 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
   var notAttending = [];
 
   var mapToView = function(oppData) {
-    console.log(oppData);
     var guidance = {};
     var declared = [];
     var basic;
