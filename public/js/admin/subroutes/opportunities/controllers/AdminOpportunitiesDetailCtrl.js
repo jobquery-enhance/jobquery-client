@@ -2,9 +2,10 @@ app.controller('AdminOpportunitiesDetailCtrl',
   ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User', 'OppFactory',
   function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User, OppFactory) {
   var originalCompanyId;
+  var opportunityId;
+
   $scope.sorter = 'score';
   $scope.reverse = true;
-  $scope.oppData = {};
   $scope.showAttending = false;
 
   //get all tags
@@ -17,10 +18,11 @@ app.controller('AdminOpportunitiesDetailCtrl',
   });
   //get user data
   OppFactory.users($stateParams._id).then(function(data) {
-    $scope.basic = data.opportunity;
-    mapToView(data.opportunity, data.matches);
-    $scope.oppData = data.opportunity;
-    $scope.matchData = data.matches;
+    console.log(data, ' oppInfo');
+    $scope.basic = data.basic;
+    $scope.guidance = data.guidance;
+    opportunityId = data.basic._id;
+    originalCompanyId = data.basic.company._id;
   });
   //get all companies
   OppFactory.companies.then(function(companies) {
@@ -32,7 +34,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
   //oppotunity preview state
   $scope.seePreview = function() {
-    $state.go("admin.opportunities.preview", {_id: $scope.oppData._id});
+    $state.go("admin.opportunities.preview", {_id: opportunityId});
   };
 
   // Company.getAll().then(function (companies) {
@@ -63,33 +65,17 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
   var mapToView = function (oppData, matchData) {
     console.log(oppData, ' oppData');
-    // $scope.basic._id = oppData._id;
-    // $scope.basic.description = oppData.description;
-    // $scope.basic.company = oppData.company._id;
     // originalCompanyId = oppData.company._id;
-    // $scope.basic.title = oppData.jobTitle;
-    // $scope.basic.location = oppData.company.city;
-    // $scope.basic.links = oppData.links;
-    // $scope.basic.active = oppData.active;
-    // $scope.basic.approved = oppData.approved;
-    // $scope.basic.group = oppData.category;
-    // $scope.basic.internal =
-    //   oppData.internalNotes.length ?
-    //   oppData.internalNotes[0].text : null;
-    // $scope.basic.notes =
-    //   oppData.notes.length ?
-    //   oppData.notes[0].text : null;
-    console.log($scope.basic, ' basic');
-    // guidance = opportunity tags
-    var guidance = {};
-    guidance.questions = oppData.questions;
-    guidance.tags = oppData.tags.map(function (tagData) {
-      // interestGrid.push(tagData.tag.name);
 
-      return {data: tagData.tag, value: tagData.value, importance: tagData.importance};
-    });
+    // var guidance = {};
+    // guidance.questions = oppData.questions;
+    // guidance.tags = oppData.tags.map(function (tagData) {
+    //   // interestGrid.push(tagData.tag.name);
 
-    $scope.guidance = guidance;
+    //   return {data: tagData.tag, value: tagData.value, importance: tagData.importance};
+    // });
+
+    // $scope.guidance = guidance;
 
     // declared = user tags
 
@@ -474,8 +460,23 @@ app.controller('AdminOpportunitiesDetailCtrl',
 //factory to remove logic from controller
 app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Category, Tag, Match, Company) {
 
-  var mapToView = function(oppData, matchData) {
+  var mapToView = function(oppData) {
+    console.log(oppData);
+    var guidance = {};
+    var declared = [];
+    var basic;
 
+    guidance.questions = oppData.opportunity.questions;
+    guidance.tags = oppData.opportunity.tags.map(function (tagData) {
+      // interestGrid.push(tagData.tag.name);
+      return {data: tagData.tag, value: tagData.value, importance: tagData.importance};
+    });
+
+    return {
+      declared: declared,
+      guidance: guidance,
+      basic: oppData.opportunity
+    };
   };
 
   return {
@@ -493,7 +494,8 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
     }),
     users: function(stateParamId) {
       return Match.getUsers(stateParamId).then(function(data) {
-        return data;
+        return mapToView(data);
+        // return data;
       });
     },
     mapToView: mapToView
