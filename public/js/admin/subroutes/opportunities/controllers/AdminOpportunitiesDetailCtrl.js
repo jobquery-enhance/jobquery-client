@@ -35,9 +35,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.companies = companies;
   });
 
-  Company.getAll(companyId).then(function(company) {
-    // console.log(company, 'company');
-  });
 
   //array to create the downloadable grid
   var interestGrid = ['Name', 'Group', 'Stage', 'Interest', 'Admin Override', 'Attending'];
@@ -95,7 +92,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
         k -= 1;
       }
     }
-    console.log($scope.basic, ' basic');
     var oppData = {};
     oppData._id = $scope.basic._id;
     oppData.active = $scope.basic.active;
@@ -112,7 +108,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
     oppData.tags = $scope.guidance.tags.map(function (tag) {
       return {tag: tag.data._id, value: tag.value, importance: tag.importance};
     });
-    console.log(oppData);
     // update opportunity
     Opportunity.update(oppData).then(function(data){
     });
@@ -124,7 +119,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
         if (company._id === originalCompanyId) {
           var indexToRemove = company.opportunities.indexOf(oppData._id);
           company.opportunities.splice(indexToRemove, 1);
-          console.log(company);
           Company.update(company);
         }
 
@@ -319,12 +313,27 @@ app.controller('AdminOpportunitiesDetailCtrl',
     user[glyph] = false;
   };
 
+
+  var checkTags = function(user) {
+    var result = [];
+    _.each($scope.filteredStats, function(tagObj, key) {
+      if(user.tags[key]) {
+        result.push(user.tags[key]);
+      } else {
+        result.push('');
+      }
+    });
+    return result.join(',');
+  };
+
+
   //fill up the interest grid array
   $scope.matchGrid = function() {
     var csvString = '';
     _.each($scope.attending, function(user) {
       var result = [];
-      result.push(user.name || user.email, user.category || '', user.searchStage || '', user.interest || 'Not Declared', user.adminOverride || '', user.attending || '', '\n');
+      result.push(user.name || user.email, user.category || '', user.searchStage || '', user.interest || 'Not Declared', user.adminOverride || '', user.attending || '', checkTags(user), '\n');
+
       csvString += result.join(',');
 
     });
@@ -342,6 +351,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
 }]);
 
 //factory to remove logic from controller
+//next step to move this into a higher level factory so it can be incorported into other controllers making the same server calls
 app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Category, Tag, Match, Company) {
   var attending = [];
   var notAttending = [];
