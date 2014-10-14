@@ -7,33 +7,42 @@ app.controller('AdminOpportunitiesDetailCtrl',
   $scope.oppData = {};
   $scope.showAttending = false;
 
+  //get all tags
   OppFactory.tags.then(function(tags) {
     $scope.tags = tags;
   });
-
+  //get all category info
   OppFactory.categories.then(function(categories) {
     $scope.categories = categories;
   });
-
-  OppFactory.users($stateParams._id).then(function(users) {
-    console.log(users);
+  //get user data
+  OppFactory.users($stateParams._id).then(function(data) {
+    $scope.basic = data.opportunity;
+    mapToView(data.opportunity, data.matches);
+    $scope.oppData = data.opportunity;
+    $scope.matchData = data.matches;
+  });
+  //get all companies
+  OppFactory.companies.then(function(companies) {
+    $scope.companies = companies;
   });
 
   //array to create the downloadable grid
   var interestGrid = ['Name', 'Group', 'Stage', 'Interest', 'Admin Override', 'Attending'];
 
+  //oppotunity preview state
   $scope.seePreview = function() {
     $state.go("admin.opportunities.preview", {_id: $scope.oppData._id});
   };
 
-  Company.getAll().then(function (companies) {
-    $scope.companies = companies;
-  });
-    Match.getUsers($stateParams._id).then(function (data) {
-      $scope.mapToView(data.opportunity, data.matches);
-      $scope.oppData = data.opportunity;
-      $scope.matchData = data.matches;
-    });
+  // Company.getAll().then(function (companies) {
+  //   $scope.companies = companies;
+  // });
+    // Match.getUsers($stateParams._id).then(function (data) {
+    //   $scope.mapToView(data.opportunity, data.matches);
+    //   $scope.oppData = data.opportunity;
+    //   $scope.matchData = data.matches;
+    // });
 
   // Tag.getAll().then(function (tags) { $scope.tags = tags; });
 
@@ -48,27 +57,29 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.editButtonText = $scope.readOnly ? "✎  Edit Opportunity" : "✔  Save Opportunity";
   };
 
-  $scope.basic = {};
+  // $scope.basic = {};
   $scope.guidance = {};
   $scope.declared = [];
-  $scope.mapToView = function (oppData, matchData) {
-    $scope.basic._id = oppData._id;
-    $scope.basic.description = oppData.description;
-    $scope.basic.company = oppData.company._id;
-    originalCompanyId = oppData.company._id;
-    $scope.basic.title = oppData.jobTitle;
-    $scope.basic.location = oppData.company.city;
-    $scope.basic.links = oppData.links;
-    $scope.basic.active = oppData.active;
-    $scope.basic.approved = oppData.approved;
-    $scope.basic.group = oppData.category;
-    $scope.basic.internal =
-      oppData.internalNotes.length ?
-      oppData.internalNotes[0].text : null;
-    $scope.basic.notes =
-      oppData.notes.length ?
-      oppData.notes[0].text : null;
 
+  var mapToView = function (oppData, matchData) {
+    console.log(oppData, ' oppData');
+    // $scope.basic._id = oppData._id;
+    // $scope.basic.description = oppData.description;
+    // $scope.basic.company = oppData.company._id;
+    // originalCompanyId = oppData.company._id;
+    // $scope.basic.title = oppData.jobTitle;
+    // $scope.basic.location = oppData.company.city;
+    // $scope.basic.links = oppData.links;
+    // $scope.basic.active = oppData.active;
+    // $scope.basic.approved = oppData.approved;
+    // $scope.basic.group = oppData.category;
+    // $scope.basic.internal =
+    //   oppData.internalNotes.length ?
+    //   oppData.internalNotes[0].text : null;
+    // $scope.basic.notes =
+    //   oppData.notes.length ?
+    //   oppData.notes[0].text : null;
+    console.log($scope.basic, ' basic');
     // guidance = opportunity tags
     var guidance = {};
     guidance.questions = oppData.questions;
@@ -462,28 +473,10 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
 //factory to remove logic from controller
 app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Category, Tag, Match, Company) {
-  var categories;
-  var tags;
-  var basic;
-  var guidance;
-  var declared;
 
-  // var match = function(stateParamId) {
-  //   Match.getUsers(stateParamId)
-  //     .then(function(data) {
+  var mapToView = function(oppData, matchData) {
 
-  //     });
-  // };
-
-  // Company.getAll().then(function (companies) {
-  //   //be sure to pass in $stateParams._id to match.getUsers()
-  //   Match.getUsers().then(function (data) {
-  //     var mapToView(data.opportunity, data.matches);
-  //     var oppData = data.opportunity;
-  //     var matchData = data.matches;
-  //   });
-  // });
-
+  };
 
   return {
     categories: Category.getAll('Opportunity')
@@ -502,7 +495,8 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       return Match.getUsers(stateParamId).then(function(data) {
         return data;
       });
-    }
+    },
+    mapToView: mapToView
 
   };
 }]);

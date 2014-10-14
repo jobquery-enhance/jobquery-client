@@ -16,11 +16,11 @@
         <table class="table table-condensed">
         <tr>
             <td>Company:</td>
-            <td><select ng-model="basic.company" ng-disabled="readOnly" ng-options="company._id as company.name for company in companies | orderBy:'name'" required></select></td>
+            <td><select ng-model="basic.company._id" ng-disabled="readOnly" ng-options="company._id as company.name for company in companies | orderBy:'name'" required></select></td>
         </tr>
         <tr>
             <td>Title:</td>
-            <td><input size="50" ng-readonly="readOnly" type="text" ng-model="basic.title" required></td>
+            <td><input size="50" ng-readonly="readOnly" type="text" ng-model="basic.jobTitle" required></td>
         </tr>
         <tr>
         <tr>
@@ -37,7 +37,7 @@
         </tr>
           <tr>
             <td>Group:</td>
-            <td><select ng-model="basic.group._id" ng-options="category._id as category.name for category in categories" ng-disabled="readOnly"></select></td>
+            <td><select ng-model="basic.category._id" ng-options="category._id as category.name for category in categories" ng-disabled="readOnly"></select></td>
         </tr>
         <tr>
             <td>Links:</td>
