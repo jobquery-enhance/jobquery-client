@@ -25,6 +25,7 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'Dia
       opportunity.category = oppModel.category;
       opportunity.groupName = groupName;
       opportunity.company = oppModel.company.name;
+      opportunity.company._id = oppModel.company._id;
       opportunity.title = oppModel.jobTitle;
       opportunity.attending = groupName === 'Attending Hiring Day' ? true : false;
       opportunity.active = oppModel.active;
@@ -75,8 +76,8 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'Dia
     var toggleOppCategory = function(opp){
 
       //these are the unique _id in mongodb for the 'Attending Hiring Day', and
-      //'Not Attending Hiring Day' respectively. These two categories should probably 
-      //be refactored at some point in time to be boolean values on each opportunity 
+      //'Not Attending Hiring Day' respectively. These two categories should probably
+      //be refactored at some point in time to be boolean values on each opportunity
       //rather than part of the original 'category' implementation
 
       if(opp.category.name === 'Attending Hiring Day'){
@@ -109,7 +110,7 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'Dia
         }
       }
       $scope.groups[newCategory].push(opp);
-      
+
     };
 
     var toggleOppCategoryInDatabase = function(opp){

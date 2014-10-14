@@ -3,6 +3,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
   function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User, OppFactory) {
   var originalCompanyId;
   var opportunityId;
+  var companyId;
 
   $scope.sorter = 'score';
   $scope.reverse = true;
@@ -32,6 +33,10 @@ app.controller('AdminOpportunitiesDetailCtrl',
   //get all companies
   OppFactory.companies.then(function(companies) {
     $scope.companies = companies;
+  });
+
+  Company.getAll(companyId).then(function(company) {
+    // console.log(company, 'company');
   });
 
   //array to create the downloadable grid
@@ -90,7 +95,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
         k -= 1;
       }
     }
-
+    console.log($scope.basic, ' basic');
     var oppData = {};
     oppData._id = $scope.basic._id;
     oppData.active = $scope.basic.active;
@@ -101,12 +106,13 @@ app.controller('AdminOpportunitiesDetailCtrl',
     oppData.category = $scope.basic.category._id;
     oppData.company = $scope.basic.company;
     oppData.links = $scope.basic.links;
-    oppData.notes = $scope.basic.notes ? [ {text: $scope.basic.notes} ] : [];
-    oppData.internalNotes = $scope.basic.internal ? [ {text: $scope.basic.internal} ] : [];
+    oppData.notes = $scope.basic.notes[0].text ? [ {text: $scope.basic.notes[0].text} ] : [];
+    oppData.internalNotes = $scope.basic.internalNotes[0].text ? [ {text: $scope.basic.internalNotes[0].text} ] : [];
+
     oppData.tags = $scope.guidance.tags.map(function (tag) {
       return {tag: tag.data._id, value: tag.value, importance: tag.importance};
     });
-
+    console.log(oppData);
     // update opportunity
     Opportunity.update(oppData).then(function(data){
     });
@@ -118,6 +124,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
         if (company._id === originalCompanyId) {
           var indexToRemove = company.opportunities.indexOf(oppData._id);
           company.opportunities.splice(indexToRemove, 1);
+          console.log(company);
           Company.update(company);
         }
 
@@ -348,7 +355,6 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
     guidance.tags = oppData.opportunity.tags.map(function (tagData) {
       return {data: tagData.tag, value: tagData.value, importance: tagData.importance};
     });
-
     return {
       declared: declared,
       guidance: guidance,
@@ -448,7 +454,7 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       });
     },
     attending: attending,
-    notAttending: notAttending
+    notAttending: notAttending,
 
   };
 }]);

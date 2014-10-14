@@ -57,7 +57,7 @@
         </tr>
         <tr>
             <td>Internal Notes:</td>
-            <td><textarea cols="50" rows="3" ng-readonly="readOnly" ng-model="basic.internalNotes[0]"></textarea></td>
+            <td><textarea cols="50" rows="3" ng-readonly="readOnly" ng-model="basic.internalNotes[0].text"></textarea></td>
         </tr>
         </table>
     </div>
@@ -134,7 +134,7 @@
                 <th><div class="text-left pointer" ng-click="sorter = 'attending'; reverse = !reverse">Attending</div></th>
                 <th><div class="text-center  pointer" ng-click="sorter = 'category'; reverse = !reverse">Group</div></th>
                 <th><div class="text-left  pointer" ng-click="sorter = 'searchStage'; reverse = !reverse">Stage</div></th>
-                <th><div class="text-center pointer" ng-click="sorter = 'score'; reverse = !reverse">Match</div></th>
+                <!-- <th><div class="text-center pointer" ng-click="sorter = 'score'; reverse = !reverse">Match</div></th> -->
                 <th><div class="text-center pointer" ng-click="sorter = 'interest'; reverse = !reverse">Interest</div></th>
                 <th><div class="text-center pointer"> Admin Override</div></th>
                 <th><div class="text-center pointer"> Scheduling Preference</div></th>
@@ -163,7 +163,7 @@
                     <td class="text-center">{{ user.attending }}</td>
                     <td>{{ user.category }}</td>
                     <td>{{ user.searchStage }}</td>
-                    <td><div class="text-center">{{ user.points[1] === 0 ? '-' : user.score + '%' }}</div></td>
+                    <!-- <td><div class="text-center">{{ user.points[1] === 0 ? '-' : user.score + '%' }}</div></td> -->
                     <td><div class="text-center">{{ user.interest === 0 ? 'N/A' : user.interest }}</div></td>
                     <td class="text-center" style="min-width: 100px; max-width: 100px; font-weight: 600">
                         <input class="text-center"  placeholder="{{ user.adminOverride}} " ng-model="user.adminOverride" ng-click="edit(user)" ng-class="isOverridden(user)" type="number" min="1" max="4"></input>
@@ -190,7 +190,7 @@
                     <td class="text-center">{{ user.attending }}</td>
                     <td>{{ user.category }}</td>
                     <td>{{ user.searchStage }}</td>
-                    <td><div class="text-center">{{ user.points[1] === 0 ? '-' : user.score + '%' }}</div></td>
+                    <!-- <td><div class="text-center">{{ user.points[1] === 0 ? '-' : user.score + '%' }}</div></td> -->
                     <td><div class="text-center">{{ user.interest === 0 ? 'N/A' : user.interest }}</div></td>
                     <td class="text-center" style="min-width: 100px; max-width: 100px; font-weight: 600">
                         <input class="text-center"  placeholder="{{ user.adminOverride }}" ng-model="user.adminOverride" ng-click="edit(user)" ng-class="isOverridden(user)" type="number" min="0" max="4"></input>
