@@ -51,106 +51,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.editButtonText = $scope.readOnly ? "✎  Edit Opportunity" : "✔  Save Opportunity";
   };
 
-  // var mapToView = function (oppData, matchData) {
-    // console.log(oppData, ' oppData');
-
-    // declared = user tags
-
-    // going to hold the users who aren't attending hiring day
-    // $scope.notAttending = [];
-    // going to hold the users who are attending hiring day
-    // $scope.attending = [];
-
-    // $scope.interestThreeOrAbove = 0;
-    // $scope.interestResponses = 0;
-    // var declared = function() {
-    //   var result = matchData.map(function (matchModel) {
-    //     if (matchModel.userInterest > 0) {
-    //       $scope.interestResponses += 1;
-    //     }
-    //     if (matchModel.userInterest >= 3) {
-    //       $scope.interestThreeOrAbove +=1 ;
-    //     }
-
-    //     //Normalize question and answer arrays.
-    //     matchModel.answers = matchModel.answers || [];
-    //     var numQuestions = guidance.questions.length;
-    //     var numAnswers = matchModel.answers.length;
-    //     var difference = numQuestions - numAnswers;
-    //     for(var i = 0; i < difference; i++){
-    //       matchModel.answers.push({answer: ''});
-    //     }
-    //     if(!matchModel || !matchModel.user) {
-    //       return;
-    //     }
-    //     //if user is attending push user obj into attending array if not push into notAttending array
-    //     if(matchModel.user.attending) {
-    //       matchModel.user.attending = 'Yes';
-    //       $scope.attending.push({
-    //         _id: matchModel.user._id,
-    //         name: matchModel.user.name,
-    //         attending: matchModel.user.attending,
-    //         email: matchModel.user.email,
-    //         star: matchModel.star,
-    //         upVote: matchModel.upVote,
-    //         downVote: matchModel.downVote,
-    //         noGo: matchModel.noGo,
-    //         interest: matchModel.userInterest,
-    //         answers: matchModel.answers,
-    //         category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
-    //         searchStage: matchModel.user.searchStage,
-    //         adminOverride: matchModel.adminOverride,
-    //         points: [0, 0], // default: [points, possible points]
-    //         score: 0, // points[0] / points[1]
-    //         tags: (function () {
-    //           var tagsByKeys = {};
-    //           matchModel.user.tags.forEach(function (tag) {
-    //             tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
-    //           });
-    //           return tagsByKeys;
-    //         })()
-    //       });
-    //     } else {
-    //       matchModel.user.attending = 'No';
-    //       $scope.notAttending.push({
-    //         _id: matchModel.user._id,
-    //         name: matchModel.user.name,
-    //         attending: matchModel.user.attending,
-    //         email: matchModel.user.email,
-    //         star: matchModel.star,
-    //         upVote: matchModel.upVote,
-    //         downVote: matchModel.downVote,
-    //         noGo: matchModel.noGo,
-    //         interest: matchModel.userInterest,
-    //         answers: matchModel.answers,
-    //         category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
-    //         searchStage: matchModel.user.searchStage,
-    //         adminOverride: matchModel.adminOverride,
-    //         points: [0, 0], // default: [points, possible points]
-    //         score: 0, // points[0] / points[1]
-    //         tags: (function () {
-    //           var tagsByKeys = {};
-    //           matchModel.user.tags.forEach(function (tag) {
-    //             tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
-    //           });
-    //           return tagsByKeys;
-    //         })()
-    //       });
-    //     }
-    //   });
-    //   result = result.filter(function(match) {
-    //     if(match) {
-    //       return match;
-    //     }
-    //   });
-    //   return result;
-    // };
-    // $scope.declared = declared();
-    // $scope.updateGuidance();
-    // console.log($scope.attending);
-  // };
-
-
 
   $scope.save = function () {
     // remove any empty tags and duplicate tags (preference for higher order)
@@ -199,7 +99,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     oppData.description = $scope.basic.description;
     oppData.questions = $scope.guidance.questions;
     oppData.jobTitle = $scope.basic.title;
-    oppData.category = $scope.basic.group._id;
+    oppData.category = $scope.basic.category._id;
     oppData.company = $scope.basic.company;
     oppData.links = $scope.basic.links;
     oppData.notes = $scope.basic.notes ? [ {text: $scope.basic.notes} ] : [];
@@ -460,11 +360,9 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
 
   var declared = function(matchData, questionLength) {
     matchData.map(function (matchModel) {
-
       if(!matchModel || !matchModel.user) {
         return;
       }
-
       //Normalize question and answer arrays.
       matchModel.answers = matchModel.answers || [];
       var numQuestions = questionLength;
