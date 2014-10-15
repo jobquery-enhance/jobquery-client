@@ -102,9 +102,26 @@ app.controller('AdminOpportunitiesDetailCtrl',
     oppData.category = $scope.basic.category._id;
     oppData.company = $scope.basic.company;
     oppData.links = $scope.basic.links;
-    oppData.notes = $scope.basic.notes[0].text ? [ {text: $scope.basic.notes[0].text} ] : [];
-    oppData.internalNotes = $scope.basic.internalNotes[0].text ? [ {text: $scope.basic.internalNotes[0].text} ] : [];
-
+    // oppData.notes = $scope.basic.notes[0].text ? [ {text: $scope.basic.notes[0].text} ] : [];
+    oppData.notes = function() {
+      if($scope.basic.notes[0]) {
+        console.log($scope.basic.notes,'good notes')
+        return [{text: $scope.basic.notes[0].text}];
+      } else {
+      console.log($scope.basic.notes, 'bad notes');
+        return [];
+      }
+    }();
+    // oppData.internalNotes = $scope.basic.internalNotes[0].text ? [ {text: $scope.basic.internalNotes[0].text} ] : [];
+    oppData.internalNotes = function() {
+      if($scope.basic.internalNotes[0]) {
+        console.log($scope.basic.internalNotes[0], 'good internal');
+        return $scope.basic.internalNotes;
+      } else {
+        console.log($scope.basic.internalNotes, 'else internal');
+        return [];
+      }
+    }();
     oppData.tags = $scope.guidance.tags.map(function (tag) {
       return {tag: tag.data._id, value: tag.value, importance: tag.importance};
     });

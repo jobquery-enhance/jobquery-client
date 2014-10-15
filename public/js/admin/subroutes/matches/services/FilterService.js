@@ -91,6 +91,7 @@
 
 app.factory('FilterService', ['Match', 'User', '$q',
   function (Match, User, $q) {
+    var defer = $q.defer();
     var scheduleSpreadsheet;
     var detailedSpreadsheet;
     // var deferred = $q.defer();
@@ -653,13 +654,13 @@ app.factory('FilterService', ['Match', 'User', '$q',
         // };
 
         var downloadSpreadsheet = function(csvString) {
-          var f = document.createElement('iframe');
-          document.body.appendChild(f);
-          f.src = 'data:' + 'text/csv' + ',' + encodeURIComponent(csvString);
-          //remove Iframes
-          setTimeout(function() {
-            document.body.removeChild(f);
-          }, 333);
+          // var f = document.createElement('iframe');
+          // document.body.appendChild(f);
+          // f.src = 'data:' + 'text/csv' + ',' + encodeURIComponent(csvString);
+          // //remove Iframes
+          // setTimeout(function() {
+          //   document.body.removeChild(f);
+          // }, 333);
         };
 
         var matches = {};
@@ -691,9 +692,9 @@ app.factory('FilterService', ['Match', 'User', '$q',
         scheduleAllMatches(scheduleMatrix);
         shuffleScheduleRounds(scheduleMatrix, usersForSchedule);
 
-        scheduleSpreadSheet = makeScheduleSpreadsheet(scheduleMatrix);
+        // scheduleSpreadSheet = makeScheduleSpreadsheet(scheduleMatrix);
+        defer.resolve(makeScheduleSpreadsheet(scheduleMatrix));
         detailedSpreadsheet = makeDetailedSpreadsheet(scheduleMatrix);
-
         downloadSpreadsheet(scheduleSpreadSheet);
         downloadSpreadsheet(detailedSpreadsheet);
 
@@ -701,5 +702,6 @@ app.factory('FilterService', ['Match', 'User', '$q',
     });
 
     return {
+      scheduleSpreadsheet: defer.promise
     };
 }]);
