@@ -102,7 +102,14 @@ app.controller('AdminOpportunitiesDetailCtrl',
     oppData.category = $scope.basic.category._id;
     oppData.company = $scope.basic.company;
     oppData.links = $scope.basic.links;
-    oppData.notes = $scope.basic.notes[0].text ? [ {text: $scope.basic.notes[0].text} ] : [];
+    // oppData.notes = $scope.basic.notes[0].text ? [ {text: $scope.basic.notes[0].text} ] : [];
+    oppData.notes = function() {
+      if($scope.basic.notes[0].text) {
+        return $scope.basic.notes[0].text;
+      } else {
+        return [];
+      }
+    };
     oppData.internalNotes = $scope.basic.internalNotes[0].text ? [ {text: $scope.basic.internalNotes[0].text} ] : [];
 
     oppData.tags = $scope.guidance.tags.map(function (tag) {
