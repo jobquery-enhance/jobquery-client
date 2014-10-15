@@ -679,8 +679,6 @@ app.factory('FilterService', ['Match', 'User', '$q',
         // scheduleSpreadSheet = makeScheduleSpreadsheet(scheduleMatrix);
         defer.resolve(makeScheduleSpreadsheet(scheduleMatrix));
         detailedSpreadsheet = makeDetailedSpreadsheet(scheduleMatrix);
-        downloadSpreadsheet(scheduleSpreadSheet);
-        downloadSpreadsheet(detailedSpreadsheet);
 
       });
     });
