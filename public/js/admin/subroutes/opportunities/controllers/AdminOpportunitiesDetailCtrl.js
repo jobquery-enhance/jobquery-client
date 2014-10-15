@@ -337,6 +337,11 @@ app.controller('AdminOpportunitiesDetailCtrl',
       csvString += result.join(',');
 
     });
+    _.each($scope.notAttending, function(user) {
+      var result = [];
+      result.push(user.name || user.email, user.category || '', user.searchStage || '', user.interest || 'Not Declared', user.adminOverride || '', user.attending || '', checkTags(user), '\n');
+      csvString += result.join(',');
+    });
 
     var str = interestGrid.join(',');
     str += csvString;
