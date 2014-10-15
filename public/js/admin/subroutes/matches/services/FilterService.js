@@ -647,22 +647,6 @@ app.factory('FilterService', ['Match', 'User', '$q',
           return [totalRequested, totalFulfilled];
         };
 
-        // var downloadSpreadsheet = function(csvString){
-        //  var f = document.createElement("iframe");
-        //  document.body.appendChild(f);
-        //  f.src = "data:" +  'text/csv'   + "," + encodeURIComponent(csvString);
-        // };
-
-        var downloadSpreadsheet = function(csvString) {
-          // var f = document.createElement('iframe');
-          // document.body.appendChild(f);
-          // f.src = 'data:' + 'text/csv' + ',' + encodeURIComponent(csvString);
-          // //remove Iframes
-          // setTimeout(function() {
-          //   document.body.removeChild(f);
-          // }, 333);
-        };
-
         var matches = {};
         var opportunityAppointment = [];
         var opportunities = {};
