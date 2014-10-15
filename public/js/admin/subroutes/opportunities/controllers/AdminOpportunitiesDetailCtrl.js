@@ -1,33 +1,48 @@
 app.controller('AdminOpportunitiesDetailCtrl',
-  ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User',
-  function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User) {
+  ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User', 'OppFactory',
+  function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User, OppFactory) {
   var originalCompanyId;
+  var opportunityId;
+  var companyId;
+
   $scope.sorter = 'score';
   $scope.reverse = true;
-  $scope.oppData = {};
   $scope.showAttending = false;
-  $scope.tooltip = '<button>Yo</button>';
+
+  //get all tags
+  OppFactory.tags.then(function(tags) {
+    $scope.tags = tags;
+  });
+
+  //get all category info
+  OppFactory.categories.then(function(categories) {
+    $scope.categories = categories;
+  });
+
+  //get user data
+  OppFactory.users($stateParams._id).then(function(data) {
+    $scope.basic = data.basic;
+    $scope.guidance = data.guidance;
+    opportunityId = data.basic._id;
+    originalCompanyId = data.basic.company._id;
+    $scope.attending = OppFactory.attending;
+    $scope.notAttending = OppFactory.notAttending;
+    $scope.updateGuidance();
+  });
+
+  //get all companies
+  OppFactory.companies.then(function(companies) {
+    $scope.companies = companies;
+  });
+
 
   //array to create the downloadable grid
   var interestGrid = ['Name', 'Group', 'Stage', 'Interest', 'Admin Override', 'Attending'];
 
+  //oppotunity preview state
   $scope.seePreview = function() {
-    $state.go("admin.opportunities.preview", {_id: $scope.oppData._id});
+    $state.go("admin.opportunities.preview", {_id: opportunityId});
   };
-  Company.getAll().then(function (companies) {
-    $scope.companies = companies;
-
-    Match.getUsers($stateParams._id).then(function (data) {
-      $scope.mapToView(data.opportunity, data.matches);
-      $scope.oppData = data.opportunity;
-      $scope.matchData = data.matches;
-    });
-  });
-
-  Tag.getAll().then(function (tags) { $scope.tags = tags; });
-
-  Category.getAll('Opportunity')
-  .then(function (categories) { $scope.categories = categories; });
 
   $scope.readOnly = true;
   $scope.editButtonText = "✎  Edit Opportunity";
@@ -36,134 +51,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.readOnly = !$scope.readOnly;
     $scope.editButtonText = $scope.readOnly ? "✎  Edit Opportunity" : "✔  Save Opportunity";
   };
-
-  $scope.basic = {};
-  $scope.guidance = {};
-  $scope.declared = [];
-  $scope.mapToView = function (oppData, matchData) {
-    $scope.basic._id = oppData._id;
-    $scope.basic.description = oppData.description;
-    $scope.basic.company = oppData.company._id;
-    originalCompanyId = oppData.company._id;
-    $scope.basic.title = oppData.jobTitle;
-    $scope.basic.location = oppData.company.city;
-    $scope.basic.links = oppData.links;
-    $scope.basic.active = oppData.active;
-    $scope.basic.approved = oppData.approved;
-    $scope.basic.group = oppData.category;
-    $scope.basic.internal =
-      oppData.internalNotes.length ?
-      oppData.internalNotes[0].text : null;
-    $scope.basic.notes =
-      oppData.notes.length ?
-      oppData.notes[0].text : null;
-
-    // guidance = opportunity tags
-    var guidance = {};
-    guidance.questions = oppData.questions;
-    guidance.tags = oppData.tags.map(function (tagData) {
-      // interestGrid.push(tagData.tag.name);
-
-      return {data: tagData.tag, value: tagData.value, importance: tagData.importance};
-    });
-
-    $scope.guidance = guidance;
-
-    // declared = user tags
-
-    //going to hold the users who aren't attending hiring day
-    $scope.notAttending = [];
-    //going to hold the users who are attending hiring day
-    $scope.attending = [];
-
-    $scope.interestThreeOrAbove = 0;
-    $scope.interestResponses = 0;
-    var declared = function() {
-      var result = matchData.map(function (matchModel) {
-        if (matchModel.userInterest > 0) {
-          $scope.interestResponses += 1;
-        }
-        if (matchModel.userInterest >= 3) {
-          $scope.interestThreeOrAbove +=1 ;
-        }
-
-        //Normalize question and answer arrays.
-        matchModel.answers = matchModel.answers || [];
-        var numQuestions = guidance.questions.length;
-        var numAnswers = matchModel.answers.length;
-        var difference = numQuestions - numAnswers;
-        for(var i = 0; i < difference; i++){
-          matchModel.answers.push({answer: ''});
-        }
-        if(!matchModel || !matchModel.user) {
-          return;
-        }
-        //if user is attending push user obj into attending array if not push into notAttending array
-        if(matchModel.user.attending) {
-          matchModel.user.attending = 'Yes';
-          $scope.attending.push({
-            _id: matchModel.user._id,
-            name: matchModel.user.name,
-            attending: matchModel.user.attending,
-            email: matchModel.user.email,
-            star: matchModel.star,
-            upVote: matchModel.upVote,
-            downVote: matchModel.downVote,
-            noGo: matchModel.noGo,
-            interest: matchModel.userInterest,
-            answers: matchModel.answers,
-            category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
-            searchStage: matchModel.user.searchStage,
-            adminOverride: matchModel.adminOverride,
-            points: [0, 0], // default: [points, possible points]
-            score: 0, // points[0] / points[1]
-            tags: (function () {
-              var tagsByKeys = {};
-              matchModel.user.tags.forEach(function (tag) {
-                tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
-              });
-              return tagsByKeys;
-            })()
-          });
-        } else {
-          matchModel.user.attending = 'No';
-          $scope.notAttending.push({
-            _id: matchModel.user._id,
-            name: matchModel.user.name,
-            attending: matchModel.user.attending,
-            email: matchModel.user.email,
-            star: matchModel.star,
-            upVote: matchModel.upVote,
-            downVote: matchModel.downVote,
-            noGo: matchModel.noGo,
-            interest: matchModel.userInterest,
-            answers: matchModel.answers,
-            category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
-            searchStage: matchModel.user.searchStage,
-            adminOverride: matchModel.adminOverride,
-            points: [0, 0], // default: [points, possible points]
-            score: 0, // points[0] / points[1]
-            tags: (function () {
-              var tagsByKeys = {};
-              matchModel.user.tags.forEach(function (tag) {
-                tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
-              });
-              return tagsByKeys;
-            })()
-          });
-        }
-      });
-      result = result.filter(function(match) {
-        if(match) {
-          return match;
-        }
-      });
-      return result;
-    };
-    $scope.declared = declared();
-    $scope.updateGuidance();
-  };
-
 
 
   $scope.save = function () {
@@ -205,7 +92,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
         k -= 1;
       }
     }
-
     var oppData = {};
     oppData._id = $scope.basic._id;
     oppData.active = $scope.basic.active;
@@ -213,15 +99,15 @@ app.controller('AdminOpportunitiesDetailCtrl',
     oppData.description = $scope.basic.description;
     oppData.questions = $scope.guidance.questions;
     oppData.jobTitle = $scope.basic.title;
-    oppData.category = $scope.basic.group._id;
+    oppData.category = $scope.basic.category._id;
     oppData.company = $scope.basic.company;
     oppData.links = $scope.basic.links;
-    oppData.notes = $scope.basic.notes ? [ {text: $scope.basic.notes} ] : [];
-    oppData.internalNotes = $scope.basic.internal ? [ {text: $scope.basic.internal} ] : [];
+    oppData.notes = $scope.basic.notes[0].text ? [ {text: $scope.basic.notes[0].text} ] : [];
+    oppData.internalNotes = $scope.basic.internalNotes[0].text ? [ {text: $scope.basic.internalNotes[0].text} ] : [];
+
     oppData.tags = $scope.guidance.tags.map(function (tag) {
       return {tag: tag.data._id, value: tag.value, importance: tag.importance};
     });
-
     // update opportunity
     Opportunity.update(oppData).then(function(data){
     });
@@ -248,8 +134,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
   };
 
   $scope.edit = function (user, override) {
-    console.log(user);
-    console.log(override);
     // user.adminOverride = user;
     Match.update(user);
   };
@@ -314,9 +198,11 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
   $scope.updateGuidance = function () {
   // filtered guidance = no text type
-  $scope.filteredTags = $scope.guidance.tags.filter(function (tag) {
-    return (tag.value !== 'text');
-  });
+    $scope.filteredTags = $scope.guidance.tags.filter(function (tag) {
+      interestGrid.push(tag.data.name);
+      return (tag.value !== 'text');
+    });
+    interestGrid.push('\n');
   // $scope.filteredTags = $scope.guidance.tags;
 
     // calculate summary stats
@@ -426,33 +312,176 @@ app.controller('AdminOpportunitiesDetailCtrl',
   var toggleOffDbGlyph = function(user, glyph){
     user[glyph] = false;
   };
+
+
+  var checkTags = function(user) {
+    var result = [];
+    _.each($scope.filteredStats, function(tagObj, key) {
+      if(user.tags[key]) {
+        result.push(user.tags[key]);
+      } else {
+        result.push('');
+      }
+    });
+    return result.join(',');
+  };
+
+
   //fill up the interest grid array
   $scope.matchGrid = function() {
     var csvString = '';
     _.each($scope.attending, function(user) {
       var result = [];
-      if(user.name) {
-        result.push(user.name, user.category || '', user.searchStage || '', user.interest || '', user.adminOverride || '');
-      }
-      if(user.category === "HR14/15" && user.searchStage !== 'Out') {
-        result.push('Yes', '\n');
-      } else {
-        result.push('\n');
-      }
+      result.push(user.name || user.email, user.category || '', user.searchStage || '', user.interest || 'Not Declared', user.adminOverride || '', user.attending || '', checkTags(user), '\n');
+
+      csvString += result.join(',');
+
+    });
+    _.each($scope.notAttending, function(user) {
+      var result = [];
+      result.push(user.name || user.email, user.category || '', user.searchStage || '', user.interest || 'Not Declared', user.adminOverride || '', user.attending || '', checkTags(user), '\n');
       csvString += result.join(',');
     });
 
-    interestGrid.push('\n');
     var str = interestGrid.join(',');
     str += csvString;
     var f = document.createElement("iframe");
     document.body.appendChild(f);
-    f.src = "data:" +  'text/csv'   + "," + encodeURIComponent(str);
+    f.src = 'data:' +  'text/csv'   + ',' + encodeURIComponent(str);
     setTimeout(function() {
       document.body.removeChild(f);
     }, 333);
   };
 
-
-
 }]);
+
+//factory to remove logic from controller
+//next step to move this into a higher level factory so it can be incorported into other controllers making the same server calls
+app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Category, Tag, Match, Company) {
+  var attending = [];
+  var notAttending = [];
+
+  var mapToView = function(oppData) {
+    var guidance = {};
+    var declared = [];
+    var basic;
+
+    guidance.questions = oppData.opportunity.questions;
+    guidance.tags = oppData.opportunity.tags.map(function (tagData) {
+      return {data: tagData.tag, value: tagData.value, importance: tagData.importance};
+    });
+    return {
+      declared: declared,
+      guidance: guidance,
+      basic: oppData.opportunity
+    };
+  };
+
+  var declared = function(matchData, questionLength) {
+    matchData.map(function (matchModel) {
+      if(!matchModel || !matchModel.user) {
+        return;
+      }
+      //Normalize question and answer arrays.
+      matchModel.answers = matchModel.answers || [];
+      var numQuestions = questionLength;
+      var numAnswers = matchModel.answers.length;
+      var difference = numQuestions - numAnswers;
+      //try to get rid of this
+      for(var i = 0; i < difference; i++){
+        matchModel.answers.push({answer: ''});
+      }
+      //if user is attending push user obj into attending array if not push into notAttending array
+      if(matchModel.user.attending) {
+        matchModel.user.attending = 'Yes';
+        attending.push({
+          _id: matchModel.user._id,
+          name: matchModel.user.name,
+          attending: matchModel.user.attending,
+          email: matchModel.user.email,
+          star: matchModel.star,
+          upVote: matchModel.upVote,
+          downVote: matchModel.downVote,
+          noGo: matchModel.noGo,
+          interest: matchModel.userInterest,
+          answers: matchModel.answers,
+          category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
+          searchStage: matchModel.user.searchStage,
+          adminOverride: matchModel.adminOverride,
+          points: [0, 0], // default: [points, possible points]
+          score: 0, // points[0] / points[1]
+          tags: (function () {
+            var tagsByKeys = {};
+            matchModel.user.tags.forEach(function (tag) {
+              tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
+            });
+            return tagsByKeys;
+          })()
+        });
+      } else {
+        matchModel.user.attending = 'No';
+        notAttending.push({
+          _id: matchModel.user._id,
+          name: matchModel.user.name,
+          attending: matchModel.user.attending,
+          email: matchModel.user.email,
+          star: matchModel.star,
+          upVote: matchModel.upVote,
+          downVote: matchModel.downVote,
+          noGo: matchModel.noGo,
+          interest: matchModel.userInterest,
+          answers: matchModel.answers,
+          category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
+          searchStage: matchModel.user.searchStage,
+          adminOverride: matchModel.adminOverride,
+          points: [0, 0], // default: [points, possible points]
+          score: 0, // points[0] / points[1]
+          tags: (function () {
+            var tagsByKeys = {};
+            matchModel.user.tags.forEach(function (tag) {
+              tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
+            });
+            return tagsByKeys;
+          })()
+        });
+      }
+    });
+
+  };
+
+  return {
+    categories: Category.getAll('Opportunity')
+      .then(function(categories) {
+      return categories;
+    }),
+    tags: Tag.getAll()
+      .then(function(tags) {
+        return tags;
+    }),
+    companies: Company.getAll()
+      .then(function (companies) {
+        return companies;
+    }),
+    users: function(stateParamId) {
+      return Match.getUsers(stateParamId).then(function(data) {
+        declared(data.matches, data.opportunity.questions.length);
+        return mapToView(data);
+      });
+    },
+    attending: attending,
+    notAttending: notAttending,
+
+  };
+}]);
+
+
+
+
+
+
+
+
+
+
+
+

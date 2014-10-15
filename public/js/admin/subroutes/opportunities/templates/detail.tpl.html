@@ -16,11 +16,11 @@
         <table class="table table-condensed">
         <tr>
             <td>Company:</td>
-            <td><select ng-model="basic.company" ng-disabled="readOnly" ng-options="company._id as company.name for company in companies | orderBy:'name'" required></select></td>
+            <td><select ng-model="basic.company._id" ng-disabled="readOnly" ng-options="company._id as company.name for company in companies | orderBy:'name'" required></select></td>
         </tr>
         <tr>
             <td>Title:</td>
-            <td><input size="50" ng-readonly="readOnly" type="text" ng-model="basic.title" required></td>
+            <td><input size="50" ng-readonly="readOnly" type="text" ng-model="basic.jobTitle" required></td>
         </tr>
         <tr>
         <tr>
@@ -37,7 +37,7 @@
         </tr>
           <tr>
             <td>Group:</td>
-            <td><select ng-model="basic.group._id" ng-options="category._id as category.name for category in categories" ng-disabled="readOnly"></select></td>
+            <td><select ng-model="basic.category._id" ng-options="category._id as category.name for category in categories" ng-disabled="readOnly"></select></td>
         </tr>
         <tr>
             <td>Links:</td>
@@ -53,11 +53,11 @@
         </tr>
         <tr>
             <td>Notes:</td>
-            <td><textarea cols="50" rows="3" ng-readonly="readOnly" ng-model="basic.notes"></textarea></td>
+            <td><textarea cols="50" rows="3" ng-readonly="readOnly" ng-model="basic.notes[0].text"></textarea></td>
         </tr>
         <tr>
             <td>Internal Notes:</td>
-            <td><textarea cols="50" rows="3" ng-readonly="readOnly" ng-model="basic.internal"></textarea></td>
+            <td><textarea cols="50" rows="3" ng-readonly="readOnly" ng-model="basic.internalNotes[0].text"></textarea></td>
         </tr>
         </table>
     </div>
@@ -134,7 +134,7 @@
                 <th><div class="text-left pointer" ng-click="sorter = 'attending'; reverse = !reverse">Attending</div></th>
                 <th><div class="text-center  pointer" ng-click="sorter = 'category'; reverse = !reverse">Group</div></th>
                 <th><div class="text-left  pointer" ng-click="sorter = 'searchStage'; reverse = !reverse">Stage</div></th>
-                <th><div class="text-center pointer" ng-click="sorter = 'score'; reverse = !reverse">Match</div></th>
+                <!-- <th><div class="text-center pointer" ng-click="sorter = 'score'; reverse = !reverse">Match</div></th> -->
                 <th><div class="text-center pointer" ng-click="sorter = 'interest'; reverse = !reverse">Interest</div></th>
                 <th><div class="text-center pointer"> Admin Override</div></th>
                 <th><div class="text-center pointer"> Scheduling Preference</div></th>
@@ -159,16 +159,15 @@
 <!-- Row 3 -->
                 <tr ng-repeat="user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse">
                     <td><a ui-sref="admin.candidates.detail({_id: user._id})">Detail</a></td>
-                    <td class="text-center">{{ user.name }}</td>
+                    <td class="text-center">{{ user.name || user.email }}</td>
                     <td class="text-center">{{ user.attending }}</td>
                     <td>{{ user.category }}</td>
                     <td>{{ user.searchStage }}</td>
-                    <td><div class="text-center">{{ user.points[1] === 0 ? '-' : user.score + '%' }}</div></td>
                     <td><div class="text-center">{{ user.interest === 0 ? 'N/A' : user.interest }}</div></td>
                     <td class="text-center" style="min-width: 100px; max-width: 100px; font-weight: 600">
                         <input class="text-center"  placeholder="{{ user.adminOverride}} " ng-model="user.adminOverride" ng-click="edit(user)" ng-class="isOverridden(user)" type="number" min="1" max="4"></input>
                     </td>
-
+<!-- Scheduling Preference Column -->
                     <td class="text-center" style="min-width: 100px; max-width: 100px; font-weight: 600">
                       <p class="text-center"  >
                         <span ng-class="{'starStyle' : user.star === true} " class="glyphicon glyphicon-star" ng-click="adjustGlyphHighlighting('star', $index, user)"></span>
@@ -181,29 +180,15 @@
                     <td ng-repeat="tag in filteredTags" ng-show="!hideTags">
                         <p class="text-center"><span class="glyphicon" ng-class="calculateFit(tag.importance, filteredStats[tag.data._id].type, tag.value, user.tags[tag.data._id])[0]" ng-style="{color: calculateFit(tag.importance, filteredStats[tag.data._id].type, tag.value, user.tags[tag.data._id])[1]}"></span></p>
                     </td>
-                    <td ng-repeat="answerObject in user.answers" ng-show="!hideQuestions"><p class="text-center">{{answerObject.answer || 'N/A'}}</p></td>
                 </tr>
-<!-- repeat everything 10th row -->
-                <!-- <tr ng-repeat-end ng-if="$index > 0 && $index % 10 === 0 && !$last">
-                    <th></th>
-                    <th><div class="text-left">Name</div></th>
-                    <th><div class="text-left pointer" ng-click="sorter = 'name'; reverse = !reverse">Attending?</div></th>
-                    <th><div class="text-left">Group</div></th>
-                    <th><div class="text-left">Stage</div></th>
-                    <th><div class="text-center">Match</div></th>
-                    <th><div class="text-center">Interest</div></th>
-                    <th><div class="text-center">Admin Override</div></th>
-                    <th><div class="text-center pointer"> Scheduling Preference <span></span></div></th>
-                    <th ng-repeat="tag in filteredTags" ng-show="!hideTags"><div class="text-center">{{ tag.data.name }}</div></th>
-                    <th ng-repeat="question in guidance.questions" ng-show="!hideQuestions"><div class="text-center">{{question.question}}</div></th>
-                </tr> -->
+<!-- Table to show those who aren't attending hiring day -->
                 <tr ng-if="showAttending" ng-repeat="user in notAttending | filter:ExcludeAccepted() | orderBy:sorter:reverse">
                     <td><a ui-sref="admin.candidates.detail({_id: user._id})">Detail</a></td>
                     <td class="text-center">{{ user.name }}</td>
                     <td class="text-center">{{ user.attending }}</td>
                     <td>{{ user.category }}</td>
                     <td>{{ user.searchStage }}</td>
-                    <td><div class="text-center">{{ user.points[1] === 0 ? '-' : user.score + '%' }}</div></td>
+                    <!-- <td><div class="text-center">{{ user.points[1] === 0 ? '-' : user.score + '%' }}</div></td> -->
                     <td><div class="text-center">{{ user.interest === 0 ? 'N/A' : user.interest }}</div></td>
                     <td class="text-center" style="min-width: 100px; max-width: 100px; font-weight: 600">
                         <input class="text-center"  placeholder="{{ user.adminOverride }}" ng-model="user.adminOverride" ng-click="edit(user)" ng-class="isOverridden(user)" type="number" min="0" max="4"></input>
