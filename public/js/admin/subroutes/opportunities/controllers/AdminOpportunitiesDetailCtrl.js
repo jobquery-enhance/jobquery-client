@@ -328,6 +328,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
   var toggleOffDbGlyph = function(user, glyph){
     user[glyph] = false;
+    $scope.edit(user);
   };
 
 
