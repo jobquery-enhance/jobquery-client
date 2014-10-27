@@ -96,8 +96,9 @@ app.factory('FilterService', ['Match', 'User', '$q',
     var detailedSpreadsheet;
     // var deferred = $q.defer();
 
-    User.getAll().then(function(users){
-      Match.getAll().then(function(matchData){
+
+    var info = User.getAll().then(function(users){
+      return Match.getAll().then(function(matchData){
 
         var filterUsers = function (user){
           if (user.isAdmin) return false;
@@ -676,14 +677,17 @@ app.factory('FilterService', ['Match', 'User', '$q',
         scheduleAllMatches(scheduleMatrix);
         shuffleScheduleRounds(scheduleMatrix, usersForSchedule);
 
-        // scheduleSpreadSheet = makeScheduleSpreadsheet(scheduleMatrix);
-        defer.resolve(makeScheduleSpreadsheet(scheduleMatrix));
         detailedSpreadsheet = makeDetailedSpreadsheet(scheduleMatrix);
-
+        var arr = [];
+        arr[0] = makeScheduleSpreadsheet(scheduleMatrix);
+        arr[1] = makeDetailedSpreadsheet(scheduleMatrix);
+        return arr;
       });
     });
 
     return {
-      scheduleSpreadsheet: defer.promise
+      info: info.then(function(data) {
+        return data;
+      })
     };
 }]);
