@@ -4,7 +4,6 @@ app.controller('AdminMatchesCtrl',
     var schedule;
     var matches;
     FilterService.info.then(function(data) {
-      console.log(data);
       schedule = data[0];
       matches = data[1];
     });
@@ -20,9 +19,7 @@ app.controller('AdminMatchesCtrl',
     };
 
     $scope.downloadSchedule = function() {
-      // FilterService.scheduleSpreadsheet.then(function(result) {
         download(schedule);
-      // });
     };
     $scope.downloadMatches = function() {
       download(matches);

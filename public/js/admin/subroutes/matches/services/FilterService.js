@@ -677,8 +677,6 @@ app.factory('FilterService', ['Match', 'User', '$q',
         scheduleAllMatches(scheduleMatrix);
         shuffleScheduleRounds(scheduleMatrix, usersForSchedule);
 
-        // scheduleSpreadSheet = makeScheduleSpreadsheet(scheduleMatrix);
-        defer.resolve(makeScheduleSpreadsheet(scheduleMatrix));
         detailedSpreadsheet = makeDetailedSpreadsheet(scheduleMatrix);
         var arr = [];
         arr[0] = makeScheduleSpreadsheet(scheduleMatrix);
@@ -688,7 +686,6 @@ app.factory('FilterService', ['Match', 'User', '$q',
     });
 
     return {
-      scheduleSpreadsheet: defer.promise,
       info: info.then(function(data) {
         return data;
       })
