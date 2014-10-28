@@ -151,8 +151,11 @@ app.controller('AdminOpportunitiesDetailCtrl',
   };
 
   $scope.edit = function (user, override) {
-    // user.adminOverride = user;
-    Match.update(user);
+    console.log(user.interest, 'interest');
+    console.log(user, 'override');
+    Match.update(user).then(function(res) {
+      console.log(res);
+    });
   };
 
   $scope.isOverridden = function (user) {
