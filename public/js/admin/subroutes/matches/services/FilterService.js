@@ -490,7 +490,6 @@ app.factory('FilterService', ['Match', 'User', '$q',
           var userStarsFulfilledRow = ['Stars Fulfilled'];
           var userFoursRequestedRow = ['Fours Scheduled'];
           var userFoursFulfilledRow = ['Fours Fulfilled'];
-          console.log(calculateNumberFulfillment('stars', '53efc43ef2245d78182c0532'), 'calculate');
           for(var user in userObj){
             topArray.push(userObj[user].name || userObj[user].email);
             userIds.push(user);
