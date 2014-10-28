@@ -96,8 +96,9 @@ app.factory('FilterService', ['Match', 'User', '$q',
     var detailedSpreadsheet;
     // var deferred = $q.defer();
 
-    User.getAll().then(function(users){
-      Match.getAll().then(function(matchData){
+
+    var info = User.getAll().then(function(users){
+      return Match.getAll().then(function(matchData){
 
         var filterUsers = function (user){
           if (user.isAdmin) return false;
@@ -158,7 +159,6 @@ app.factory('FilterService', ['Match', 'User', '$q',
         };
 
         var caculateUserInterestLevel = function(match){
-
           /*
            * Before we run the schedule, we have to calculate the number that represents
            * the precise user interest. This number comes as a result of the userInterest (1 through 4),
@@ -200,19 +200,19 @@ app.factory('FilterService', ['Match', 'User', '$q',
             calculatedUserInterest = adminOverride * 3;
             if (noGo) {
               calculatedUserInterest = 0;
-              return;
+              return calculatedUserInterest;
             }else if(star){
               calculatedUserInterest = 14;
-              return;
+              return calculatedUserInterest;
             }else if(upVote){
               calculatedUserInterest += 1;
             }else if(downVote){
               calculatedUserInterest -= 1;
             }
           }
-          if (match.adminOverride !== 0 || calculatedUserInterest%3 !== 0 || calculatedUserInterest===14){
+          // if (match.adminOverride !== 0 || calculatedUserInterest%3 !== 0 || calculatedUserInterest===14){
 
-          }
+          // }
           return calculatedUserInterest;
         };
 
@@ -490,7 +490,6 @@ app.factory('FilterService', ['Match', 'User', '$q',
           var userStarsFulfilledRow = ['Stars Fulfilled'];
           var userFoursRequestedRow = ['Fours Scheduled'];
           var userFoursFulfilledRow = ['Fours Fulfilled'];
-
           for(var user in userObj){
             topArray.push(userObj[user].name || userObj[user].email);
             userIds.push(user);
@@ -574,7 +573,6 @@ app.factory('FilterService', ['Match', 'User', '$q',
 
           spreadSheetArray.push(numberOfConvosRow);
           spreadSheetArray.push(numberOfBreaksRow);
-
           return spreadSheetArray.join('\n');
         };
 
@@ -676,14 +674,17 @@ app.factory('FilterService', ['Match', 'User', '$q',
         scheduleAllMatches(scheduleMatrix);
         shuffleScheduleRounds(scheduleMatrix, usersForSchedule);
 
-        // scheduleSpreadSheet = makeScheduleSpreadsheet(scheduleMatrix);
-        defer.resolve(makeScheduleSpreadsheet(scheduleMatrix));
         detailedSpreadsheet = makeDetailedSpreadsheet(scheduleMatrix);
-
+        var arr = [];
+        arr[0] = makeScheduleSpreadsheet(scheduleMatrix);
+        arr[1] = makeDetailedSpreadsheet(scheduleMatrix);
+        return arr;
       });
     });
 
     return {
-      scheduleSpreadsheet: defer.promise
+      info: info.then(function(data) {
+        return data;
+      })
     };
 }]);
