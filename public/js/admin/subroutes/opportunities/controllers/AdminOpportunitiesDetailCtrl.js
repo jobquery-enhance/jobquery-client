@@ -105,20 +105,16 @@ app.controller('AdminOpportunitiesDetailCtrl',
     // oppData.notes = $scope.basic.notes[0].text ? [ {text: $scope.basic.notes[0].text} ] : [];
     oppData.notes = function() {
       if($scope.basic.notes[0]) {
-        console.log($scope.basic.notes,'good notes')
         return [{text: $scope.basic.notes[0].text}];
       } else {
-      console.log($scope.basic.notes, 'bad notes');
         return [];
       }
     }();
     // oppData.internalNotes = $scope.basic.internalNotes[0].text ? [ {text: $scope.basic.internalNotes[0].text} ] : [];
     oppData.internalNotes = function() {
       if($scope.basic.internalNotes[0]) {
-        console.log($scope.basic.internalNotes[0], 'good internal');
         return $scope.basic.internalNotes;
       } else {
-        console.log($scope.basic.internalNotes, 'else internal');
         return [];
       }
     }();
@@ -151,8 +147,8 @@ app.controller('AdminOpportunitiesDetailCtrl',
   };
 
   $scope.edit = function (user, override) {
-    // user.adminOverride = user;
-    Match.update(user);
+    Match.update(user).then(function(res) {
+    });
   };
 
   $scope.isOverridden = function (user) {
