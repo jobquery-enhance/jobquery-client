@@ -1,5 +1,4 @@
-app
-  .factory('authHttpInterceptor', ['localStorageService', '$location', function (localStorageService, $location) {
+app.factory('authHttpInterceptor', ['localStorageService', '$location', function (localStorageService, $location) {
    return {
      'request': function(config) {
        config.headers = config.headers || {};
@@ -44,3 +43,60 @@ var isTokenInDate = function (localStorageService) {
   }
   return true;
 };
+
+app.factory('OppSetUp', ['Match', function(Match) {
+
+  var opps = function() {
+    return Match.getAll().then(function(data) {
+      var groups = {};
+      var allOpportunities = {};
+      data.opportunities.forEach(function (oppModel) {
+        var groupName = oppModel.category.name;
+        var opportunity = {};
+        if (!groups[groupName]) { groups[groupName] = []; }
+
+        opportunity._id = oppModel._id;
+        opportunity.category = oppModel.category;
+        opportunity.groupName = groupName;
+        opportunity.company = oppModel.company.name;
+        opportunity.company._id = oppModel.company._id;
+        opportunity.title = oppModel.jobTitle;
+        opportunity.attending = groupName === 'Attending Hiring Day' ? true : false;
+        opportunity.active = oppModel.active;
+        opportunity.approved = oppModel.approved;
+        opportunity.internalNotes =
+        oppModel.internalNotes.length > 0 ? oppModel.internalNotes[0].text : null;
+        opportunity.interested = 0;
+        opportunity.declared = 0;
+
+        allOpportunities[opportunity._id] = opportunity;
+        groups[groupName].push(opportunity);
+      });
+      data.matches.forEach(function (match) {
+        var oppId = match.opportunity;
+        if (match.userInterest > 0) { allOpportunities[oppId].declared++; }
+        if (match.userInterest > 2) { allOpportunities[oppId].interested++; }
+      });
+      return groups;
+    });
+  };
+
+  return {
+    groups: opps().then(function(data) {
+      return data;
+    })
+  };
+}]);
+
+
+
+
+
+
+
+
+
+
+
+
+
