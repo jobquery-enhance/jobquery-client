@@ -1,49 +1,13 @@
-app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'DialogueService',
-  function ($scope, Opportunity, Match, DialogueService) {
+app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'DialogueService', 'OppSetUp',
+  function ($scope, Opportunity, Match, DialogueService, OppSetUp) {
 
-  Match.getAll().then(function (data) {
-    $scope.mapToView(data.matches, data.opportunities);
+  OppSetUp.groups.then(function(data) {
+    $scope.groups = data;
   });
 
   $scope.toggleEdit = function (attribute) {
     if (attribute.editable) { $scope.syncTags(); }
     attribute.editable = !attribute.editable;
-  };
-
-  $scope.groups = {};
-
-  $scope.mapToView = function (matchData, oppData) {
-
-    var allOpportunities = {};
-    oppData.forEach(function (oppModel) {
-
-      var groupName = oppModel.category.name;
-      var opportunity = {};
-      if (!$scope.groups[groupName]) { $scope.groups[groupName] = []; }
-
-      opportunity._id = oppModel._id;
-      opportunity.category = oppModel.category;
-      opportunity.groupName = groupName;
-      opportunity.company = oppModel.company.name;
-      opportunity.company._id = oppModel.company._id;
-      opportunity.title = oppModel.jobTitle;
-      opportunity.attending = groupName === 'Attending Hiring Day' ? true : false;
-      opportunity.active = oppModel.active;
-      opportunity.approved = oppModel.approved;
-      opportunity.internalNotes =
-      oppModel.internalNotes.length > 0 ? oppModel.internalNotes[0].text : null;
-      opportunity.interested = 0;
-      opportunity.declared = 0;
-
-      allOpportunities[opportunity._id] = opportunity;
-      $scope.groups[groupName].push(opportunity);
-    });
-
-    matchData.forEach(function (match) {
-      var oppId = match.opportunity;
-      if (match.userInterest > 0) { allOpportunities[oppId].declared++; }
-      if (match.userInterest > 2) { allOpportunities[oppId].interested++; }
-    });
   };
 
   $scope.includeAllActive = false;
