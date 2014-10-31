@@ -28,6 +28,9 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.attending = OppFactory.attending;
     $scope.notAttending = OppFactory.notAttending;
     $scope.updateGuidance();
+    console.log(data, 'attending');
+    console.log($scope.notAttending, 'notattending');
+
   });
 
   //get all companies
@@ -483,8 +486,7 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       });
     },
     attending: attending,
-    notAttending: notAttending,
-
+    notAttending: notAttending
   };
 }]);
 

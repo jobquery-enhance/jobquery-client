@@ -143,19 +143,19 @@
             </thead>
             <tbody>
 <!-- Row 2 -->
-                <tr>
-                    <th></th><!-- Empty table header-->
-                    <th></th><!-- Empty table header-->
-                    <th></th><!-- Empty table header-->
-                    <th></th><!-- Empty table header-->
-                    <th></th><!-- Empty table header-->
-                    <th></th><!-- Empty table header-->
-                    <th></th><!-- Empty table header-->
+                <!-- <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                     <th ng-repeat="tag in filteredTags" ng-show="!hideTags">
                         <p class="text-center">{{ filteredStats[tag.data._id].type === 'text' ? '' : filteredStats[tag.data._id].count}}</p>
                     </th>
-                    <th ng-repeat="question in guidance.questions" ng-show="!hideQuestions"></th><!-- Empty table header-->
-                </tr>
+                    <th ng-repeat="question in guidance.questions" ng-show="!hideQuestions"></th>
+                </tr> -->
 <!-- Row 3 -->
                 <tr ng-repeat="user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse">
                     <td><a ui-sref="admin.candidates.detail({_id: user._id})">Detail</a></td>

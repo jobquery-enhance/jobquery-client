@@ -2,6 +2,7 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'Dia
   function ($scope, Opportunity, Match, DialogueService, OppSetUp) {
 
   OppSetUp.groups.then(function(data) {
+    console.log(data);
     $scope.groups = data;
   });
 
