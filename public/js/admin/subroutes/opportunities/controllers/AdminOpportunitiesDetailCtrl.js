@@ -26,10 +26,9 @@ app.controller('AdminOpportunitiesDetailCtrl',
     opportunityId = data.basic._id;
     originalCompanyId = data.basic.company._id;
     $scope.attending = OppFactory.attending;
-    $scope.notAttending = OppFactory.notAttending;
+    // $scope.notAttending = OppFactory.notAttending;
     $scope.updateGuidance();
     console.log(data, 'attending');
-    console.log($scope.notAttending, 'notattending');
 
   });
 
@@ -37,6 +36,11 @@ app.controller('AdminOpportunitiesDetailCtrl',
   OppFactory.companies.then(function(companies) {
     $scope.companies = companies;
   });
+
+  $scope.showNonAttending = function() {
+    $scope.notAttending = OppFactory.notAttending();
+    $scope.showAttending = !$scope.showAttending;
+  };
 
 
   //array to create the downloadable grid
@@ -377,6 +381,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
 app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Category, Tag, Match, Company) {
   var attending = [];
   var notAttending = [];
+  var cache;
 
   var mapToView = function(oppData) {
     var guidance = {};
@@ -413,7 +418,7 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
         matchModel.user.attending = 'Yes';
         attending.push({
           _id: matchModel.user._id,
-          name: matchModel.user.name,
+          name: matchModel.user.name || matchModel.user.email,
           attending: matchModel.user.attending,
           email: matchModel.user.email,
           star: matchModel.star,
@@ -456,7 +461,7 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       matchModel.user.attending = 'No';
       notAttending.push({
         _id: matchModel.user._id,
-        name: matchModel.user.name,
+        name: matchModel.user.name || matchModel.user.email,
         attending: matchModel.user.attending,
         email: matchModel.user.email,
         star: matchModel.star,
@@ -496,14 +501,17 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
     }),
     users: function(stateParamId) {
       return Match.getUsers(stateParamId).then(function(data) {
-        console.log(data, 'dataaaaas');
+        cache = data;
         declared(data.matches, data.opportunity.questions.length);
         notDeclared(data.notAttending, data.opportunity.questions.length);
         return mapToView(data);
       });
     },
     attending: attending,
-    notAttending: notAttending
+    notAttending: function() {
+      notDeclared(cache.notAttending, cache.opportunity.questions.length);
+      return notAttending;
+    }
   };
 }]);
 
