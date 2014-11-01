@@ -25,9 +25,9 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.guidance = data.guidance;
     opportunityId = data.basic._id;
     originalCompanyId = data.basic.company._id;
-    $scope.attending = OppFactory.attending;
+    // $scope.attending = OppFactory.attending();
     // $scope.notAttending = OppFactory.notAttending;
-    $scope.updateGuidance();
+    // $scope.updateGuidance();
 
   });
 
@@ -35,6 +35,11 @@ app.controller('AdminOpportunitiesDetailCtrl',
   OppFactory.companies.then(function(companies) {
     $scope.companies = companies;
   });
+
+  $scope.showMatchGrid = function() {
+    $scope.attending = OppFactory.attending();
+    $scope.updateGuidance();
+  };
 
   $scope.showNonAttending = function() {
     $scope.notAttending = OppFactory.notAttending();
@@ -501,11 +506,14 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
     users: function(stateParamId) {
       return Match.getUsers(stateParamId).then(function(data) {
         cache = data;
-        declared(data.matches, data.opportunity.questions.length);
+        // declared(data.matches, data.opportunity.questions.length);
         return mapToView(data);
       });
     },
-    attending: attending,
+    attending: function() {
+      declared(cache.matches, cache.opportunity.questions.length);
+      return attending;
+    },
     notAttending: function() {
       notDeclared(cache.notAttending, cache.opportunity.questions.length);
       return notAttending;
