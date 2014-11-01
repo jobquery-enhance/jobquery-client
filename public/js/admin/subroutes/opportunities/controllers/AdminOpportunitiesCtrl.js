@@ -1,6 +1,6 @@
 app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'DialogueService', 'OppSetUp',
   function ($scope, Opportunity, Match, DialogueService, OppSetUp) {
-
+    //authInterceptor
   OppSetUp.groups.then(function(data) {
     console.log(data);
     $scope.groups = data;

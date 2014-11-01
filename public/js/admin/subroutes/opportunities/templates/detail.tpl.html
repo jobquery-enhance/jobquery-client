@@ -121,7 +121,9 @@
             </table>
         </div>
         <div class="row">
-
+            <button ng-click="showMatchGrid()">Show Match Grid</button>
+        </div> <br/>
+        <div class="row">
             <button ng-click="matchGrid()">Download Match Grid</button>
             <button type="button" ng-init="hideQuestions = true; hideTags = false" ng-click="hideQuestions = !hideQuestions; hideTags = !hideTags">Toggle Questions and Tags</button>
             <button ng-click="showNonAttending()">Toggle Non-Attending Candidates</button>
