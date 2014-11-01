@@ -28,7 +28,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.attending = OppFactory.attending;
     // $scope.notAttending = OppFactory.notAttending;
     $scope.updateGuidance();
-    console.log(data, 'attending');
 
   });
 
@@ -503,7 +502,6 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       return Match.getUsers(stateParamId).then(function(data) {
         cache = data;
         declared(data.matches, data.opportunity.questions.length);
-        notDeclared(data.notAttending, data.opportunity.questions.length);
         return mapToView(data);
       });
     },
