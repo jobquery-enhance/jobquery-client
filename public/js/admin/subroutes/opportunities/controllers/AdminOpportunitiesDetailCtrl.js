@@ -435,35 +435,50 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
             return tagsByKeys;
           })()
         });
-      } else {
-        matchModel.user.attending = 'No';
-        notAttending.push({
-          _id: matchModel.user._id,
-          name: matchModel.user.name,
-          attending: matchModel.user.attending,
-          email: matchModel.user.email,
-          star: matchModel.star,
-          upVote: matchModel.upVote,
-          downVote: matchModel.downVote,
-          noGo: matchModel.noGo,
-          interest: matchModel.userInterest,
-          answers: matchModel.answers,
-          category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
-          searchStage: matchModel.user.searchStage,
-          adminOverride: matchModel.adminOverride,
-          points: [0, 0], // default: [points, possible points]
-          score: 0, // points[0] / points[1]
-          tags: (function () {
-            var tagsByKeys = {};
-            matchModel.user.tags.forEach(function (tag) {
-              tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
-            });
-            return tagsByKeys;
-          })()
-        });
       }
     });
+  };
 
+  var notDeclared = function(matchData, questionLength) {
+    matchData.map(function (matchModel) {
+      if(!matchModel || !matchModel.user) {
+        return;
+      }
+      //Normalize question and answer arrays.
+      matchModel.answers = matchModel.answers || [];
+      var numQuestions = questionLength;
+      var numAnswers = matchModel.answers.length;
+      var difference = numQuestions - numAnswers;
+      //try to get rid of this
+      for(var i = 0; i < difference; i++){
+        matchModel.answers.push({answer: ''});
+      }
+      matchModel.user.attending = 'No';
+      notAttending.push({
+        _id: matchModel.user._id,
+        name: matchModel.user.name,
+        attending: matchModel.user.attending,
+        email: matchModel.user.email,
+        star: matchModel.star,
+        upVote: matchModel.upVote,
+        downVote: matchModel.downVote,
+        noGo: matchModel.noGo,
+        interest: matchModel.userInterest,
+        answers: matchModel.answers,
+        category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
+        searchStage: matchModel.user.searchStage,
+        adminOverride: matchModel.adminOverride,
+        points: [0, 0], // default: [points, possible points]
+        score: 0, // points[0] / points[1]
+        tags: (function () {
+          var tagsByKeys = {};
+          matchModel.user.tags.forEach(function (tag) {
+            tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
+          });
+          return tagsByKeys;
+        })()
+      });
+    });
   };
 
   return {
@@ -481,7 +496,9 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
     }),
     users: function(stateParamId) {
       return Match.getUsers(stateParamId).then(function(data) {
+        console.log(data, 'dataaaaas');
         declared(data.matches, data.opportunity.questions.length);
+        notDeclared(data.notAttending, data.opportunity.questions.length);
         return mapToView(data);
       });
     },
