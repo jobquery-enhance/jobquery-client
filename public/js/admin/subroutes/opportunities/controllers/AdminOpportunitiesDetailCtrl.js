@@ -354,6 +354,8 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
   //fill up the interest grid array
   $scope.matchGrid = function() {
+    $scope.showNonAttending();
+    $scope.showMatchGrid();
     var csvString = '';
     _.each($scope.attending, function(user) {
       var result = [];
