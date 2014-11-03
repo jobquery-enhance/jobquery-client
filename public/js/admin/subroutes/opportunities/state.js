@@ -19,7 +19,14 @@ app.config(['$stateProvider', function ($stateProvider) {
     .state('admin.opportunities.detail', {
       url: '/:_id',
       templateUrl: '/js/admin/subroutes/opportunities/templates/detail.tpl.html',
-      controller: 'AdminOpportunitiesDetailCtrl'
+      controller: 'AdminOpportunitiesDetailCtrl',
+      resolve: {
+        oppData: function($stateParams, OppFactory) {
+          return OppFactory.users($stateParams._id).then(function(data) {
+            return data;
+          });
+        }
+      }
     })
     .state('admin.opportunities.preview', {
       url: '/:_id',
