@@ -2,7 +2,7 @@ app.factory('OpportunityResource', ['$resource', 'SERVER_URL', '$http', function
   return $resource(SERVER_URL + '/api/opportunities/:_id', null, {update: {method: 'PUT'}, get: {cache: true}});
 }]);
 
-app.factory('Opportunity', ['OpportunityResource', function(OpportunityResource) {
+app.factory('Opportunity', ['OpportunityResource', '$http', 'SERVER_URL', function(OpportunityResource, $http, SERVER_URL) {
   var opportunityMethods = {};
 
 
@@ -25,6 +25,15 @@ app.factory('Opportunity', ['OpportunityResource', function(OpportunityResource)
 
   opportunityMethods.update = function (opportunity) {
     return OpportunityResource.update({_id: opportunity._id}, opportunity).$promise;
+  };
+
+  opportunityMethods.getOpportunities = function() {
+    return $http({
+      method: 'GET',
+      url: SERVER_URL + '/api/opportunities/getOpportunities'
+    }).then(function(data) {
+      return data;
+    });
   };
   return opportunityMethods;
 }]);
