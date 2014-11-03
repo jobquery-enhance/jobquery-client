@@ -1,5 +1,5 @@
-app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'DialogueService', 'OppSetUp', 'groups',
-  function ($scope, Opportunity, Match, DialogueService, OppSetUp, groups) {
+app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'DialogueService', 'groups',
+  function ($scope, Opportunity, Match, DialogueService, groups) {
     $scope.groups = {
       'Attending Hiring Day': groups['Attending Hiring Day'],
       'Not Attending Hiring Day': groups['Not Attending Hiring Day']
