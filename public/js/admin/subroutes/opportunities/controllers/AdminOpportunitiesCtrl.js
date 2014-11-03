@@ -1,13 +1,9 @@
-app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'DialogueService', 'OppSetUp',
-  function ($scope, Opportunity, Match, DialogueService, OppSetUp) {
-    //authInterceptor
-  OppSetUp.groups.then(function(data) {
-    console.log(data);
+app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'DialogueService', 'OppSetUp', 'groups',
+  function ($scope, Opportunity, Match, DialogueService, OppSetUp, groups) {
     $scope.groups = {
-      'Attending Hiring Day': data['Attending Hiring Day'],
-      'Not Attending Hiring Day': data['Not Attending Hiring Day']
+      'Attending Hiring Day': groups['Attending Hiring Day'],
+      'Not Attending Hiring Day': groups['Not Attending Hiring Day']
     };
-  });
 
   $scope.toggleEdit = function (attribute) {
     if (attribute.editable) { $scope.syncTags(); }
