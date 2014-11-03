@@ -12,7 +12,7 @@ app.config(['$stateProvider', function ($stateProvider) {
       controller: 'AdminOpportunitiesCtrl',
       resolve: {
         groups: function(Match) {
-          return Match.getAll().then(function(data) {
+          return Match.batchProcess().then(function(data) {
             return data;
           });
         }
