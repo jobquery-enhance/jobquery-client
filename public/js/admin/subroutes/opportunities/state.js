@@ -10,13 +10,13 @@ app.config(['$stateProvider', function ($stateProvider) {
       url: '',
       templateUrl: '/js/admin/subroutes/opportunities/templates/opportunities.tpl.html',
       controller: 'AdminOpportunitiesCtrl',
-      resolve: {
-        groups: function(Match) {
-          return Match.getAll().then(function(data) {
-            return data;
-          });
-        }
-      }
+      // resolve: {
+      //   groups: function(Match) {
+      //     return Match.getAll().then(function(data) {
+      //       return data;
+      //     });
+      //   }
+      // }
     })
     .state('admin.opportunities.new', {
       url: '/new',
