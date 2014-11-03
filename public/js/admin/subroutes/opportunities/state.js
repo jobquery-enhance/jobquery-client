@@ -11,11 +11,11 @@ app.config(['$stateProvider', function ($stateProvider) {
       templateUrl: '/js/admin/subroutes/opportunities/templates/opportunities.tpl.html',
       controller: 'AdminOpportunitiesCtrl',
       resolve: {
-        groups: function(Match) {
+        groups: ['Match', function(Match) {
           return Match.batchProcess().then(function(data) {
             return data;
           });
-        }
+        }]
       }
     })
     .state('admin.opportunities.new', {
@@ -28,11 +28,11 @@ app.config(['$stateProvider', function ($stateProvider) {
       templateUrl: '/js/admin/subroutes/opportunities/templates/detail.tpl.html',
       controller: 'AdminOpportunitiesDetailCtrl',
       resolve: {
-        oppData: function($stateParams, OppFactory) {
+        oppData: ['$stateParams', 'OppFactory', function($stateParams, OppFactory) {
           return OppFactory.users($stateParams._id).then(function(data) {
             return data;
           });
-        }
+        }]
       }
     })
     .state('admin.opportunities.preview', {
