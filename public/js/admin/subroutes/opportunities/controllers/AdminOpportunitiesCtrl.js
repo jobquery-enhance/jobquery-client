@@ -3,7 +3,10 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'Dia
     //authInterceptor
   OppSetUp.groups.then(function(data) {
     console.log(data);
-    $scope.groups = data;
+    $scope.groups = {
+      'Attending Hiring Day': data['Attending Hiring Day'],
+      'Not Attending Hiring Day': data['Not Attending Hiring Day']
+    };
   });
 
   $scope.toggleEdit = function (attribute) {
