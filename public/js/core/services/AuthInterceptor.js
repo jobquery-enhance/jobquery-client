@@ -44,15 +44,6 @@ var isTokenInDate = function (localStorageService) {
   return true;
 };
 
-app.factory('OppSetUp', ['Match', function(Match) {
-
-  return {
-    groups: Match.getAll().then(function(data) {
-      return data;
-    })
-  };
-}]);
-
 
 
 

@@ -1,8 +1,6 @@
 app.controller('AdminOpportunitiesDetailCtrl',
-  ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User', 'OppFactory',
-  function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User, OppFactory) {
-  var originalCompanyId;
-  var opportunityId;
+  ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User', 'OppFactory', 'oppData',
+  function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User, OppFactory, oppData) {
   var companyId;
 
   $scope.sorter = 'score';
@@ -19,17 +17,11 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.categories = categories;
   });
 
-  //get user data
-  OppFactory.users($stateParams._id).then(function(data) {
-    $scope.basic = data.basic;
-    $scope.guidance = data.guidance;
-    opportunityId = data.basic._id;
-    originalCompanyId = data.basic.company._id;
-    // $scope.attending = OppFactory.attending();
-    // $scope.notAttending = OppFactory.notAttending;
-    // $scope.updateGuidance();
+  var originalCompanyId = oppData.basic.company._id;
+  var opportunityId = oppData.basic._id;
+  $scope.basic = oppData.basic;
+  $scope.guidance = oppData.guidance;
 
-  });
 
   //get all companies
   OppFactory.companies.then(function(companies) {
@@ -221,6 +213,8 @@ app.controller('AdminOpportunitiesDetailCtrl',
   };
 
   $scope.updateGuidance = function () {
+    $scope.attending = OppFactory.attending();
+
   // filtered guidance = no text type
     $scope.filteredTags = $scope.guidance.tags.filter(function (tag) {
       interestGrid.push(tag.data.name);
@@ -508,7 +502,6 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
     users: function(stateParamId) {
       return Match.getUsers(stateParamId).then(function(data) {
         cache = data;
-        // declared(data.matches, data.opportunity.questions.length);
         return mapToView(data);
       });
     },
