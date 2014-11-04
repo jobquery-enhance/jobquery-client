@@ -28,8 +28,8 @@ app.config(['$stateProvider', function ($stateProvider) {
       templateUrl: '/js/admin/subroutes/opportunities/templates/detail.tpl.html',
       controller: 'AdminOpportunitiesDetailCtrl',
       resolve: {
-        oppData: ['$stateParams', 'OppFactory', function($stateParams, OppFactory) {
-          return OppFactory.users($stateParams._id).then(function(data) {
+        OppData: ['$stateParams', 'Match', function($stateParams, Match) {
+          return Match.getUsers($stateParams._id).then(function(data) {
             return data;
           });
         }]

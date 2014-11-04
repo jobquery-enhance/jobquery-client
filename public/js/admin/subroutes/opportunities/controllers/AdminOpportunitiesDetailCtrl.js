@@ -1,7 +1,8 @@
 app.controller('AdminOpportunitiesDetailCtrl',
-  ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User', 'OppFactory', 'oppData',
-  function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User, OppFactory, oppData) {
+  ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User', 'OppFactory', 'OppData',
+  function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User, OppFactory, OppData) {
   var companyId;
+  var oppObj = OppFactory.users(OppData);
 
   $scope.sorter = 'score';
   $scope.reverse = true;
@@ -17,10 +18,10 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.categories = categories;
   });
 
-  var originalCompanyId = oppData.basic.company._id;
-  var opportunityId = oppData.basic._id;
-  $scope.basic = oppData.basic;
-  $scope.guidance = oppData.guidance;
+  var originalCompanyId = oppObj.basic.company._id;
+  var opportunityId = oppObj.basic._id;
+  $scope.basic = oppObj.basic;
+  $scope.guidance = oppObj.guidance;
 
 
   //get all companies
@@ -499,11 +500,9 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       .then(function (companies) {
         return companies;
     }),
-    users: function(stateParamId) {
-      return Match.getUsers(stateParamId).then(function(data) {
-        cache = data;
-        return mapToView(data);
-      });
+    users: function(data) {
+      cache = data;
+      return mapToView(data);
     },
     attending: function() {
       declared(cache.matches, cache.opportunity.questions.length);
