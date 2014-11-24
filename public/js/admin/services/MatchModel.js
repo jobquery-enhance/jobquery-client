@@ -46,9 +46,8 @@ app
 
     matchMethods.batchProcess = function(arrayOfIds){
       return $http({
-        method: 'PUT',
-        url: SERVER_URL + '/api/matches/batchProcess',
-        data: { ids: arrayOfIds }
+        method: 'GET',
+        url: SERVER_URL + '/api/matches/batchProcess'
       }).then(function(response){
         return response.data;
       });

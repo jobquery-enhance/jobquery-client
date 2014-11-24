@@ -1,5 +1,4 @@
-app
-  .factory('authHttpInterceptor', ['localStorageService', '$location', function (localStorageService, $location) {
+app.factory('authHttpInterceptor', ['localStorageService', '$location', function (localStorageService, $location) {
    return {
      'request': function(config) {
        config.headers = config.headers || {};
@@ -44,3 +43,16 @@ var isTokenInDate = function (localStorageService) {
   }
   return true;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+

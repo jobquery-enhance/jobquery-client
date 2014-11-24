@@ -184,16 +184,14 @@
 
 </head>
 <body ng-app="jobQuery" ng-controller="AppCtrl">
-
+    <div class="overlay loading" ng-if="notifications.loading"></div>
 <div ui-view></div>
 
 <div class="sidebar-container text-right">
     <div ui-view="sidebar"></div>
 </div>
 <div class="content-container">
-    <div class="overlay loading" ng-if="notifications.loading">
-        <!-- <h1>Loading</h1> -->
-    </div>
+    <div></div>
     <div ui-view="main"></div>
 </div>
 

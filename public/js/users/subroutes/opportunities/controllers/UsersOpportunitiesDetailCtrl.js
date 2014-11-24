@@ -1,7 +1,6 @@
 app.controller('UsersOpportunitiesDetailCtrl',
   ['$scope', '$timeout', '$sce', 'UsersOpportunity', '$stateParams', 'GuidanceService', 'generateGlyphs',
   function($scope, $timeout, $sce, UsersOpportunity, $stateParams, GuidanceService, generateGlyphs) {
-
   $scope.submitText = '✔  Submit Preferences';
   $scope.pendingRequests = 0;
   $scope.myInterval = 5000;
