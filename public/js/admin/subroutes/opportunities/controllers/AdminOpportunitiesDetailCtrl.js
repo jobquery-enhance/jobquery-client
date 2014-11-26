@@ -31,7 +31,8 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
   $scope.showMatchGrid = function() {
     $scope.attending = OppFactory.attending();
-    $scope.updateGuidance();
+    // $scope.updateGuidance();
+    console.log($scope.attending, 'attending');
   };
 
   $scope.showNonAttending = function() {
@@ -214,7 +215,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
   };
 
   $scope.updateGuidance = function () {
-    $scope.attending = OppFactory.attending();
+    // $scope.attending = OppFactory.attending();
 
   // filtered guidance = no text type
     $scope.filteredTags = $scope.guidance.tags.filter(function (tag) {
