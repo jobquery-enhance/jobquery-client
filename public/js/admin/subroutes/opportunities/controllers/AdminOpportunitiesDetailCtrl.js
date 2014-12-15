@@ -30,9 +30,13 @@ app.controller('AdminOpportunitiesDetailCtrl',
   });
 
   $scope.showMatchGrid = function() {
-    $scope.attending = OppFactory.attending();
-    // $scope.updateGuidance();
-    console.log($scope.attending, 'attending');
+    if($scope.attending === undefined) {
+      $scope.attending = OppFactory.attending();
+      // $scope.updateGuidance();
+      console.log($scope.attending, 'attending');
+    } else {
+      console.log('Match grid is already showing.');
+    }
   };
 
   $scope.showNonAttending = function() {
