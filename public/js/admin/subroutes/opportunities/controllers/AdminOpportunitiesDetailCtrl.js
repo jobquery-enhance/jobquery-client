@@ -415,6 +415,7 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       var numQuestions = questionLength;
       var numAnswers = matchModel.answers.length;
       var difference = numQuestions - numAnswers;
+      var attendingUsers = {};
       //try to get rid of this
       for(var i = 0; i < difference; i++){
         matchModel.answers.push({answer: ''});
@@ -422,30 +423,39 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       //if user is attending push user obj into attending array if not push into notAttending array
       if(matchModel.user.attending) {
         matchModel.user.attending = 'Yes';
-        attending.push({
-          _id: matchModel.user._id,
-          name: matchModel.user.name || matchModel.user.email,
-          attending: matchModel.user.attending,
-          email: matchModel.user.email,
-          star: matchModel.star,
-          upVote: matchModel.upVote,
-          downVote: matchModel.downVote,
-          noGo: matchModel.noGo,
-          interest: matchModel.userInterest,
-          answers: matchModel.answers,
-          category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
-          searchStage: matchModel.user.searchStage,
-          adminOverride: matchModel.adminOverride,
-          points: [0, 0], // default: [points, possible points]
-          score: 0, // points[0] / points[1]
-          tags: (function () {
-            var tagsByKeys = {};
-            matchModel.user.tags.forEach(function (tag) {
-              tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
-            });
-            return tagsByKeys;
-          })()
-        });
+
+        // check if user has already been added to array
+        if( attendingUsers[matchModel.user._id] === undefined) {
+          // if not, add to tracking object
+          attendingUsers[matchModel.user.id] = 1;
+          
+          // and add to array
+          attending.push({
+            _id: matchModel.user._id,
+            name: matchModel.user.name || matchModel.user.email,
+            attending: matchModel.user.attending,
+            email: matchModel.user.email,
+            star: matchModel.star,
+            upVote: matchModel.upVote,
+            downVote: matchModel.downVote,
+            noGo: matchModel.noGo,
+            interest: matchModel.userInterest,
+            answers: matchModel.answers,
+            category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
+            searchStage: matchModel.user.searchStage,
+            adminOverride: matchModel.adminOverride,
+            points: [0, 0], // default: [points, possible points]
+            score: 0, // points[0] / points[1]
+            tags: (function () {
+              var tagsByKeys = {};
+              matchModel.user.tags.forEach(function (tag) {
+                tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
+              });
+              return tagsByKeys;
+            })()
+          });
+          
+        }
       }
     });
   };
