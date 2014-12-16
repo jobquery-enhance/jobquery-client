@@ -526,13 +526,6 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       cache = data;
       return mapToView(data);
     },
-    usersDefined: function() {
-      if(cache) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     attending: function() {
       if(attending.length === 0) {
         declared(cache.matches, cache.opportunity.questions.length);
