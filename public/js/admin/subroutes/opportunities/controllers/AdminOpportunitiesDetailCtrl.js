@@ -30,19 +30,13 @@ app.controller('AdminOpportunitiesDetailCtrl',
   });
 
   $scope.showMatchGrid = function() {
-    console.log('showMatchGrid called');
     $scope.matchGridIsShowing = true;
     // Disables showMatchGrid button. Fixes issue where multiple clicks
     // would allow admin to continue making match requests.
-    console.log('What is attending?', $scope.attending );
-    // console.log('What is cache?', cache);
-    if($scope.attending === undefined) {
+
       $scope.attending = OppFactory.attending();
       console.log('Attending: ', $scope.attending);
         // $scope.updateGuidance();
-    } else {
-      console.log('Using cached attendees: ', $scope.attending);
-    }
   };
 
   $scope.showNonAttending = function() {
@@ -394,7 +388,6 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
   var attending = [];
   var notAttending = [];
   var cache;
-  var mapCache;
 
   var mapToView = function(oppData) {
     var guidance = {};
