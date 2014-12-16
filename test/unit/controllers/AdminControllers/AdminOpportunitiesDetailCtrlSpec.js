@@ -4,15 +4,57 @@ describe('Unit: AdminOpportunitiesDetailCtrl', function(){
   // Load the module with MainController
   beforeEach(module('jobQuery'));
 
-  var ctrl, scope;
+  var ctrl, scope, mockOppFactory, mockOppData, guidance;
   // inject the $controller and $rootScope services
   // in the beforeEach block
   beforeEach(inject(function($controller, $rootScope) {
+    guidance = {
+      tags: {
+        data: {
+          id: 1
+        },
+        value: 2,
+        importance: 'very'
+      }
+    };
+
+    mockOppFactory = {
+      users: function(data) {
+        return data;
+      }
+    };
+    
+    mockOppData = {};
+    mockOppData._id = '123';
+    mockOppData.active = true;
+    mockOppData.approved = true;
+    mockOppData.description = "Blah";
+    mockOppData.questions = 'Do you know Backbone?';
+    mockOppData.jobTitle = 'Awesome Developer'
+    mockOppData.category = 'Cool Jobs'
+    mockOppData.company = 'Facebook'
+    mockOppData.links = null
+    // oppData.notes = $scope.basic.notes[0].text ? [ {text: $scope.basic.notes[0].text} ] : [];
+    mockOppData.notes = function() {
+      return [];
+    }();
+
+    // oppData.internalNotes = $scope.basic.internalNotes[0].text ? [ {text: $scope.basic.internalNotes[0].text} ] : [];
+    mockOppData.internalNotes = function() {
+      return [];
+    }();
+
+    mockOppData.tags = function() {
+      return {tag: guidance.tags.data._id, value: guidance.tags.value, importance: guidance.tags.importance};
+    }();
+
     // Create a new scope that's a child of the $rootScope
     scope = $rootScope.$new();
     // Create the controller
     ctrl = $controller('AdminOpportunitiesDetailCtrl', {
-      $scope: scope
+      $scope: scope,
+      OppFactory: mockOppFactory,
+      OppData: mockOppData
     });
   }));
 

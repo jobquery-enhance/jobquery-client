@@ -11,7 +11,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
   //get all tags
   OppFactory.tags.then(function(tags) {
     $scope.tags = tags;
-  });
+  }); 
 
   //get all category info
   OppFactory.categories.then(function(categories) {
@@ -30,13 +30,13 @@ app.controller('AdminOpportunitiesDetailCtrl',
   });
 
   $scope.showMatchGrid = function() {
-    if($scope.attending === undefined) {
+    $scope.matchGridIsShowing = true;
+    // Disables showMatchGrid button. Fixes issue where multiple clicks
+    // would allow admin to continue making match requests.
+
       $scope.attending = OppFactory.attending();
-      // $scope.updateGuidance();
-      console.log($scope.attending, 'attending');
-    } else {
-      console.log('Match grid is already showing.');
-    }
+      console.log('Attending: ', $scope.attending);
+        // $scope.updateGuidance();
   };
 
   $scope.showNonAttending = function() {
@@ -520,7 +520,10 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       return mapToView(data);
     },
     attending: function() {
-      declared(cache.matches, cache.opportunity.questions.length);
+      if(attending.length === 0) {
+        declared(cache.matches, cache.opportunity.questions.length);
+      }
+
       return attending;
     },
     notAttending: function() {

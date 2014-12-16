@@ -165,6 +165,8 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
+        // AdminDashboardCtrl not currently in use
+        'test/unit/controllers/AdminControllers/AdminDashboardCtrlSpec.js'
     ],
 
 
