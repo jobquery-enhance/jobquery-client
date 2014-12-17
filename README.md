@@ -1,4 +1,4 @@
-#[jobQuery](http://jqapp.azurewebsites.net/)
+#[jobQuery](http://jobqueryclient.azurewebsites.net/)
 
 A custom CMS for Hack Reactor to manage hiring day. *eHarmony* for jobs.
 
