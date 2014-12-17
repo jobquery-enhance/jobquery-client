@@ -13,3 +13,18 @@ A custom CMS for Hack Reactor to manage hiring day. *eHarmony* for jobs.
 ## Technology Stack
 
 - Angular.js
+
+## Local System Prerequisites
+- Node.JS
+- MongoDB
+- bower
+- npm
+
+## How to Run Locally
+1. Clone both the jobquery-client and jobquery-server to your local machine.
+1. In both repos, run `npm install` and `bower install` from main directory.
+1. Start a local instance of mongo by typing `mongod` in the terminal.
+  - You will need to import data into the local DB. Contact a group admin.
+1. In another terminal tab, run `node server.js` in `jobquery-server/`.
+1. In a third terminal tab, run `gulp devserve` in `jobquery-client/`.
+1. Open a browser and navigate to http://localhost:8000.
