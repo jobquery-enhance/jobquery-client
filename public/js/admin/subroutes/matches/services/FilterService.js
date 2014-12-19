@@ -450,9 +450,9 @@ app.factory('FilterService', ['Match', 'User', '$q',
           for(var userId in usersForSchedule){
             var oldRoundsForUser = usersForSchedule[userId].scheduleForThisUser;
             var newRoundsForUser = {};
-            for(var oldRoundNumber in shuffledScheduleObject){
-              var newRoundNumber = shuffledScheduleObject[oldRoundNumber];
-              newRoundsForUser[newRoundNumber] = oldRoundsForUser[oldRoundNumber];
+            for(var oldRoundNum in shuffledScheduleObject){
+              var newRoundNum = shuffledScheduleObject[oldRoundNum];
+              newRoundsForUser[newRoundNum] = oldRoundsForUser[oldRoundNum];
             }
             usersForSchedule[userId].scheduleForThisUser = newRoundsForUser;
           }
