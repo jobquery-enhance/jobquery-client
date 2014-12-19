@@ -7,6 +7,8 @@ app.controller('AdminOpportunitiesDetailCtrl',
   $scope.sorter = 'score';
   $scope.reverse = true;
   $scope.showAttending = false;
+  $scope.matchGridIsShowing = false;
+
 
   //get all tags
   OppFactory.tags.then(function(tags) {
