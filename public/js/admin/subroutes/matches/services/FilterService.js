@@ -248,6 +248,7 @@ app.factory('FilterService', ['Match', 'User', '$q',
         };
 
         var scheduleAllMatches = function (scheduleMatrix){
+          var oppToSchedule;
           //for everything interestLevel
           for(var interestLevel = 14; interestLevel > 3; interestLevel--){
             var numberOfRoundsScheduledTicker = 0;
@@ -266,7 +267,7 @@ app.factory('FilterService', ['Match', 'User', '$q',
                       var currentRoundsForUser = usersForSchedule[userId].numberOfRounds;
                       while( usersForSchedule[userId].numberOfRounds === currentRoundsForUser && matchesForThisInterestLevel[numberOfRequests][userId].length > 0){
                         //pop oppId and schedule it(schedule it is a helper function)
-                        var oppToSchedule = matchesForThisInterestLevel[numberOfRequests][userId].pop();
+                        oppToSchedule = matchesForThisInterestLevel[numberOfRequests][userId].pop();
                         if(usersForSchedule[userId].numberOfRounds < 9) {
                           scheduleSingleOpp(oppToSchedule, userId, scheduleMatrix, interestLevel);
                         }
@@ -460,6 +461,7 @@ app.factory('FilterService', ['Match', 'User', '$q',
 
         var makeScheduleSpreadsheet = function(scheduleMatrix){
           var spreadSheetArray = [];
+          var userName;
           var topRow = ['','1','2','3','4','5','6','7','8','9','10','11'];
           spreadSheetArray.push(topRow);
           for(var oppId in scheduleMatrix){
@@ -472,7 +474,7 @@ app.factory('FilterService', ['Match', 'User', '$q',
               if( userId === undefined || userId === 'BREAK' ){
                 userName = 'BREAK';
               }else{
-                var userName = userObj[userId].name || userObj[userId].email;
+                userName = userObj[userId].name || userObj[userId].email;
               }
               rowArray.push(userName);
             }
@@ -542,9 +544,11 @@ app.factory('FilterService', ['Match', 'User', '$q',
               var userID = userIds[c];
               var thisUserSchedule = usersForSchedule[userID].scheduleForThisUser;
               var hasAppointment = false;
+              var translatedInterestLevel;
+
               for(var roundNumber in thisUserSchedule){
                 var interestLevel = userInterestsForOpportunites[userID][oppId];
-                var translatedInterestLevel = translateInterestLevelForSpreadsheet(interestLevel);
+                translatedInterestLevel = translateInterestLevelForSpreadsheet(interestLevel);
                 if( thisUserSchedule[roundNumber] === oppId ){
                   if( interestLevel === 14 ){
                     numberOfStars++;
