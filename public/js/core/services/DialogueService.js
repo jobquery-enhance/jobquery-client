@@ -23,7 +23,11 @@ app.factory('DialogueService', function () {
   };
 
   serviceMethods.toggle = function () {
-    serviceMethods._hidden ? serviceMethods.show() : serviceMethods.hide();
+    if(serviceMethods._hidden) {
+      serviceMethods.show();
+    } else {
+      serviceMethods.hide();
+    }
   };
 
   serviceMethods.show = function () {

@@ -248,6 +248,7 @@ app.factory('FilterService', ['Match', 'User', '$q',
         };
 
         var scheduleAllMatches = function (scheduleMatrix){
+          var oppToSchedule;
           //for everything interestLevel
           for(var interestLevel = 14; interestLevel > 3; interestLevel--){
             var numberOfRoundsScheduledTicker = 0;
@@ -266,7 +267,7 @@ app.factory('FilterService', ['Match', 'User', '$q',
                       var currentRoundsForUser = usersForSchedule[userId].numberOfRounds;
                       while( usersForSchedule[userId].numberOfRounds === currentRoundsForUser && matchesForThisInterestLevel[numberOfRequests][userId].length > 0){
                         //pop oppId and schedule it(schedule it is a helper function)
-                        var oppToSchedule = matchesForThisInterestLevel[numberOfRequests][userId].pop();
+                        oppToSchedule = matchesForThisInterestLevel[numberOfRequests][userId].pop();
                         if(usersForSchedule[userId].numberOfRounds < 9) {
                           scheduleSingleOpp(oppToSchedule, userId, scheduleMatrix, interestLevel);
                         }
@@ -423,15 +424,17 @@ app.factory('FilterService', ['Match', 'User', '$q',
 
           var newOutsideRounds = _.shuffle(outsideRounds);
           var newInsideRounds = _.shuffle(insideRounds);
+          var oldRound;
+          var newRound;
 
           while( outsideRounds.length > 0 ){
-            var oldRound = outsideRounds.pop();
-            var newRound = newOutsideRounds.pop();
+            oldRound = outsideRounds.pop();
+            newRound = newOutsideRounds.pop();
             shuffledScheduleObject[oldRound] = newRound;
           }
           while( insideRounds.length > 0 ){
-            var oldRound = insideRounds.pop();
-            var newRound = newInsideRounds.pop();
+            oldRound = insideRounds.pop();
+            newRound = newInsideRounds.pop();
             shuffledScheduleObject[oldRound] = newRound;
           }
 
@@ -448,9 +451,9 @@ app.factory('FilterService', ['Match', 'User', '$q',
           for(var userId in usersForSchedule){
             var oldRoundsForUser = usersForSchedule[userId].scheduleForThisUser;
             var newRoundsForUser = {};
-            for(var oldRoundNumber in shuffledScheduleObject){
-              var newRoundNumber = shuffledScheduleObject[oldRoundNumber];
-              newRoundsForUser[newRoundNumber] = oldRoundsForUser[oldRoundNumber];
+            for(var oldRoundNum in shuffledScheduleObject){
+              var newRoundNum = shuffledScheduleObject[oldRoundNum];
+              newRoundsForUser[newRoundNum] = oldRoundsForUser[oldRoundNum];
             }
             usersForSchedule[userId].scheduleForThisUser = newRoundsForUser;
           }
@@ -458,6 +461,7 @@ app.factory('FilterService', ['Match', 'User', '$q',
 
         var makeScheduleSpreadsheet = function(scheduleMatrix){
           var spreadSheetArray = [];
+          var userName;
           var topRow = ['','1','2','3','4','5','6','7','8','9','10','11'];
           spreadSheetArray.push(topRow);
           for(var oppId in scheduleMatrix){
@@ -470,7 +474,7 @@ app.factory('FilterService', ['Match', 'User', '$q',
               if( userId === undefined || userId === 'BREAK' ){
                 userName = 'BREAK';
               }else{
-                var userName = userObj[userId].name || userObj[userId].email;
+                userName = userObj[userId].name || userObj[userId].email;
               }
               rowArray.push(userName);
             }
@@ -495,7 +499,7 @@ app.factory('FilterService', ['Match', 'User', '$q',
             userIds.push(user);
           }
 
-          topArray.push('Stars Scheduled')
+          topArray.push('Stars Scheduled');
 
           for(var breakStringIndex = 0; breakStringIndex < 10; breakStringIndex++){
             topArray.push('brk');
@@ -536,13 +540,15 @@ app.factory('FilterService', ['Match', 'User', '$q',
                 breakRounds.push('R' + (Number(j) + 1));
               }
             }
-            for(var i = 0; i < userIds.length; i++){
-              var userId = userIds[i];
-              var thisUserSchedule = usersForSchedule[userId].scheduleForThisUser;
+            for(var c = 0; c < userIds.length; c++){
+              var userID = userIds[c];
+              var thisUserSchedule = usersForSchedule[userID].scheduleForThisUser;
               var hasAppointment = false;
+              var translatedInterestLevel;
+
               for(var roundNumber in thisUserSchedule){
-                var interestLevel = userInterestsForOpportunites[userId][oppId];
-                var translatedInterestLevel = translateInterestLevelForSpreadsheet(interestLevel);
+                var interestLevel = userInterestsForOpportunites[userID][oppId];
+                translatedInterestLevel = translateInterestLevelForSpreadsheet(interestLevel);
                 if( thisUserSchedule[roundNumber] === oppId ){
                   if( interestLevel === 14 ){
                     numberOfStars++;
@@ -563,9 +569,9 @@ app.factory('FilterService', ['Match', 'User', '$q',
             spreadSheetArray.push(rowArray);
           }
 
-          for(var i = 0; i < userIds.length; i++){
-            var userId = userIds[i];
-            var numberOfConvos = usersForSchedule[userId].numberOfRounds;
+          for(var b = 0; b < userIds.length; b++){
+            var usersId = userIds[b];
+            var numberOfConvos = usersForSchedule[usersId].numberOfRounds;
             var numberOfBreaks = 11 - numberOfConvos;
             numberOfConvosRow.push(numberOfConvos);
             numberOfBreaksRow.push(numberOfBreaks);

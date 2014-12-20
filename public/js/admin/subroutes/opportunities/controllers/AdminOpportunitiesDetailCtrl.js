@@ -9,7 +9,6 @@ app.controller('AdminOpportunitiesDetailCtrl',
   $scope.showAttending = false;
   $scope.matchGridIsShowing = false;
 
-
   //get all tags
   OppFactory.tags.then(function(tags) {
     $scope.tags = tags;
@@ -35,6 +34,8 @@ app.controller('AdminOpportunitiesDetailCtrl',
     $scope.matchGridIsShowing = true;
     // Disables showMatchGrid button. Fixes issue where multiple clicks
     // would allow admin to continue making match requests.
+
+    console.log('matchGridIsShowing', $scope.matchGridIsShowing);
 
       $scope.attending = OppFactory.attending();
       console.log('Attending: ', $scope.attending);

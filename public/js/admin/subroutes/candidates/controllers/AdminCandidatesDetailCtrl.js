@@ -21,7 +21,7 @@ function (User, $scope, $stateParams, Match, Company, Tag, Category, $q) {
       $scope.tags = parseUserTags(user);
       return Match.getOpportunities(user._id);
     }).then(function(data){
-      matches = data.matches
+      matches = data.matches;
       return Company.getAll();
     }).then(function(data){
       companies = data;
@@ -146,7 +146,7 @@ function (User, $scope, $stateParams, Match, Company, Tag, Category, $q) {
       e.preventDefault();
       $scope.addNewCategory($scope.newCategory);
     }
-  }
+  };
 
   initialize();
 
