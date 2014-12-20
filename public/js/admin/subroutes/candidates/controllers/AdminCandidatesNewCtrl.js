@@ -74,7 +74,7 @@ app.controller('AdminCandidatesNewCtrl', ['User', '$scope', 'Category', function
       $scope.categories.push(newCategory);
       $scope.category = $scope.categories[$scope.categories.length - 1];
       $scope.creatingCategory = false;
-    })
+    });
   };
 
   $scope.interceptEnter = function(e){
@@ -82,7 +82,7 @@ app.controller('AdminCandidatesNewCtrl', ['User', '$scope', 'Category', function
       e.preventDefault();
       $scope.addNewCategory($scope.newCategory);
     }
-  }
+  };
 
 
 }]);

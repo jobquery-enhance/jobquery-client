@@ -1,5 +1,5 @@
 app.controller('AdminCompaniesMonitorCtrl', ['$scope', '$http', 'SERVER_URL', '$modal', function ($scope, $http, SERVER_URL, $modal) {
-  $scope.jobs;
+  $scope.jobs = undefined;
   //used to check if there are job results
   $scope.jobResults = false;
 
