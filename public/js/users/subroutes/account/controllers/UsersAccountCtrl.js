@@ -51,6 +51,11 @@ app.controller('UsersAccountCtrl',
 
 
   $scope.update = function (user) {
+    var compiledTags = [];
+    var callback = function(tag) {
+      compiledTags.push(tag);
+    };
+    
     if(user.password) delete user.password;
     if(user.newPassword) delete user.newPassword;
     if(user.newPasswordConfirm) delete user.newPasswordConfirm;
@@ -63,16 +68,14 @@ app.controller('UsersAccountCtrl',
     $scope.user.surveyPercent = $scope.percentageOfSurveyCompleted;
 
     // re-compile tags
-    var compiledTags = [];
     for (var key in $scope.tags) {
       for (var type in $scope.tags[key]) {
-        $scope.tags[key][type].forEach(function (tag) {
-          compiledTags.push(tag);
-        });
+        $scope.tags[key][type].forEach(callback(tag));
       }
     }
+
     $scope.user.tags = compiledTags;
-    
+
     // send for update
     $scope.pendingRequests++;
     $scope.submitText = 'Saving...';

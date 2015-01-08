@@ -7,11 +7,12 @@ app.controller('AdminOpportunitiesDetailCtrl',
   $scope.sorter = 'score';
   $scope.reverse = true;
   $scope.showAttending = false;
+  $scope.matchGridIsShowing = false;
 
   //get all tags
   OppFactory.tags.then(function(tags) {
     $scope.tags = tags;
-  });
+  }); 
 
   //get all category info
   OppFactory.categories.then(function(categories) {
@@ -30,9 +31,15 @@ app.controller('AdminOpportunitiesDetailCtrl',
   });
 
   $scope.showMatchGrid = function() {
-    $scope.attending = OppFactory.attending();
-    // $scope.updateGuidance();
-    console.log($scope.attending, 'attending');
+    $scope.matchGridIsShowing = true;
+    // Disables showMatchGrid button. Fixes issue where multiple clicks
+    // would allow admin to continue making match requests.
+
+    console.log('matchGridIsShowing', $scope.matchGridIsShowing);
+
+      $scope.attending = OppFactory.attending();
+      console.log('Attending: ', $scope.attending);
+        // $scope.updateGuidance();
   };
 
   $scope.showNonAttending = function() {
@@ -411,6 +418,8 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       var numQuestions = questionLength;
       var numAnswers = matchModel.answers.length;
       var difference = numQuestions - numAnswers;
+      var attendingUsers = {};
+
       //try to get rid of this
       for(var i = 0; i < difference; i++){
         matchModel.answers.push({answer: ''});
@@ -418,30 +427,38 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       //if user is attending push user obj into attending array if not push into notAttending array
       if(matchModel.user.attending) {
         matchModel.user.attending = 'Yes';
-        attending.push({
-          _id: matchModel.user._id,
-          name: matchModel.user.name || matchModel.user.email,
-          attending: matchModel.user.attending,
-          email: matchModel.user.email,
-          star: matchModel.star,
-          upVote: matchModel.upVote,
-          downVote: matchModel.downVote,
-          noGo: matchModel.noGo,
-          interest: matchModel.userInterest,
-          answers: matchModel.answers,
-          category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
-          searchStage: matchModel.user.searchStage,
-          adminOverride: matchModel.adminOverride,
-          points: [0, 0], // default: [points, possible points]
-          score: 0, // points[0] / points[1]
-          tags: (function () {
-            var tagsByKeys = {};
-            matchModel.user.tags.forEach(function (tag) {
-              tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
-            });
-            return tagsByKeys;
-          })()
-        });
+
+        // check if user has already been added to array
+        if( attendingUsers[matchModel.user._id] === undefined) {
+          // if not, add to tracking object
+          attendingUsers[matchModel.user.id] = 1;
+          
+          // and add to array
+          attending.push({
+            _id: matchModel.user._id,
+            name: matchModel.user.name || matchModel.user.email,
+            attending: matchModel.user.attending,
+            email: matchModel.user.email,
+            star: matchModel.star,
+            upVote: matchModel.upVote,
+            downVote: matchModel.downVote,
+            noGo: matchModel.noGo,
+            interest: matchModel.userInterest,
+            answers: matchModel.answers,
+            category: matchModel.user.category ? matchModel.user.category.name : 'N/A',
+            searchStage: matchModel.user.searchStage,
+            adminOverride: matchModel.adminOverride,
+            points: [0, 0], // default: [points, possible points]
+            score: 0, // points[0] / points[1]
+            tags: (function () {
+              var tagsByKeys = {};
+              matchModel.user.tags.forEach(function (tag) {
+                tagsByKeys[tag.tag._id] = tag.tag.isPublic ? tag.value : tag.privateValue;
+              });
+              return tagsByKeys;
+            })()
+          });
+        }
       }
     });
   };
@@ -506,7 +523,10 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
       return mapToView(data);
     },
     attending: function() {
-      declared(cache.matches, cache.opportunity.questions.length);
+      if(attending.length === 0) {
+        declared(cache.matches, cache.opportunity.questions.length);
+      }
+
       return attending;
     },
     notAttending: function() {

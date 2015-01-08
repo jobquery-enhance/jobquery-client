@@ -24,8 +24,8 @@ app.factory('Company', ['CompanyResource', 'SERVER_URL', '$http', function (Comp
     return companyMethods.getAll(id);
   };
 
-  companyMethods.create = function (company) {
-    var company = new CompanyResource(company);
+  companyMethods.create = function (companyName) {
+    var company = new CompanyResource(companyName);
     return company.$save();
   };
 

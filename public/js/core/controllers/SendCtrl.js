@@ -10,6 +10,6 @@ function($scope, AuthService) {
       $scope.success = true;
       $scope.submitting = false;
     });
-  }
+  };
 
 }]);

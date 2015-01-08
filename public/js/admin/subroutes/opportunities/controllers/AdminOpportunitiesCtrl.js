@@ -56,13 +56,15 @@ app.controller('AdminOpportunitiesCtrl', ['$scope', 'Opportunity', 'Match', 'Dia
     };
 
     var toggleScopeGroupsCategory = function(opp){
+      var currentCategory = '';
+      var newCategory = '';
       opp.attending = !opp.attending;
       if(opp.category.name === 'Attending Hiring Day'){
-        var currentCategory = 'Attending Hiring Day';
-        var newCategory = 'Not Attending Hiring Day';
+        currentCategory = 'Attending Hiring Day';
+        newCategory = 'Not Attending Hiring Day';
       }else{
-        var currentCategory = 'Not Attending Hiring Day';
-        var newCategory = 'Attending Hiring Day';
+        currentCategory = 'Not Attending Hiring Day';
+        newCategory = 'Attending Hiring Day';
       }
 
       var currentGroup = $scope.groups[currentCategory];
