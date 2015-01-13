@@ -52,7 +52,7 @@ app.controller('UsersAccountCtrl',
 
   $scope.update = function (user) {
     var compiledTags = [];
-    var callback = function(tag) {
+    var addTag = function(tag) {
       compiledTags.push(tag);
     };
     
@@ -70,7 +70,7 @@ app.controller('UsersAccountCtrl',
     // re-compile tags
     for (var key in $scope.tags) {
       for (var type in $scope.tags[key]) {
-        $scope.tags[key][type].forEach(callback(tag));
+        $scope.tags[key][type].forEach(addTag);
       }
     }
 
