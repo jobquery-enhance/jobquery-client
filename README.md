@@ -34,5 +34,5 @@ Reference the Angular Protractor [tutorial](http://angular.github.io/protractor/
 1. Install Protractor globally using `npm install -g proctractor`.
 1. Update the webdrivers using `webdriver-manager update`.
 1. Start the selenium server: `webdriver-manager start`.
-1. Edit the file named `test/E2E/privateInfo.js` with usernames, passwords, etc.
+1. Edit the file named `test/E2E/privateInfo.js` with usernames, passwords, etc. The setup at this time is:
 1. Navigate to `test/E2E/conf.js` in the terminal and enter `protractor conf.js` to run tests.
