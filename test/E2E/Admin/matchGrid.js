@@ -13,8 +13,10 @@ describe('Match grid', function() {
 
   it('should be hidden at first', function() {
     browser.get(ApolloLightspeed);
-    var rows = element.all(by.css('tbody tr th'));
-    expect( rows.count() ).toBe(0);
+    element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'))
+      .then(function(users) {
+        expect(users.length).toBe(0);
+      });
   });
 
   it('should show when the "Show Match Grid" button is clicked', function() {
@@ -30,7 +32,7 @@ describe('Match grid', function() {
     expect( matchGridButton.isEnabled() ).toBe(false);
   });
 
-  it('should not have duplicates within the match grid', function() {
+  xit('should not have duplicates within the match grid', function() {
     var duplicate = false;
     element.all(by.css('div.row table tbody tr td a')).then(function(links) {
       for(var i = 1; i < links.length; i++) {
@@ -47,18 +49,38 @@ describe('Match grid', function() {
 
   });
 
-  xit('should display the correct data', function() {
+  it('should display the correct data', function() {
     /* There is currently an issue where the match grid shows information 
     from the previous opportunity's match grid.
     */
+    var jobAMatches;
+    var jobBMatches;
 
-    // Navigate to job A.
-    // Show match grid for job A.
+    // Already on job A, with match grid shown.
     // Save ng-repeat candidates
-    // Navigate to match grid for job B.
+    jobAMatches = element.all(by.css('div.row table tbody tr td a'));
+    expect( jobAMatches.count() ).not.toBe(0);
+
+    // Navigate to job B.
+    browser.get(Beatsmusic);
+    var matchGridButton = element(by.buttonText('Show Match Grid'));
+
+    // Match grid should be hidden
+    jobBMatches = element.all(by.repeater('div.row table tbody tr td a'))
+    expect( jobBMatches.count() ).toBe(0);
+
+    // The match grid button should be enabled, bc it hasn't been clicked yet
+    expect( matchGridButton.isEnabled() ).toBe(true);
     // Show match grid for job B.
-    // Save ng-repeat candidates
-    // Compare candidates, they should be dissimilar
-    expect(expecation).to.be(equal);
+    matchGridButton.click()
+    // Now button should be disabled an match grid showing
+    expect( matchGridButton.isEnabled() ).toBe(false);
+
+    // The match grid should be showing
+    jobBMatches = element.all(by.css('div.row table tbody tr td a'));
+    expect( jobBMatches.count() ).not.toBe(0);
+
+    // Compare candidates' links, they should be dissimilar
+    expect(jobAMatches.getAttribute('href')).not.toEqual(jobBMatches.getAttribute('href'));
   });
 });
