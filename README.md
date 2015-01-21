@@ -30,7 +30,8 @@ A custom CMS for Hack Reactor to manage hiring day. *eHarmony* for jobs.
 1. Open a browser and navigate to http://localhost:8000.
 
 ## To Run End-to-End Tests
-Reference the Angular Protractor [tutorial](http://angular.github.io/protractor/#/tutorial)
+Reference the Angular Protractor [tutorial](http://angular.github.io/protractor/#/tutorial).
+
 1. Install Protractor globally using `npm install -g proctractor`.
 1. Update the webdrivers using `webdriver-manager update`.
 1. Start the selenium server: `webdriver-manager start`.
