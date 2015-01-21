@@ -32,21 +32,34 @@ describe('Match grid', function() {
     expect( matchGridButton.isEnabled() ).toBe(false);
   });
 
-  xit('should not have duplicates within the match grid', function() {
+  it('should not have duplicates within the match grid', function() {
+    // Already on job A, with match grid shown.
     var duplicate = false;
-    element.all(by.css('div.row table tbody tr td a')).then(function(links) {
-      for(var i = 1; i < links.length; i++) {
-        var link = links[i].getAttribute('href');
-        for(var j = i + 1; j < links.length; j++) {
-          if( links[j] === link) {
+    var linkStorage = {};
+
+    // Save unique links
+    var uniqueUserLinks = element.all(by.css('div.row table tbody tr td a'));
+    
+    // get an array of href attributes
+    uniqueUserLinks.getAttribute('href')
+      .then(function(hrefs) {
+        // add the links to the linkStorage object
+        for (var i = 0; i < hrefs.length; i++) {
+          // if the link is already there
+          if( linkStorage[ hrefs[i] ] ) {
+            // update its counter
+            linkStorage[hrefs[i]] += 1
             duplicate = true;
+            // there's already one duplicate, which will fail the test
+            break;
+          } else {
+            // create a link and start a counter
+            linkStorage[hrefs[i]] = 1;
           }
-        }
-      }
-      expect(duplicate).toBe(false);
-    });
-
-
+        };
+      }).then(function() {
+        expect(duplicate).toBe(false);
+      });
   });
 
   it('should display the correct data', function() {
