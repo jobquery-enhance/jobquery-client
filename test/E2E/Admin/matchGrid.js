@@ -71,29 +71,33 @@ describe('Match grid', function() {
 
     // Already on job A, with match grid shown.
     // Save ng-repeat candidates
-    jobAMatches = element.all(by.css('div.row table tbody tr td a'));
-    expect( jobAMatches.count() ).not.toBe(0);
+    jobAMatches = element.all(by.css('tr.ng-scope'))
+      .then(function(rows) {
+        console.log('rows',  rows.getText());
+      });
 
-    // Navigate to job B.
-    browser.get(Beatsmusic);
-    var matchGridButton = element(by.buttonText('Show Match Grid'));
+    // expect( jobAMatches.count() ).not.toBe(0);
 
-    // Match grid should be hidden
-    jobBMatches = element.all(by.repeater('div.row table tbody tr td a'))
-    expect( jobBMatches.count() ).toBe(0);
+    // // Navigate to job B.
+    // browser.get(Beatsmusic);
+    // var matchGridButton = element(by.buttonText('Show Match Grid'));
 
-    // The match grid button should be enabled, bc it hasn't been clicked yet
-    expect( matchGridButton.isEnabled() ).toBe(true);
-    // Show match grid for job B.
-    matchGridButton.click()
-    // Now button should be disabled an match grid showing
-    expect( matchGridButton.isEnabled() ).toBe(false);
+    // // Match grid should be hidden
+    // jobBMatches = element.all(by.repeater('div.row table tbody tr td a'))
+    // expect( jobBMatches.count() ).toBe(0);
 
-    // The match grid should be showing
-    jobBMatches = element.all(by.css('div.row table tbody tr td a'));
-    expect( jobBMatches.count() ).not.toBe(0);
+    // // The match grid button should be enabled, bc it hasn't been clicked yet
+    // expect( matchGridButton.isEnabled() ).toBe(true);
+    // // Show match grid for job B.
+    // matchGridButton.click()
+    // // Now button should be disabled an match grid showing
+    // expect( matchGridButton.isEnabled() ).toBe(false);
 
-    // Compare candidates' links, they should be dissimilar
-    expect(jobAMatches.getAttribute('href')).not.toEqual(jobBMatches.getAttribute('href'));
+    // // The match grid should be showing
+    // jobBMatches = element.all(by.css('div.row table tbody tr td a'));
+    // expect( jobBMatches.count() ).not.toBe(0);
+
+    // // Compare candidates' links, they should be dissimilar
+    // expect(jobAMatches.getAttribute('href')).not.toEqual(jobBMatches.getAttribute('href'));
   });
 });
