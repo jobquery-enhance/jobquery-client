@@ -32,13 +32,23 @@ A custom CMS for Hack Reactor to manage hiring day. *eHarmony* for jobs.
 ## To Run End-to-End Tests
 Reference the Angular Protractor [tutorial](http://angular.github.io/protractor/#/tutorial).
 
+### Setup
+
 1. Install Protractor globally using `npm install -g proctractor`.
 1. Update the webdrivers using `webdriver-manager update`.
-1. Start the selenium server: `webdriver-manager start`.
 1. Create a file named `test/E2E/privateInfo.js` with usernames, passwords, etc. The setup at this time is:
 
         exports.admin = ['someemail@email.com', 'password'];
 
         exports.user = ['someemail@email.com', 'password'];
+1. Start the selenium server in a new terminal tab: `webdriver-manager start`.
+1. Run jobQuery locally, see steps above. 
 
-1. Navigate to `test/E2E/conf.js` in another terminal window and enter `protractor conf.js` to run tests.
+There should be 4 tabs open:
+- Server
+- MongoDB
+- Client
+- Selenium server
+
+### Run
+In a fifth terminal window, navigate to `jobquery-client/test/E2E/conf.js` and enter `protractor conf.js` to run tests.
