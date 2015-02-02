@@ -71,31 +71,28 @@ describe('Match grid', function() {
 
     // Already on job A, with match grid shown.
     // Save ng-repeat candidates
-    jobAMatches = element.all(by.css('tr.ng-scope'))
-      .then(function(rows) {
-        console.log('rows',  rows.getText());
-      });
+    jobAMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
 
-    // expect( jobAMatches.count() ).not.toBe(0);
+    expect( jobAMatches.count() ).not.toBe(0);
 
     // // Navigate to job B.
-    // browser.get(Beatsmusic);
-    // var matchGridButton = element(by.buttonText('Show Match Grid'));
+    browser.get(Beatsmusic);
+    var matchGridButton = element(by.buttonText('Show Match Grid'));
 
     // // Match grid should be hidden
-    // jobBMatches = element.all(by.repeater('div.row table tbody tr td a'))
-    // expect( jobBMatches.count() ).toBe(0);
+    jobBMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
+    expect( jobBMatches.count() ).toBe(0);
 
     // // The match grid button should be enabled, bc it hasn't been clicked yet
-    // expect( matchGridButton.isEnabled() ).toBe(true);
+    expect( matchGridButton.isEnabled() ).toBe(true);
     // // Show match grid for job B.
-    // matchGridButton.click()
+    matchGridButton.click()
     // // Now button should be disabled an match grid showing
-    // expect( matchGridButton.isEnabled() ).toBe(false);
+    expect( matchGridButton.isEnabled() ).toBe(false);
 
     // // The match grid should be showing
-    // jobBMatches = element.all(by.css('div.row table tbody tr td a'));
-    // expect( jobBMatches.count() ).not.toBe(0);
+    jobBMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
+    expect( jobBMatches.count() ).not.toBe(0);
 
     // // Compare candidates' links, they should be dissimilar
     // expect(jobAMatches.getAttribute('href')).not.toEqual(jobBMatches.getAttribute('href'));
