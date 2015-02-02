@@ -44,7 +44,7 @@ Reference the Angular Protractor [tutorial](http://angular.github.io/protractor/
 1. Start the selenium server in a new terminal tab: `webdriver-manager start`.
 1. Run jobQuery locally, see steps above. 
 
-There should be 4 tabs open:
+There should be four tabs open:
 - Server
 - MongoDB
 - Client
