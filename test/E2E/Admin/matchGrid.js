@@ -71,6 +71,8 @@ describe('Match grid', function() {
     // but are then turned into objects to be used for comparison
     var jobAMatches;
     var jobBMatches;
+    // start with the assumption that the match grid is broken
+    var same = true;
 
     // Already on job A, with match grid shown.
     // Save ng-repeat candidates
@@ -92,8 +94,7 @@ describe('Match grid', function() {
               var name = hrefNameRating[1];
               var rating = hrefNameRating[2];
 
-              jobAMatches[href] = 
-                { name: rating };
+              jobAMatches[href] = [name, rating]
             }
           });
       });
@@ -117,34 +118,45 @@ describe('Match grid', function() {
     jobBMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
     expect( jobBMatches.count() ).not.toBe(0);
 
-    // Get the name and rating of each repeat
-    // Store in an object
+    
+    jobBMatches = {};
+    element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'))
+      .each(function(row) {
+        // An array with format: [href, name, rating]
+        var hrefNameRating;
 
-    // Recreate for jobB
+        row.getInnerHtml()
+          .then(function(columns) {
+            hrefNameRating = extractRowData(columns);
 
-    // Loop through both objects, comparing.
+            if( hrefNameRating ) {
+              var href = hrefNameRating[0];
+              var name = hrefNameRating[1];
+              var rating = hrefNameRating[2];
 
-    // // // Compare candidates' links, they should be dissimilar
-    // jobAMatches.count()
-    //   .then(function(numberOfJobs) {
-      
-    //     for(var i = 0; i < numberOfJobs; i++) {
-    //       if( jobAMatches[i] != jobBMatches[i] ) {
-    //         same = false;
-    //       } else if( i === 1 ) {
-    //         jobAMatches.get(1)
-    //           .then(function(one) {
-    //             console.log('message', one.getText() );
-    //           });
+              jobBMatches[href] = [name, rating];
+            }
+          });
+      });
 
-    //         // jobBMatches.get(1)
-    //         //   .then(function(one) {
-    //         //     console.log('first job B', one.getText());
-    //         //   });
-    //       }
-    //     };
-    //   });
+      // Bc the objects get updated asynchronously, we need to give them time to complete
+      // 15 seconds does not give enough time for full completion, but allow for a 
+      // representative sample to be compared
+      setTimeout(function() {
+        for(var href in jobAMatches) {
+          // If the href can be found in the other match object
+          if( jobBMatches[href] ) {
+            // check if name is same and rating is different
+            console.log('making comparison for ', href);
+            if( jobAMatches[href][0] === jobBMatches[href][0] && jobAMatches[href][1] !== jobBMatches[href][1]  ) {
+              same = false;
+              console.log('not the same ', jobAMatches[href][1] + jobBMatches[href][1] );
+            }
+          }
+        }
 
+        expect(same).toBe(false);
+      }, 15000);
 
   });
 });
