@@ -66,65 +66,38 @@ describe('Match grid', function() {
     /* There is currently an issue where the match grid shows information 
     from the previous opportunity's match grid.
     */
+
+    // Matches start as webelements (for counting), 
+    // but are then turned into objects to be used for comparison
     var jobAMatches;
     var jobBMatches;
-    var same = true;
-    
-    // Catches each user's unique href identifier
-    var hrefRegEx = /\/admin\/candidates\/+(\d|\w){10,}/;
-    // Catches first-and-last names
-    var nameRegEx = />+\w+\s+\w+</;
-    // Catches the user's numerical rating of the position
-    var ratingRegEx = />+\d+</;
 
     // Already on job A, with match grid shown.
     // Save ng-repeat candidates
     jobAMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
     expect( jobAMatches.count() ).not.toBe(0);
 
+    jobAMatches = {};
     element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'))
       .each(function(row) {
-        var href;
-        var name;
-        var rating;
+        // An array with format: [href, name, rating]
+        var hrefNameRating;
 
         row.getInnerHtml()
           .then(function(columns) {
-            if( columns.match(nameRegEx) !== null ) {
-              // Href identifier
-              href = columns.match(hrefRegEx)[0];
-              href = href.substring(18);
+            hrefNameRating = extractRowData(columns);
 
-              // Name
-              name = columns.match(nameRegEx)[0];
-              // Remove html carrots from <User Name>
-              name = name.substring(1, name.length - 1);
-            
-              // Rating
-              if( columns.match(ratingRegEx) !== null ) {
-                rating = columns.match(ratingRegEx)[0];
-                rating = rating.substring(1, rating.length - 1);
-              } else {
-                rating = 'N/A';
-              }
+            if( hrefNameRating ) {
+              var href = hrefNameRating[0];
+              var name = hrefNameRating[1];
+              var rating = hrefNameRating[2];
+
+              jobAMatches[href] = 
+                { name: rating };
             }
-          })
-        
-
-        // .findElements('td a')
-        //   .then(function(links) {
-        //     console.log('link?', typeof links);
-        //   })
+          });
       });
-
-        // .then(function(row1) {
-        //   row1.getOuterHtml()
-        //     .then(function(html) {
-        //       console.log('row1: ', html );
-        //     })
   
-
-
     // // Navigate to job B.
     browser.get(Beatsmusic);
     var matchGridButton = element(by.buttonText('Show Match Grid'));
@@ -172,6 +145,42 @@ describe('Match grid', function() {
     //     };
     //   });
 
-    expect( same ).toBe(false);
+
   });
 });
+
+var extractRowData = function(ngRepeatColumns) {
+  var href;
+  var name;
+  var rating;
+
+  // Catches each user's unique href identifier
+  var hrefRegEx = /\/admin\/candidates\/+(\d|\w){10,}/;
+  // Catches first-and-last names
+  var nameRegEx = />+\w+\s+\w+</;
+  // Catches the user's numerical rating of the position
+  var ratingRegEx = />+\d+</;
+
+  if( ngRepeatColumns.match(nameRegEx) !== null ) {
+    // Href identifier
+    href = ngRepeatColumns.match(hrefRegEx)[0];
+    href = href.substring(18);
+
+    // Name
+    name = ngRepeatColumns.match(nameRegEx)[0];
+    // Remove html carrots from <User Name>
+    name = name.substring(1, name.length - 1);
+  
+    // Rating
+    if( ngRepeatColumns.match(ratingRegEx) !== null ) {
+      rating = ngRepeatColumns.match(ratingRegEx)[0];
+      rating = rating.substring(1, rating.length - 1);
+    } else {
+      rating = 'N/A';
+    }
+
+    return [href, name, rating];
+  } else {
+    return false;
+  }
+};
