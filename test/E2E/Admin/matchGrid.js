@@ -68,12 +68,29 @@ describe('Match grid', function() {
     */
     var jobAMatches;
     var jobBMatches;
+    var same = true;
 
     // Already on job A, with match grid shown.
     // Save ng-repeat candidates
     jobAMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
-
     expect( jobAMatches.count() ).not.toBe(0);
+
+    element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'))
+      .each(function(row) {
+        // get all of the columns in the row
+        row.getInnerHtml()
+          .then(function(link) {
+            console.log('link?', link);
+          })
+      });
+
+        // .then(function(row1) {
+        //   row1.getOuterHtml()
+        //     .then(function(html) {
+        //       console.log('row1: ', html );
+        //     })
+  
+
 
     // // Navigate to job B.
     browser.get(Beatsmusic);
@@ -94,7 +111,34 @@ describe('Match grid', function() {
     jobBMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
     expect( jobBMatches.count() ).not.toBe(0);
 
-    // // Compare candidates' links, they should be dissimilar
-    // expect(jobAMatches.getAttribute('href')).not.toEqual(jobBMatches.getAttribute('href'));
+    // Get the name and rating of each repeat
+    // Store in an object
+
+    // Recreate for jobB
+
+    // Loop through both objects, comparing.
+
+    // // // Compare candidates' links, they should be dissimilar
+    // jobAMatches.count()
+    //   .then(function(numberOfJobs) {
+      
+    //     for(var i = 0; i < numberOfJobs; i++) {
+    //       if( jobAMatches[i] != jobBMatches[i] ) {
+    //         same = false;
+    //       } else if( i === 1 ) {
+    //         jobAMatches.get(1)
+    //           .then(function(one) {
+    //             console.log('message', one.getText() );
+    //           });
+
+    //         // jobBMatches.get(1)
+    //         //   .then(function(one) {
+    //         //     console.log('first job B', one.getText());
+    //         //   });
+    //       }
+    //     };
+    //   });
+
+    expect( same ).toBe(false);
   });
 });
