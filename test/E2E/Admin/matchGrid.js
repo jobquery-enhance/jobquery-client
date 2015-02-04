@@ -4,13 +4,6 @@ describe('Match grid', function() {
   var ApolloLightspeed = 'http://localhost:8000/admin/opportunities/53b1ea816ecb92340e865aa6';
   var Beatsmusic = 'http://localhost:8000/admin/opportunities/53b1a55a6ecb92340e865929';
 
-  // beforeEach(function() {
-  //   browser.get('http://localhost:8000/login');
-  //   element(by.model('email')).sendKeys(loginCredentials[0]);
-  //   element(by.model('password')).sendKeys(loginCredentials[1]);
-  //   element(by.css('input.login-button')).click();
-  // });
-
   it('should be hidden at first', function() {
     browser.get(ApolloLightspeed);
     element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'))
@@ -100,7 +93,13 @@ describe('Match grid', function() {
       });
   
     // // Navigate to job B.
-    browser.get(Beatsmusic);
+    var opportunities = element(by.css('div#sidebar-opportunities'))
+    opportunities.click();
+
+    var beats = element(by.cssContainingText('td.ng-binding', 'Beats Music'));
+    browser.sleep(1000);
+    beats.click();
+
     var matchGridButton = element(by.buttonText('Show Match Grid'));
 
     // // Match grid should be hidden
@@ -110,7 +109,7 @@ describe('Match grid', function() {
     // // The match grid button should be enabled, bc it hasn't been clicked yet
     expect( matchGridButton.isEnabled() ).toBe(true);
     // // Show match grid for job B.
-    matchGridButton.click()
+    matchGridButton.click();
     // // Now button should be disabled an match grid showing
     expect( matchGridButton.isEnabled() ).toBe(false);
 
@@ -145,9 +144,7 @@ describe('Match grid', function() {
       setTimeout(function() {
         for(var href in jobAMatches) {
           // If the href can be found in the other match object
-          if( jobBMatches[href] ) {
             // check if name is same and rating is different
-            console.log('making comparison for ', href);
             if( jobAMatches[href][0] === jobBMatches[href][0] && jobAMatches[href][1] !== jobBMatches[href][1]  ) {
               same = false;
               console.log('not the same ', jobAMatches[href][1] + jobBMatches[href][1] );
