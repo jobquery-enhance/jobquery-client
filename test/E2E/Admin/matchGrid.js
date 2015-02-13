@@ -145,11 +145,12 @@ describe('Match grid', function() {
         for(var href in jobAMatches) {
           // If the href can be found in the other match object
             // check if name is same and rating is different
-            if( jobAMatches[href][0] === jobBMatches[href][0] && jobAMatches[href][1] !== jobBMatches[href][1]  ) {
-              same = false;
-              console.log('not the same ', jobAMatches[href][1] + jobBMatches[href][1] );
+            if( jobAMatches[href] && jobBMatches[href] ) {
+              if( jobAMatches[href][0] === jobBMatches[href][0] && jobAMatches[href][1] !== jobBMatches[href][1]  ) {
+                same = false;
+                console.log('not the same ', jobAMatches[href][1] + jobBMatches[href][1] );
+              }
             }
-          }
         }
 
         expect(same).toBe(false);
