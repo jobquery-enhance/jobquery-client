@@ -4,13 +4,6 @@ describe('Match grid', function() {
   var ApolloLightspeed = 'http://localhost:8000/admin/opportunities/53b1ea816ecb92340e865aa6';
   var Beatsmusic = 'http://localhost:8000/admin/opportunities/53b1a55a6ecb92340e865929';
 
-  // beforeEach(function() {
-  //   browser.get('http://localhost:8000/login');
-  //   element(by.model('email')).sendKeys(loginCredentials[0]);
-  //   element(by.model('password')).sendKeys(loginCredentials[1]);
-  //   element(by.css('input.login-button')).click();
-  // });
-
   it('should be hidden at first', function() {
     browser.get(ApolloLightspeed);
     element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'))
@@ -66,34 +59,138 @@ describe('Match grid', function() {
     /* There is currently an issue where the match grid shows information 
     from the previous opportunity's match grid.
     */
+
+    // Matches start as webelements (for counting), 
+    // but are then turned into objects to be used for comparison
     var jobAMatches;
     var jobBMatches;
+    // start with the assumption that the match grid is broken
+    var same = true;
 
     // Already on job A, with match grid shown.
     // Save ng-repeat candidates
-    jobAMatches = element.all(by.css('div.row table tbody tr td a'));
+    jobAMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
     expect( jobAMatches.count() ).not.toBe(0);
 
-    // Navigate to job B.
-    browser.get(Beatsmusic);
+    jobAMatches = {};
+    element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'))
+      .each(function(row) {
+        // An array with format: [href, name, rating]
+        var hrefNameRating;
+
+        row.getInnerHtml()
+          .then(function(columns) {
+            hrefNameRating = extractRowData(columns);
+
+            if( hrefNameRating ) {
+              var href = hrefNameRating[0];
+              var name = hrefNameRating[1];
+              var rating = hrefNameRating[2];
+
+              jobAMatches[href] = [name, rating]
+            }
+          });
+      });
+  
+    // // Navigate to job B.
+    var opportunities = element(by.css('div#sidebar-opportunities'))
+    opportunities.click();
+
+    var beats = element(by.cssContainingText('td.ng-binding', 'Beats Music'));
+    browser.sleep(1000);
+    beats.click();
+
     var matchGridButton = element(by.buttonText('Show Match Grid'));
 
-    // Match grid should be hidden
-    jobBMatches = element.all(by.repeater('div.row table tbody tr td a'))
+    // // Match grid should be hidden
+    jobBMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
     expect( jobBMatches.count() ).toBe(0);
 
-    // The match grid button should be enabled, bc it hasn't been clicked yet
+    // // The match grid button should be enabled, bc it hasn't been clicked yet
     expect( matchGridButton.isEnabled() ).toBe(true);
-    // Show match grid for job B.
-    matchGridButton.click()
-    // Now button should be disabled an match grid showing
+    // // Show match grid for job B.
+    matchGridButton.click();
+    // // Now button should be disabled an match grid showing
     expect( matchGridButton.isEnabled() ).toBe(false);
 
-    // The match grid should be showing
-    jobBMatches = element.all(by.css('div.row table tbody tr td a'));
+    // // The match grid should be showing
+    jobBMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
     expect( jobBMatches.count() ).not.toBe(0);
 
-    // Compare candidates' links, they should be dissimilar
-    expect(jobAMatches.getAttribute('href')).not.toEqual(jobBMatches.getAttribute('href'));
+    
+    jobBMatches = {};
+    element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'))
+      .each(function(row) {
+        // An array with format: [href, name, rating]
+        var hrefNameRating;
+
+        row.getInnerHtml()
+          .then(function(columns) {
+            hrefNameRating = extractRowData(columns);
+
+            if( hrefNameRating ) {
+              var href = hrefNameRating[0];
+              var name = hrefNameRating[1];
+              var rating = hrefNameRating[2];
+
+              jobBMatches[href] = [name, rating];
+            }
+          });
+      });
+
+      // Bc the objects get updated asynchronously, we need to give them time to complete
+      // 15 seconds does not give enough time for full completion, but allow for a 
+      // representative sample to be compared
+      setTimeout(function() {
+        for(var href in jobAMatches) {
+          // If the href can be found in the other match object
+            // check if name is same and rating is different
+            if( jobAMatches[href] && jobBMatches[href] ) {
+              if( jobAMatches[href][0] === jobBMatches[href][0] && jobAMatches[href][1] !== jobBMatches[href][1]  ) {
+                same = false;
+                console.log('not the same ', jobAMatches[href][1] + jobBMatches[href][1] );
+              }
+            }
+        }
+
+        expect(same).toBe(false);
+      }, 15000);
+
   });
 });
+
+var extractRowData = function(ngRepeatColumns) {
+  var href;
+  var name;
+  var rating;
+
+  // Catches each user's unique href identifier
+  var hrefRegEx = /\/admin\/candidates\/+(\d|\w){10,}/;
+  // Catches first-and-last names
+  var nameRegEx = />+\w+\s+\w+</;
+  // Catches the user's numerical rating of the position
+  var ratingRegEx = />+\d+</;
+
+  if( ngRepeatColumns.match(nameRegEx) !== null ) {
+    // Href identifier
+    href = ngRepeatColumns.match(hrefRegEx)[0];
+    href = href.substring(18);
+
+    // Name
+    name = ngRepeatColumns.match(nameRegEx)[0];
+    // Remove html carrots from <User Name>
+    name = name.substring(1, name.length - 1);
+  
+    // Rating
+    if( ngRepeatColumns.match(ratingRegEx) !== null ) {
+      rating = ngRepeatColumns.match(ratingRegEx)[0];
+      rating = rating.substring(1, rating.length - 1);
+    } else {
+      rating = 'N/A';
+    }
+
+    return [href, name, rating];
+  } else {
+    return false;
+  }
+};
