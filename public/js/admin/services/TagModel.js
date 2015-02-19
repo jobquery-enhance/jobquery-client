@@ -12,8 +12,7 @@ app.factory('Tag', ['TagResource', '$http', 'SERVER_URL', function (TagResource,
     }
     return $http({
       method: 'GET',
-      url: url,
-      cache: true
+      url: url
     })
     .then(function(response) {
       return response.data;
