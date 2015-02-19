@@ -148,7 +148,6 @@ describe('Match grid', function() {
             if( jobAMatches[href] && jobBMatches[href] ) {
               if( jobAMatches[href][0] === jobBMatches[href][0] && jobAMatches[href][1] !== jobBMatches[href][1]  ) {
                 same = false;
-                console.log('not the same ', jobAMatches[href][1] + jobBMatches[href][1] );
               }
             }
         }
