@@ -17,7 +17,6 @@ app
     matchMethods.getUsers = function (opportunityId) {
       return $http({
         method: 'GET',
-        cache: true,
         url: SERVER_URL + '/api/matches/opportunities/' + opportunityId
       }).then(function (response) {
         return response.data;
@@ -61,7 +60,6 @@ app
   app.factory('MatchCache', ['$http', 'SERVER_URL', function($http, SERVER_URL) {
     matches = $http({
         method: 'GET',
-        cache: true,
         url: SERVER_URL + '/api/matches'
       }).then(function (response) {
         return response.data;

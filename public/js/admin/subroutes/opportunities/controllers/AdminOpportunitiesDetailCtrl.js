@@ -2,6 +2,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
   ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User', 'OppFactory', 'OppData',
   function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User, OppFactory, OppData) {
   var companyId;
+
   var oppObj = OppFactory.users(OppData);
 
   $scope.sorter = 'score';
@@ -10,14 +11,16 @@ app.controller('AdminOpportunitiesDetailCtrl',
   $scope.matchGridIsShowing = false;
 
   //get all tags
-  OppFactory.tags.then(function(tags) {
-    $scope.tags = tags;
-  }); 
+  OppFactory.tags()
+    .then(function(tags) {
+      $scope.tags = tags;
+    }); 
 
   //get all category info
-  OppFactory.categories.then(function(categories) {
-    $scope.categories = categories;
-  });
+  OppFactory.categories()
+    .then(function(categories) {
+      $scope.categories = categories;
+    });
 
   var originalCompanyId = oppObj.basic.company._id;
   var opportunityId = oppObj.basic._id;
@@ -26,20 +29,16 @@ app.controller('AdminOpportunitiesDetailCtrl',
 
 
   //get all companies
-  OppFactory.companies.then(function(companies) {
-    $scope.companies = companies;
-  });
+  OppFactory.companies()
+    .then(function(companies) {
+      $scope.companies = companies;
+    });
 
   $scope.showMatchGrid = function() {
     $scope.matchGridIsShowing = true;
     // Disables showMatchGrid button. Fixes issue where multiple clicks
     // would allow admin to continue making match requests.
-
-    console.log('matchGridIsShowing', $scope.matchGridIsShowing);
-
-      $scope.attending = OppFactory.attending();
-      console.log('Attending: ', $scope.attending);
-        // $scope.updateGuidance();
+    $scope.attending = OppFactory.attending();
   };
 
   $scope.showNonAttending = function() {
@@ -193,7 +192,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     array.splice(index, 1);
   };
 
-  $scope.addTo = function (array, field) {
+addTo = function (array, field) {
     array.push(field);
   };
 
@@ -506,27 +505,31 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
   };
 
   return {
-    categories: Category.getAll('Opportunity')
-      .then(function(categories) {
-      return categories;
-    }),
-    tags: Tag.getAll()
+    categories: function() {
+        return Category.getAll('Opportunity')
+          .then(function(categories) {
+            return categories;
+        });
+    },
+    tags: function() {
+      return Tag.getAll()
       .then(function(tags) {
         return tags;
-    }),
-    companies: Company.getAll()
-      .then(function (companies) {
-        return companies;
-    }),
+      });
+    },
+    companies: function() {
+      return Company.getAll()
+        .then(function (companies) {
+          return companies;
+      });
+    },
     users: function(data) {
       cache = data;
       return mapToView(data);
     },
     attending: function() {
-      if(attending.length === 0) {
-        declared(cache.matches, cache.opportunity.questions.length);
-      }
-
+      attending = [];
+      declared(cache.matches, cache.opportunity.questions.length);
       return attending;
     },
     notAttending: function() {
