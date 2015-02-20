@@ -2,7 +2,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
   ['$scope', '$stateParams', '$state','Opportunity', 'Match', 'Tag', 'Category', 'Company', 'generateGlyphs', 'User', 'OppFactory', 'OppData',
   function ($scope, $stateParams, $state, Opportunity, Match, Tag, Category, Company, generateGlyphs, User, OppFactory, OppData) {
   var companyId;
-  console.log('Opp: ', OppData);
+
   var oppObj = OppFactory.users(OppData);
 
   $scope.sorter = 'score';
@@ -197,7 +197,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
     array.splice(index, 1);
   };
 
-  $scope.addTo = function (array, field) {
+addTo = function (array, field) {
     array.push(field);
   };
 
