@@ -6,3 +6,4 @@ public/lib
 public/index.html
 coverage
 public/dist/app.js
+privateInfo.js

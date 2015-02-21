@@ -12,8 +12,7 @@ app.factory('Company', ['CompanyResource', 'SERVER_URL', '$http', function (Comp
     }
     return $http({
       method: 'GET',
-      url: url,
-      cache: true
+      url: url
     })
     .then(function(response) {
       return response.data;
