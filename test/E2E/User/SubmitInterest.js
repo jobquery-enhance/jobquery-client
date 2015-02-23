@@ -10,7 +10,21 @@ describe('Submit interest', function() {
     expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/dashboard' );
   });
 
-  xit('should click the number 2 and submit without a second button', function() {
-    
+  it('should navigate to an opportunity', function() {
+    // click on opportunities
+    // click on the first company
+
+  it('should submit a interest', function() {
+    // click on an interest that is different than the interest already selected
+    // navigate back to opportunities
+
+    // expect your interest for that position to be the number selected
   });
+
+  it('should still have the interest when navigating back to the opportunity for a second time', function() {
+    // click on same first company
+    // expect correct number to be highlighted
+    expect(expecation).to.be(equal);
+  });
+
 });
