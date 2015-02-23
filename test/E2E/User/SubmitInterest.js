@@ -24,23 +24,45 @@ describe('Submit interest', function() {
   });
 
   it('should submit a interest', function() {
-    var selection;
+    var beforeSelection;
+    var afterSelection;
 
-    // click on an interest that is different than the interest already selected
     // get current interest selection
-    element(by.css('div.dashbox-icon.ng-scope.dashbox-icon-active'))
+    element(by.css('div.dashbox-icon-active'))
       .then(function(selectedInterest) {
         if( selectedInterest ) {
           selectedInterest.getText()
             .then(function(text) {
-              selection = text;
-              console.log('selection: ', selection);
+              beforeSelection = text;
             });
+        // no selection has been made yet
         } else {
-          selection = undefined;
+          beforeSelection = undefined;
         }
-
       });
+    
+
+    // click on an interest that is different than the interest already selected
+    element.all(by.css('div.dashbox-icon.ng-scope'))
+      .each(function(box) {
+        box.getText()
+          .then(function(text) {
+            if(text !== beforeSelection) {
+              afterSelection = text;
+            }
+          })
+      })
+      .then(function() {
+        expect(beforeSelection).not.toBe(afterSelection);
+        console.log('before', beforeSelection);
+        console.log('after', afterSelection);
+      });
+      
+      
+          
+
+
+
 
     // navigate back to opportunities
 
