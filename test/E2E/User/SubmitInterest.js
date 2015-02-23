@@ -11,17 +11,26 @@ describe('Submit interest', function() {
   });
 
   it('should navigate to an opportunity', function() {
-    // click on opportunities
-    // click on the first company
+    var opportunities = element(by.css('div#sidebar-opportunities'))
+    browser.sleep(1000);
+    opportunities.click();
 
-  it('should submit a interest', function() {
+    // click on the first company
+    var apollo = element(by.cssContainingText('a.ng-binding', 'Apollo Lightspeed'));
+    browser.sleep(1000);
+    apollo.click();
+    
+    expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities/53b1ea816ecb92340e865aa6' );
+  });
+
+  xit('should submit a interest', function() {
     // click on an interest that is different than the interest already selected
     // navigate back to opportunities
 
     // expect your interest for that position to be the number selected
   });
 
-  it('should still have the interest when navigating back to the opportunity for a second time', function() {
+  xit('should still have the interest when navigating back to the opportunity for a second time', function() {
     // click on same first company
     // expect correct number to be highlighted
     expect(expecation).to.be(equal);
