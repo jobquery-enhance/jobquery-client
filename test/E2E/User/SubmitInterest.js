@@ -23,8 +23,25 @@ describe('Submit interest', function() {
     expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities/53b1ea816ecb92340e865aa6' );
   });
 
-  xit('should submit a interest', function() {
+  it('should submit a interest', function() {
+    var selection;
+
     // click on an interest that is different than the interest already selected
+    // get current interest selection
+    element(by.css('div.dashbox-icon.ng-scope.dashbox-icon-active'))
+      .then(function(selectedInterest) {
+        if( selectedInterest ) {
+          selectedInterest.getText()
+            .then(function(text) {
+              selection = text;
+              console.log('selection: ', selection);
+            });
+        } else {
+          selection = undefined;
+        }
+
+      });
+
     // navigate back to opportunities
 
     // expect your interest for that position to be the number selected
