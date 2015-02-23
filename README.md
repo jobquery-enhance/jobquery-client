@@ -52,3 +52,5 @@ There should be four tabs open:
 
 ### Run
 In a fifth terminal window, navigate to `jobquery-client/test/E2E/conf.js` and enter `protractor conf.js` to run tests.
+
+Tests currently complete in around 30 seconds.
