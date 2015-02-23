@@ -49,13 +49,12 @@ describe('Submit interest', function() {
           .then(function(text) {
             if(text !== beforeSelection) {
               afterSelection = text;
+              box.click();
             }
           })
       })
       .then(function() {
         expect(beforeSelection).not.toBe(afterSelection);
-        console.log('before', beforeSelection);
-        console.log('after', afterSelection);
       });
       
       
