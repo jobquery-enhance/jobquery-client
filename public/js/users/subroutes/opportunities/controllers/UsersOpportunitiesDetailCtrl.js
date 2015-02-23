@@ -98,6 +98,9 @@ app.controller('UsersOpportunitiesDetailCtrl',
     }
   };
 
+  // Not currently in-use. The submit button is commented out in the template,
+  // because clicking on the interest is enough. If there were employer questions in-play
+  // students could use this button to submit both the interest and their answers
   $scope.submit = function() {
     $scope.submitText = 'Submitting...';
     $scope.pendingRequests++;
