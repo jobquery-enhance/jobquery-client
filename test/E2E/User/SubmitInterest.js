@@ -1,6 +1,9 @@
 var userLogin = require('../privateInfo.js').user;
 
 describe('Submit interest', function() {
+  var oldInterest;
+  var newInterest;
+
   it('should login as a user', function() {
     browser.get('http://localhost:8000/login');
     expect( element(by.css('div.login-box')).isPresent() ).toBe(true);
@@ -14,6 +17,14 @@ describe('Submit interest', function() {
     var opportunities = element(by.css('div#sidebar-opportunities'))
     browser.sleep(1000);
     opportunities.click();
+
+    // get the number rating
+    element(by.css('body > div.content-container > div.ng-scope > div > ui-view > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td:nth-child(4) > span.tablebox-important.ng-binding'))
+      .getText()
+        .then(function(selection) {
+          oldInterest = selection;
+          console.log('before: ', oldInterest);
+        });
 
     // click on the first company
     var apollo = element(by.cssContainingText('a.ng-binding', 'Apollo Lightspeed'));
@@ -53,6 +64,9 @@ describe('Submit interest', function() {
               afterSelection = text;
               box.click();
               clicked = true;
+
+              // translate the new selection to a number
+              newInterest = translateInterestIntoNumber(afterSelection);
             }
           });
       })
@@ -71,8 +85,17 @@ describe('Submit interest', function() {
     
   it('should update the opportunity interest on the opportunities page', function() {
     // navigate back to opportunities
-    // expect your interest for that position to be the number selected
-    expect(expecation).to.be(equal);
+    element(by.css('div#sidebar-opportunities')).click();
+    expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities' );
+
+    // get the number rating
+    element(by.css('body > div.content-container > div.ng-scope > div > ui-view > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td:nth-child(4) > span.tablebox-important.ng-binding'))
+      .getText()
+        .then(function(number) {
+          // expect your interest for that position to be the number selected
+          expect(number).not.toBe(oldInterest);
+          expect(number).toBe(newInterest);
+        });
   });
 
   xit('should still have the interest when navigating back to the opportunity for a second time', function() {
@@ -82,3 +105,18 @@ describe('Submit interest', function() {
   });
 
 });
+
+var translateInterestIntoNumber = function(interestText) {
+  var cases = {
+    1: /NONE/,
+    2: /LOW/,
+    3: /MIS\//,
+    4: /VERY/
+  };
+
+  for(var key in cases) {
+    if( interestText.match(cases[key]) !== null ) {
+      return key;
+    }
+  }
+};
