@@ -23,7 +23,6 @@ describe('Submit interest', function() {
       .getText()
         .then(function(selection) {
           oldInterest = selection;
-          console.log('before: ', oldInterest);
         });
 
     // click on the first company
@@ -92,16 +91,27 @@ describe('Submit interest', function() {
     element(by.css('body > div.content-container > div.ng-scope > div > ui-view > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td:nth-child(4) > span.tablebox-important.ng-binding'))
       .getText()
         .then(function(number) {
-          // expect your interest for that position to be the number selected
           expect(number).not.toBe(oldInterest);
+          // expect your interest for that position to be the number selected
           expect(number).toBe(newInterest);
         });
   });
 
-  xit('should still have the interest when navigating back to the opportunity for a second time', function() {
+  it('should still have the interest when navigating back to the opportunity for a second time', function() {
     // click on same first company
+    var apollo = element(by.cssContainingText('a.ng-binding', 'Apollo Lightspeed'));
+    browser.sleep(1000);
+    apollo.click();
+    expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities/53b1ea816ecb92340e865aa6' );
+
     // expect correct number to be highlighted
-    expect(expecation).to.be(equal);
+    element(by.css('div.dashbox-icon-active'))
+      .then(function(selectedInterest) {
+        selectedInterest.getText()
+          .then(function(text) {
+            expect( translateInterestIntoNumber(text) ).toBe( newInterest );
+          })
+      });     
   });
 
 });
