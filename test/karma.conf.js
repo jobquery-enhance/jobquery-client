@@ -136,10 +136,6 @@ module.exports = function(config) {
 
             // Subroutes
 
-                // users.dashboard
-                'public/js/users/subroutes/dashboard/state.js',
-                'public/js/users/subroutes/dashboard/controllers/UsersDashboardCtrl.js',
-
                 // users.account
                 'public/js/users/subroutes/account/state.js',
                 'public/js/users/subroutes/account/controllers/UsersAccountCtrl.js',
@@ -147,15 +143,15 @@ module.exports = function(config) {
                 // users.companies
                 'public/js/users/subroutes/companies/state.js',
                 'public/js/users/subroutes/companies/controllers/UsersCompaniesCtrl.js',
-
-                // users.companies.detail
                 'public/js/users/subroutes/companies/controllers/UsersCompaniesDetailCtrl.js',
+
+                // users.dashboard
+                'public/js/users/subroutes/dashboard/state.js',
+                'public/js/users/subroutes/dashboard/controllers/UsersDashboardCtrl.js',
 
                 // users.opportunities
                 'public/js/users/subroutes/opportunities/state.js',
                 'public/js/users/subroutes/opportunities/controllers/UsersOpportunitiesCtrl.js',
-
-                // users.opportunities.detail
                 'public/js/users/subroutes/opportunities/controllers/UsersOpportunitiesDetailCtrl.js',
 
         'test/unit/**/*.js'
