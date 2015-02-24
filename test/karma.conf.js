@@ -70,59 +70,44 @@ module.exports = function(config) {
 
             // Subroutes
 
-                // admin.dashboard
-                'public/js/admin/subroutes/dashboard/state.js',
-                'public/js/admin/subroutes/dashboard/controllers/AdminDashboardCtrl.js',
-
                 // admin.account
                 'public/js/admin/subroutes/account/state.js',
                 'public/js/admin/subroutes/account/controllers/AdminAccountCtrl.js',
 
+
                 // admin.candidates
                 'public/js/admin/subroutes/candidates/state.js',
                 'public/js/admin/subroutes/candidates/controllers/AdminCandidatesCtrl.js',
-
-                // admin.candidates.detail
                 'public/js/admin/subroutes/candidates/controllers/AdminCandidatesDetailCtrl.js',
-
-                // admin.candidates.new
                 'public/js/admin/subroutes/candidates/controllers/AdminCandidatesNewCtrl.js',
 
                 // admin.companies
                 'public/js/admin/subroutes/companies/state.js',
                 'public/js/admin/subroutes/companies/controllers/AdminCompaniesCtrl.js',
-
-                // admin.companies.detail
                 'public/js/admin/subroutes/companies/controllers/AdminCompaniesDetailCtrl.js',
-
-                // admin.companies.new
+                'public/js/admin/subroutes/companies/controllers/AdminCompaniesMonitorCtrl.js',
                 'public/js/admin/subroutes/companies/controllers/AdminCompaniesNewCtrl.js',
+                
+                // admin.dashboard not currently in use
 
                 // admin.matches
                 'public/js/admin/subroutes/matches/state.js',
                 'public/js/admin/subroutes/matches/controllers/AdminMatchesCtrl.js',
                 'public/js/admin/subroutes/matches/controllers/AdminMatchesScheduleCtrl.js',
                 'public/js/admin/subroutes/matches/services/FilterService.js',
+                'public/js/admin/subroutes/matches/services/SchedulerServ.js',
 
                 // admin.messages
                 'public/js/admin/subroutes/messages/state.js',
                 'public/js/admin/subroutes/messages/controllers/AdminMessagesCtrl.js',
-
-                // admin.messages.detail
                 'public/js/admin/subroutes/messages/controllers/AdminMessagesDetailCtrl.js',
-
-                // admin.messages.new
                 'public/js/admin/subroutes/messages/controllers/AdminMessagesNewCtrl.js',
 
                 // admin.opportunities
                 'public/js/admin/subroutes/opportunities/state.js',
                 'public/js/admin/subroutes/opportunities/controllers/AdminOpportunitiesCtrl.js',
                 'public/js/admin/subroutes/opportunities/controllers/AdminOpportunitiesPreviewCtrl.js',
-
-                // admin.opportunities.detail
                 'public/js/admin/subroutes/opportunities/controllers/AdminOpportunitiesDetailCtrl.js',
-
-                // admin.opportunities.new
                 'public/js/admin/subroutes/opportunities/controllers/AdminOpportunitiesNewCtrl.js',
 
                 // admin.scheduling
@@ -132,7 +117,7 @@ module.exports = function(config) {
                 // admin.tags
                 'public/js/admin/subroutes/tags/state.js',
                 'public/js/admin/subroutes/tags/controllers/AdminTagsCtrl.js',
-                
+
         // User 
         'public/js/users/state.js',
             
@@ -173,7 +158,6 @@ module.exports = function(config) {
                 // users.opportunities.detail
                 'public/js/users/subroutes/opportunities/controllers/UsersOpportunitiesDetailCtrl.js',
 
-
         'test/unit/**/*.js'
 
     ],
@@ -182,6 +166,8 @@ module.exports = function(config) {
     // list of files to exclude
     exclude: [
         // AdminDashboardCtrl not currently in use
+        'public/js/admin/subroutes/dashboard/state.js',
+        'public/js/admin/subroutes/dashboard/controllers/AdminDashboardCtrl.js',
         'test/unit/controllers/AdminControllers/AdminDashboardCtrlSpec.js'
     ],
 
