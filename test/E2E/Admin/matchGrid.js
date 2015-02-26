@@ -92,7 +92,7 @@ describe('Match grid', function() {
           });
       });
   
-    // // Navigate to job B.
+    // Navigate to job B.
     var opportunities = element(by.css('div#sidebar-opportunities'))
     opportunities.click();
 
@@ -102,18 +102,18 @@ describe('Match grid', function() {
 
     var matchGridButton = element(by.buttonText('Show Match Grid'));
 
-    // // Match grid should be hidden
+    // Match grid should be hidden
     jobBMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
     expect( jobBMatches.count() ).toBe(0);
 
-    // // The match grid button should be enabled, bc it hasn't been clicked yet
+    // The match grid button should be enabled, bc it hasn't been clicked yet
     expect( matchGridButton.isEnabled() ).toBe(true);
-    // // Show match grid for job B.
+    // Show match grid for job B.
     matchGridButton.click();
-    // // Now button should be disabled an match grid showing
+    // Now button should be disabled an match grid showing
     expect( matchGridButton.isEnabled() ).toBe(false);
 
-    // // The match grid should be showing
+    // The match grid should be showing
     jobBMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
     expect( jobBMatches.count() ).not.toBe(0);
 

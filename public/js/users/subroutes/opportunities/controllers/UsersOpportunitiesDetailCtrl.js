@@ -98,6 +98,8 @@ app.controller('UsersOpportunitiesDetailCtrl',
     }
   };
 
+  // Not currently in-use. The "Submit Preferences" button is commented out in the template,
+  // because clicking on the interest is enough. There are currently no employer questions to answer.
   $scope.submit = function() {
     $scope.submitText = 'Submitting...';
     $scope.pendingRequests++;
