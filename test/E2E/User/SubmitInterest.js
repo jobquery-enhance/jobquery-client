@@ -31,13 +31,11 @@ describe('Submit interest', function() {
     // click on the first company
     var first = element(by.css('body > div.content-container > div.ng-scope > div > ui-view > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1)'));
     browser.sleep(1000);
-    // console.log(first);
     first.getAttribute('href')
       .then(function (href) {
         first.click();
         expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000' + href );
-
-      })
+      });
 
 
   });
@@ -115,10 +113,13 @@ describe('Submit interest', function() {
 
   it('should still have the interest when navigating back to the opportunity for a second time', function() {
     // click on same first company
-    var apollo = element(by.cssContainingText('a.ng-binding', 'Apollo Lightspeed'));
+    var first = element(by.css('body > div.content-container > div.ng-scope > div > ui-view > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1)'));
     browser.sleep(1000);
-    apollo.click();
-    expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities/53b1ea816ecb92340e865aa6' );
+    first.getAttribute('href')
+      .then(function (href) {
+        first.click();
+        expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000' + href );
+      });
 
     // get the highlighted interest box
     element(by.css('div.dashbox-icon-active'))
