@@ -2,7 +2,8 @@ var loginCredentials = require('../privateInfo.js').admin;
 
 describe('Match grid', function() {
   var ApolloLightspeed = 'http://localhost:8000/admin/opportunities/53b1ea816ecb92340e865aa6';
-  var Beatsmusic = 'http://localhost:8000/admin/opportunities/53b1a55a6ecb92340e865929';
+  // var Beatsmusic = 'http://localhost:8000/admin/opportunities/53b1a55a6ecb92340e865929';
+  var RocketScienceConsulting = 'http://localhost:8000/admin/opportunities/54b7f8e2803c80481188da26';
 
   it('should be hidden at first', function() {
     browser.get(ApolloLightspeed);
@@ -32,7 +33,7 @@ describe('Match grid', function() {
 
     // Save unique links
     var uniqueUserLinks = element.all(by.css('div.row table tbody tr td a'));
-    
+
     // get an array of href attributes
     uniqueUserLinks.getAttribute('href')
       .then(function(hrefs) {
@@ -56,11 +57,11 @@ describe('Match grid', function() {
   });
 
   it('should display the correct data', function() {
-    /* There is currently an issue where the match grid shows information 
+    /* There is currently an issue where the match grid shows information
     from the previous opportunity's match grid.
     */
 
-    // Matches start as webelements (for counting), 
+    // Matches start as webelements (for counting),
     // but are then turned into objects to be used for comparison
     var jobAMatches;
     var jobBMatches;
@@ -91,14 +92,14 @@ describe('Match grid', function() {
             }
           });
       });
-  
+
     // Navigate to job B.
     var opportunities = element(by.css('div#sidebar-opportunities'))
     opportunities.click();
 
-    var beats = element(by.cssContainingText('td.ng-binding', 'Beats Music'));
+    var rocket = element(by.cssContainingText('td.ng-binding', 'Rocket Science Consulting'));
     browser.sleep(1000);
-    beats.click();
+    rocket.click();
 
     var matchGridButton = element(by.buttonText('Show Match Grid'));
 
@@ -117,7 +118,7 @@ describe('Match grid', function() {
     jobBMatches = element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'));
     expect( jobBMatches.count() ).not.toBe(0);
 
-    
+
     jobBMatches = {};
     element.all(by.repeater('user in attending | filter:ExcludeAccepted() | orderBy:sorter:reverse'))
       .each(function(row) {
@@ -139,7 +140,7 @@ describe('Match grid', function() {
       });
 
       // Bc the objects get updated asynchronously, we need to give them time to complete
-      // 15 seconds does not give enough time for full completion, but allow for a 
+      // 15 seconds does not give enough time for full completion, but allow for a
       // representative sample to be compared
       setTimeout(function() {
         for(var href in jobAMatches) {
@@ -179,7 +180,7 @@ var extractRowData = function(ngRepeatColumns) {
     name = ngRepeatColumns.match(nameRegEx)[0];
     // Remove html carrots from <User Name>
     name = name.substring(1, name.length - 1);
-  
+
     // Rating
     if( ngRepeatColumns.match(ratingRegEx) !== null ) {
       rating = ngRepeatColumns.match(ratingRegEx)[0];

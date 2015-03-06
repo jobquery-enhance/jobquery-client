@@ -29,11 +29,15 @@ describe('Submit interest', function() {
         });
 
     // click on the first company
-    var apollo = element(by.cssContainingText('a.ng-binding', 'Apollo Lightspeed'));
+    var first = element(by.css('body > div.content-container > div.ng-scope > div > ui-view > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1)'));
     browser.sleep(1000);
-    apollo.click();
-    
-    expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities/53b1ea816ecb92340e865aa6' );
+    first.getAttribute('href')
+      .then(function (href) {
+        first.click();
+        expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000' + href );
+      });
+
+
   });
 
   it('should submit a interest', function() {
@@ -42,20 +46,22 @@ describe('Submit interest', function() {
     var clicked = false;
 
     // get current interest selection
-    element(by.css('div.dashbox-icon-active'))
-      .then(function(selectedInterest) {
-        // if there is an interest already
-        if( selectedInterest.isPresent() ) {
-          selectedInterest.getText()
-            .then(function(text) {
-              beforeSelection = text;
-            });
+    element(by.css('div.dashbox-icon-active')).isPresent().then(function(result) {
+      if ( result ) {
+        element(by.css('div.dashbox-icon-active'))
+          .then(function(selectedInterest) {
+            // if there is an interest already
+            selectedInterest.getText()
+              .then(function(text) {
+                beforeSelection = text;
+              });
+          })
+      } else {
         // no selection has been made yet
-        } else {
-          beforeSelection = undefined;
-        }
-      });
-    
+        beforeSelection = undefined;
+      }
+    })
+
     // get all of the non-selected options
     element.all(by.css('div.dashbox-icon.ng-scope'))
       // for each of them
@@ -64,7 +70,7 @@ describe('Submit interest', function() {
         box.getText()
           .then(function(text) {
             // if the interest is not the same as the one already selected
-            // clicked === false effectively breaks this loop, 
+            // clicked === false effectively breaks this loop,
             // otherwise the selection would always go to the end of the ElementArrayFinder
             if(text !== beforeSelection && clicked === false) {
               afterSelection = text;
@@ -88,8 +94,9 @@ describe('Submit interest', function() {
           });
       });
   });
-    
+
   it('should update the opportunity interest on the opportunities page', function() {
+    browser.sleep(1000);
     // navigate back to opportunities
     element(by.css('div#sidebar-opportunities')).click();
     expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities' );
@@ -106,10 +113,13 @@ describe('Submit interest', function() {
 
   it('should still have the interest when navigating back to the opportunity for a second time', function() {
     // click on same first company
-    var apollo = element(by.cssContainingText('a.ng-binding', 'Apollo Lightspeed'));
+    var first = element(by.css('body > div.content-container > div.ng-scope > div > ui-view > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1)'));
     browser.sleep(1000);
-    apollo.click();
-    expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities/53b1ea816ecb92340e865aa6' );
+    first.getAttribute('href')
+      .then(function (href) {
+        first.click();
+        expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000' + href );
+      });
 
     // get the highlighted interest box
     element(by.css('div.dashbox-icon-active'))
@@ -119,7 +129,7 @@ describe('Submit interest', function() {
             // expect correct number to be highlighted
             expect( translateInterestIntoNumber(text) ).toBe( newInterest );
           })
-      });     
+      });
   });
 
 });
