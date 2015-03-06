@@ -14,7 +14,7 @@ app.controller('AdminOpportunitiesDetailCtrl',
   OppFactory.tags()
     .then(function(tags) {
       $scope.tags = tags;
-    }); 
+    });
 
   //get all category info
   OppFactory.categories()
@@ -220,16 +220,22 @@ addTo = function (array, field) {
     }
   };
 
+  $scope.showTags = function() {
+    // filtered guidance = no text type
+      $scope.filteredTags = $scope.guidance.tags.filter(function (tag) {
+        interestGrid.push(tag.data.name);
+        return (tag.value !== 'text');
+      });
+      interestGrid.push('\n');
+    // $scope.filteredTags = $scope.guidance.tags;
+  }
+
+  $scope.showTags();
+
   $scope.updateGuidance = function () {
     // $scope.attending = OppFactory.attending();
 
-  // filtered guidance = no text type
-    $scope.filteredTags = $scope.guidance.tags.filter(function (tag) {
-      interestGrid.push(tag.data.name);
-      return (tag.value !== 'text');
-    });
-    interestGrid.push('\n');
-  // $scope.filteredTags = $scope.guidance.tags;
+    $scope.showTags();
 
     // calculate summary stats
     $scope.filteredStats = {};
@@ -431,7 +437,7 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
         if( attendingUsers[matchModel.user._id] === undefined) {
           // if not, add to tracking object
           attendingUsers[matchModel.user.id] = 1;
-          
+
           // and add to array
           attending.push({
             _id: matchModel.user._id,
@@ -538,15 +544,3 @@ app.factory('OppFactory',['Category', 'Tag', 'Match', 'Company', function(Catego
     }
   };
 }]);
-
-
-
-
-
-
-
-
-
-
-
-
