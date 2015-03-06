@@ -29,11 +29,17 @@ describe('Submit interest', function() {
         });
 
     // click on the first company
-    var apollo = element(by.cssContainingText('a.ng-binding', 'Apollo Lightspeed'));
+    var first = element(by.css('body > div.content-container > div.ng-scope > div > ui-view > div > div:nth-child(2) > div > table > tbody > tr:nth-child(1)'));
     browser.sleep(1000);
-    apollo.click();
+    // console.log(first);
+    first.getAttribute('href')
+      .then(function (href) {
+        first.click();
+        expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000' + href );
 
-    expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities/544024ee3da389f419ecceb5' );
+      })
+
+
   });
 
   it('should submit a interest', function() {
