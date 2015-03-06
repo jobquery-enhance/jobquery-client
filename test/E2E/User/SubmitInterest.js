@@ -32,8 +32,8 @@ describe('Submit interest', function() {
     var apollo = element(by.cssContainingText('a.ng-binding', 'Apollo Lightspeed'));
     browser.sleep(1000);
     apollo.click();
-    
-    expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities/53b1ea816ecb92340e865aa6' );
+
+    expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities/544024ee3da389f419ecceb5' );
   });
 
   it('should submit a interest', function() {
@@ -55,7 +55,7 @@ describe('Submit interest', function() {
           beforeSelection = undefined;
         }
       });
-    
+
     // get all of the non-selected options
     element.all(by.css('div.dashbox-icon.ng-scope'))
       // for each of them
@@ -64,7 +64,7 @@ describe('Submit interest', function() {
         box.getText()
           .then(function(text) {
             // if the interest is not the same as the one already selected
-            // clicked === false effectively breaks this loop, 
+            // clicked === false effectively breaks this loop,
             // otherwise the selection would always go to the end of the ElementArrayFinder
             if(text !== beforeSelection && clicked === false) {
               afterSelection = text;
@@ -88,7 +88,7 @@ describe('Submit interest', function() {
           });
       });
   });
-    
+
   it('should update the opportunity interest on the opportunities page', function() {
     // navigate back to opportunities
     element(by.css('div#sidebar-opportunities')).click();
@@ -119,7 +119,7 @@ describe('Submit interest', function() {
             // expect correct number to be highlighted
             expect( translateInterestIntoNumber(text) ).toBe( newInterest );
           })
-      });     
+      });
   });
 
 });
