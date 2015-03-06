@@ -34,7 +34,7 @@ Reference the Angular Protractor [tutorial](http://angular.github.io/protractor/
 
 ### Setup
 
-1. Install Protractor globally using `npm install -g proctractor`.
+1. Install Protractor globally using `npm install -g protractor`.
 1. Update the webdrivers using `webdriver-manager update`.
 1. Create a file named `test/E2E/privateInfo.js` with usernames, passwords, etc. The setup at this time is:
 
@@ -42,7 +42,7 @@ Reference the Angular Protractor [tutorial](http://angular.github.io/protractor/
 
         exports.user = ['someemail@email.com', 'password'];
 1. Start the selenium server in a new terminal tab: `webdriver-manager start`.
-1. Run jobQuery locally, see steps above. 
+1. Run jobQuery locally, see steps above.
 
 There should be four tabs open:
 - Server
