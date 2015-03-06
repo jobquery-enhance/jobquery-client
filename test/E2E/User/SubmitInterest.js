@@ -98,6 +98,7 @@ describe('Submit interest', function() {
   });
 
   it('should update the opportunity interest on the opportunities page', function() {
+    browser.sleep(1000);
     // navigate back to opportunities
     element(by.css('div#sidebar-opportunities')).click();
     expect( browser.getCurrentUrl() ).toBe( 'http://localhost:8000/users/opportunities' );
