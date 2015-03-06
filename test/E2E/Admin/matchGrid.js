@@ -157,6 +157,10 @@ describe('Match grid', function() {
       }, 15000);
 
   });
+
+  it('should show tags on the match grid', function() {
+    expect( element(by.repeater('tag in filteredTags')).isPresent() ).toBe(true);
+  });
 });
 
 var extractRowData = function(ngRepeatColumns) {
